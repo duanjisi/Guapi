@@ -408,7 +408,7 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
                                 tvGContent.setText(data.getMsListBeen().get(i).getMs_content());
                             }
                             tvGTime.setText(data.getMsListBeen().get(i).getMs_time());
-                        } else if (data.getMsListBeen().get(i).getMs_type().equals("7")) {
+                        } else if (data.getMsListBeen().get(i).getMs_type().equals("7")||data.getMsListBeen().get(i).getMs_type().equals("2")) {
                             if (CheckUtil.isNull(data.getMsListBeen().get(i).getMs_content())) {
                                 tvDongTaiContent.setText("暂无消息");
                             } else {
@@ -417,6 +417,9 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
                             tvDongTaiTime.setText(data.getMsListBeen().get(i).getMs_time());
                         }
                     }
+                } else {
+                    tvGContent.setText("暂无消息");
+                    tvDongTaiContent.setText("暂无消息");
                 }
             }
 

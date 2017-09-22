@@ -99,7 +99,7 @@ public class MailListFragment extends BasicFragment {
 
     public void getContactsPermission() {
         final String[] permissions = {
-                Manifest.permission.READ_CONTACTS, Manifest.permission.SEND_SMS};
+                Manifest.permission.READ_CONTACTS};
         final List<String> permissionsToRequest = new ArrayList<>();
         for (String permission : permissions) {
             if (ActivityCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
