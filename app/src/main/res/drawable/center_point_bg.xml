@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@drawable/point_01"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_02"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_03"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_04"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_05"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_06"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_07"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_08"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_09"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_10"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_11"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_12"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_13"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_14"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_15"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_16"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_17"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_18"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_19"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/point_20"
+        android:duration="50" />
+</animation-list>

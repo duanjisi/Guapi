@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1ed593</color>
+    <color name="colorPrimaryDark">#1ed593</color>
+    <color name="colorAccent">#1ed593</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="divider_ebebeb">#ebebeb</color>
+    <color name="gallery_blue">#1ed593</color>
+    <color name="top_bar_color">#fd2741</color>
+    <color name="actionsheet_gray">#8F8F8F</color>
+    <!-- 线条颜色 start -->
+    <color name="line_color_gray_d1">#d1d1d1</color>
+    <color name="line_color_gray_d2">#dddddd</color>
+    <color name="line_color_gray_c7">#c7c7c7</color>
+    <color name="ios7_white">#ffa8a8a8</color>
+    <color name="line_school">#d9d9d9</color>
+    <color name="text_gray">#bfbfbf</color>
+    <color name="grey">#cccccc</color>
+    <color name="asda">#E3E3E3</color>
+</resources>

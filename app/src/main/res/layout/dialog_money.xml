@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_white_circle_4"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dp10">
+
+        <TextView
+            android:id="@+id/tv_close"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:padding="@dimen/dp10"
+            android:text="X" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp10"
+            android:gravity="center"
+            android:text="红包总额"
+            android:textColor="@color/B_black"
+            android:textSize="@dimen/sp14" />
+
+        <EditText
+            android:id="@+id/et_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_edit_money"
+            android:hint="0.00元"
+            android:inputType="numberDecimal"
+            android:padding="@dimen/dp10"
+            android:textColor="@drawable/selector_text_money"
+            android:textSize="@dimen/sp14" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp10"
+            android:gravity="center"
+            android:text="红包个数"
+            android:textColor="@color/B_black"
+            android:textSize="@dimen/sp14" />
+
+        <EditText
+            android:id="@+id/et_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_edit_money"
+            android:hint="0"
+            android:inputType="number"
+            android:padding="@dimen/dp10"
+            android:textColor="@drawable/selector_text_money"
+            android:textSize="@dimen/sp14" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp10"
+            android:gravity="center"
+            android:text="谁可领取"
+            android:textColor="@color/B_black"
+            android:textSize="@dimen/sp14" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp10"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_all"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/dp10"
+                android:layout_weight="1"
+                android:background="@drawable/selector_edit_money"
+                android:gravity="center"
+                android:padding="@dimen/dp10"
+                android:text="任何人"
+                android:textColor="@drawable/selector_text_money"
+                android:textSize="@dimen/sp14" />
+
+            <TextView
+                android:id="@+id/tv_friend"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_edit_money"
+                android:gravity="center"
+                android:padding="@dimen/dp10"
+                android:text="仅好友"
+                android:textColor="@drawable/selector_text_money"
+                android:textSize="@dimen/sp14" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp10"
+            android:text="红包留言"
+            android:textColor="@color/B_black"
+            android:textSize="@dimen/sp14" />
+
+        <EditText
+            android:id="@+id/et_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_edit_money"
+            android:hint="我的红包就在附近哦~"
+            android:lines="2"
+            android:padding="@dimen/dp10"
+            android:textColor="@drawable/selector_text_money"
+            android:textSize="@dimen/sp14" />
+
+
+            <TextView
+                android:id="@+id/temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="@dimen/dp10"
+                android:text="支付方式"
+                android:textColor="@color/B_black"
+                android:textSize="@dimen/sp14" />
+
+            <TextView
+                android:id="@+id/tv_wx"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/pyq"
+                android:drawablePadding="@dimen/dp10"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/dp10"
+                android:paddingTop="@dimen/dp10"
+                android:text="微信支付"
+                android:textColor="@color/B_black"
+                android:textSize="@dimen/sp14" />
+
+            <TextView
+                android:id="@+id/tv_alipay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/zfbzf"
+                android:drawablePadding="@dimen/dp10"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/dp10"
+                android:paddingTop="@dimen/dp10"
+                android:text="支付宝支付"
+                android:textColor="@color/B_black"
+                android:textSize="@dimen/sp14" />
+
+            <TextView
+                android:id="@+id/tv_wallet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/qb"
+                android:drawablePadding="@dimen/dp10"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/dp10"
+                android:paddingTop="@dimen/dp10"
+                android:text="@string/wallet_money"
+                android:textColor="@color/B_black"
+                android:textSize="@dimen/sp14" />
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="@dimen/dp10"
+            android:background="@drawable/bg_red_circle"
+            android:text="藏好了"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp14" />
+    </LinearLayout>
+</ScrollView>

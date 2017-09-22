@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/list_itease_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_selector"
+        android:gravity="center_vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
+
+        <com.library.im.widget.CircleAvatarWidget
+            android:id="@+id/avatar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_image" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="#505762"
+            android:textSize="9dp" />
+
+        <com.library.im.cache.RecycleTextView
+
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="9dp"
+            android:layout_toLeftOf="@+id/time"
+            android:layout_toRightOf="@id/avatar"
+            android:lines="1"
+            android:textColor="#505762"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:id="@+id/msg_state"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/name"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_toLeftOf="@+id/unread_msg_number"
+            android:src="@drawable/ease_msg_state_fail_resend"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="7dp"
+            android:layout_toLeftOf="@+id/msg_state"
+            android:layout_toRightOf="@+id/avatar"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#b3b7be"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/unread_msg_number"
+            android:layout_width="wrap_content"
+            android:layout_height="20dip"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/name"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/ease_unread_count_bg"
+            android:gravity="center"
+            android:lines="1"
+            android:text="7"
+            android:textColor="@android:color/white"
+            android:textSize="12dip" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:background="#ebebeb" />
+</LinearLayout>

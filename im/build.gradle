@@ -1,0 +1,33 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.complieSDKVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSDKVersion
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    provided "com.android.support:design:${supportLibraryVersion}"
+    provided "com.android.support:appcompat-v7:${supportLibraryVersion}"
+    compile files('libs/MiPush_SDK_Client_3_0_1.jar')
+    compile files('libs/hyphenatechat_3.1.4.jar')
+    compile project(':framework')
+//    compile 'com.bigkoo:alertview:1.0.2'
+}

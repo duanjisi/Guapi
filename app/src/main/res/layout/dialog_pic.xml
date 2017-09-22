@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dp11"
+    android:layout_marginRight="@dimen/dp11"
+    android:background="@drawable/bg_white_circle_4"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="X"
+        android:textSize="22sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp10"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="@dimen/dp10"
+            android:text="瓜皮留言"
+            android:textColor="@color/B_black"
+            android:textSize="@dimen/sp14" />
+
+        <EditText
+            android:id="@+id/et_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@drawable/selector_edit_money"
+            android:gravity="start"
+            android:hint="我的瓜皮就在附近哦~"
+            android:lines="2"
+            android:padding="@dimen/dp10"
+            android:textColor="@drawable/selector_text_money"
+            android:textColorHint="@color/ios7_white"
+            android:textSize="@dimen/sp14" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp10"
+        android:layout_marginTop="@dimen/dp10"
+        android:text="添加图片"
+        android:textColor="@color/B_black"
+        android:textSize="@dimen/sp14" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_pic"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_margin="@dimen/dp10" />
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="@dimen/dp10"
+        android:background="@drawable/bg_red_circle"
+        android:text="藏好了"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp14" />
+</LinearLayout>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="background">#fafafa</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#CC3635</color>
+    <color name="bg_gray">#e9e9e9</color>
+
+    <color name="theme1">#4DB6FF</color>
+    <color name="theme2">#FF4D4D</color>
+    <color name="theme3">#5EDB73</color>
+    <color name="theme4">#FFAD4D</color>
+    <color name="theme5">#FF4D94</color>
+
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="text888">#888888</color>
+    <color name="cc3635">#cc3635</color>
+    <color name="tra_white">#88ffffff</color>
+    <color name="color_secondary">#f79e3c</color>
+    <color name="main_color">#3F92F4</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#D9000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+
+    <color name="black">#000000</color>
+    <color name="bg_title">#2c2d35</color>
+    <color name="text_color_main">#333333</color>
+    <color name="dividers_color">#e0e0e0</color>
+
+    <!--textsize-->
+    <dimen name="text_size_9">9sp</dimen>
+    <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_11">11sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_13">13sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_15">15sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_17">17sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_21">21sp</dimen>
+    <dimen name="text_size_30">30sp</dimen>
+    <dimen name="text_size_32">32sp</dimen>
+    <dimen name="text_size_41">41sp</dimen>
+    <dimen name="page_title_height">48sp</dimen>
+    <dimen name="input_height">40sp</dimen>
+    <dimen name="stroke_height">0.5dip</dimen>
+
+    <color name="c1">#383838</color>
+    <color name="c2">#757575</color>
+    <color name="c3">#bdbdbd</color>
+
+    <color name="C1">#b736bf</color>
+    <color name="Cb1">#000000</color>
+    <color name="Cb2">#c8383838</color>
+    <color name="Cb3">#757575</color>
+    <color name="Cb4">#bdbdbd</color>
+    <color name="Cb5">#e0e0e0</color>
+
+    <color name="Cw1">#ffffffff</color>
+    <color name="Cw2">#b3ffffff</color>
+    <color name="Cw3">#4dffffff</color>
+    <color name="Cw4">#1fffffff</color>
+
+    <color name="photo_pick_color">#0072BB</color>
+    <color name="divider_cccccc">#cccccc</color>
+    <color name="c_2fbeaa">#2fbeaa</color>
+    <color name="divider_e5e5e5">#e5e5e5</color>
+    <color name="province_line_border">#2076ab</color>
+    <color name="gray2">#222222</color>
+    <color name="wheel_bg">#FFFDFDFE</color>
+    <color name="wheel_line">#FFCBCBCB</color>
+    <color name="main_content">#f7f7f7</color>
+    <color name="red_button_in">#faf2f2</color>
+    <color name="exit_color">#ff0b0b</color>
+    <color name="black555">#555555</color>
+    <color name="gray_ea">#ea2a2a</color>
+    <color name="gray_888">#888</color>
+    <color name="gray_999">#999</color>
+    <color name="gray_555">#555</color>
+    <color name="Cb4Trans">#55bdbdbd</color>
+    <color name="gray_f2">#f2f2f2</color>
+    <color name="un_read">#4db6ff</color>
+    <color name="tran_gray2">#88222222</color>
+    <color name="toast_red">#cc3635</color>
+    <color name="B_black">#BB000000</color>
+    <color name="bottom_bg">#264C55</color>
+
+    <color name="triangle">#72d572</color>
+    <color name="circle">#738ffe</color>
+    <color name="rect">#e84e40</color>
+    <color name="view_bg">#00000000</color>
+
+    - <!-- 覆盖颜色
+  -->
+    <color name="bgColor_overlay">#60000000</color>
+    - <!-- 窗口背景颜色
+  -->
+    <color name="bgColor_alertview_alert">#f8f8f8</color>
+    <color name="bgColor_alertview_alert_start">#f0f0f0</color>
+    - <!-- 标题颜色
+  -->
+    <color name="textColor_alert_title">#000000</color>
+    <color name="textColor_actionsheet_title">#8f8f8f</color>
+    - <!-- 消息颜色
+  -->
+    <color name="textColor_alert_msg">#000000</color>
+    <color name="textColor_actionsheet_msg">#8f8f8f</color>
+    - <!-- 线条颜色
+  -->
+    <color name="bgColor_divier">#d7d7db</color>
+    - <!-- 取消按钮颜色
+  -->
+    <color name="textColor_alert_button_cancel">#007aff</color>
+    - <!-- 高亮按钮颜色
+  -->
+    <color name="textColor_alert_button_destructive">#ff3b30</color>
+    - <!-- 普通按钮文字颜色
+  -->
+    <color name="textColor_alert_button_others">#007aff</color>
+    - <!-- 点击颜色
+  -->
+    <color name="bgColor_alert_button_press">#EAEAEA</color>
+    - <!-- actionsheet模式的取消按钮背景颜色
+  -->
+    <color name="bgColor_actionsheet_cancel_nor">#ffffff</color>
+
+
+</resources>

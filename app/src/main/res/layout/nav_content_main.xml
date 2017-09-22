@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/side_nav_bar"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/dp24"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <LinearLayout
+            android:id="@+id/ll_user_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.ewuapp.framework.view.widget.CircleImageView
+                android:id="@+id/iv_user"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="@dimen/dp50"
+                app:srcCompat="@android:drawable/sym_def_app_icon" />
+
+            <TextView
+                android:id="@+id/tv_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:text="Android Studio"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <TextView
+                android:id="@+id/tv_user_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
+                android:drawableLeft="@mipmap/ic_edit_user"
+                android:drawablePadding="@dimen/dp10"
+                android:drawableStart="@mipmap/ic_edit_user"
+                android:text="@string/home_edit_user" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_head">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/layout_home"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp44"
+                android:layout_marginTop="@dimen/dp24"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="@dimen/dp3"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="@color/colorPrimary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginStart="@dimen/dp10"
+                    android:drawableLeft="@mipmap/ic_home"
+                    android:drawablePadding="@dimen/dp24"
+                    android:drawableStart="@mipmap/ic_home"
+                    android:gravity="center_vertical"
+                    android:text="@string/home"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp18" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_msg"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp44"
+                android:layout_below="@+id/layout_home"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:src="@mipmap/ic_msg" />
+
+                <View
+                    android:layout_width="@dimen/dp8"
+                    android:layout_height="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp5"
+                    android:background="@mipmap/ic_msg_point" />
+
+                <TextView
+                    android:id="@+id/tv_message_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:gravity="center_vertical"
+                    android:text="@string/home_message"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp18" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/layout_friend"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp44"
+                android:layout_below="@+id/layout_msg"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginStart="@dimen/dp10"
+                android:drawableLeft="@mipmap/ic_friend"
+                android:drawablePadding="@dimen/dp24"
+                android:drawableStart="@mipmap/ic_friend"
+                android:gravity="center_vertical"
+                android:text="@string/home_friend"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp18" />
+
+            <TextView
+                android:id="@+id/layout_setting"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp44"
+                android:layout_below="@+id/layout_friend"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginStart="@dimen/dp10"
+                android:drawableLeft="@mipmap/ic_setting"
+                android:drawablePadding="@dimen/dp24"
+                android:drawableStart="@mipmap/ic_setting"
+                android:gravity="center_vertical"
+                android:text="@string/home_setting"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp18" />
+
+            <TextView
+                android:id="@+id/layout_guide"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp44"
+                android:layout_below="@+id/layout_setting"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginStart="@dimen/dp10"
+                android:drawableLeft="@mipmap/ic_guide"
+                android:drawablePadding="@dimen/dp24"
+                android:drawableStart="@mipmap/ic_guide"
+                android:gravity="center_vertical"
+                android:text="@string/home_guide"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp18" />
+
+            <TextView
+                android:id="@+id/layout_invite"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp44"
+                android:layout_below="@+id/layout_guide"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginStart="@dimen/dp10"
+                android:drawableLeft="@mipmap/ic_invite"
+                android:drawablePadding="@dimen/dp24"
+                android:drawableStart="@mipmap/ic_invite"
+                android:gravity="center_vertical"
+                android:text="@string/home_invite"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp18" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/layout_exit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp44"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp10"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginStart="@dimen/dp10"
+        android:drawableLeft="@mipmap/ic_exit"
+        android:drawablePadding="@dimen/dp24"
+        android:drawableStart="@mipmap/ic_exit"
+        android:gravity="center_vertical"
+        android:text="@string/home_exit"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/sp18" />
+</RelativeLayout>
