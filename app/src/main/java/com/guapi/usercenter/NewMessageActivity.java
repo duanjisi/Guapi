@@ -21,14 +21,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ewuapp.framework.common.http.CallBack;
+import com.ewuapp.framework.common.http.Constants;
+import com.ewuapp.framework.common.utils.AppManager;
 import com.ewuapp.framework.common.utils.CheckUtil;
+import com.ewuapp.framework.common.utils.IntentUtil;
 import com.ewuapp.framework.presenter.Impl.BasePresenterImpl;
 import com.ewuapp.framework.presenter.Impl.BaseViewPresenterImpl;
 import com.ewuapp.framework.view.BaseActivity;
 import com.ewuapp.framework.view.widget.CircleImageView;
 import com.ewuapp.framework.view.widget.HintDialog;
 import com.ewuapp.framework.view.widget.ToolBarView;
+import com.guapi.MainActivity;
 import com.guapi.R;
+import com.guapi.auth.LoginActivity;
 import com.guapi.http.Http;
 import com.guapi.model.response.RefreshOneMessageResponse;
 import com.guapi.usercenter.chat.ChatActivity;
@@ -408,7 +413,7 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
                                 tvGContent.setText(data.getMsListBeen().get(i).getMs_content());
                             }
                             tvGTime.setText(data.getMsListBeen().get(i).getMs_time());
-                        } else if (data.getMsListBeen().get(i).getMs_type().equals("7")||data.getMsListBeen().get(i).getMs_type().equals("2")) {
+                        } else if (data.getMsListBeen().get(i).getMs_type().equals("7")||data.getMsListBeen().get(i).getMs_type().equals("2")||data.getMsListBeen().get(i).getMs_type().equals("3")||data.getMsListBeen().get(i).getMs_type().equals("4")||data.getMsListBeen().get(i).getMs_type().equals("5")||data.getMsListBeen().get(i).getMs_type().equals("6")) {
                             if (CheckUtil.isNull(data.getMsListBeen().get(i).getMs_content())) {
                                 tvDongTaiContent.setText("暂无消息");
                             } else {
@@ -417,15 +422,17 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
                             tvDongTaiTime.setText(data.getMsListBeen().get(i).getMs_time());
                         }
                     }
-                } else {
-                    tvGContent.setText("暂无消息");
-                    tvDongTaiContent.setText("暂无消息");
                 }
             }
 
             @Override
             public void fail(int code, String message) {
-                showMessage(message);
+                if (code == Constants.NET_CODE_NEED_LOGIN) {
+                    AppManager.getInstance().finishAll();
+                    startActivity(null,LoginActivity.class);
+                } else {
+                    showMessage(message);
+                }
             }
         }));
     }

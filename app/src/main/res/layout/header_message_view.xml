@@ -45,6 +45,7 @@
             </LinearLayout>
 
             <TextView
+                android:text="暂无消息"
                 android:id="@+id/tv_guapi_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,6 +106,7 @@
             </LinearLayout>
 
             <TextView
+                android:text="暂无消息"
                 android:id="@+id/tv_dongtai_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
