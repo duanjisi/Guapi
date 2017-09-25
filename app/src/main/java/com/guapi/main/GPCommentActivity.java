@@ -1,5 +1,6 @@
 package com.guapi.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -9,14 +10,18 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ewuapp.framework.common.http.CallBack;
 import com.ewuapp.framework.common.http.Constants;
 import com.ewuapp.framework.common.utils.CompatUtil;
@@ -40,11 +45,13 @@ import com.guapi.model.response.GPResponse;
 import com.guapi.model.response.GpSingleRespone;
 import com.guapi.model.response.LoginResponse;
 import com.guapi.tool.Global;
+import com.guapi.tool.PreferenceKey;
 import com.guapi.usercenter.UserCenterActivity;
 import com.guapi.util.ImageLoaderUtils;
 import com.guapi.widget.scan.CircleImageView;
 import com.library.im.EaseConstant;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,8 +126,23 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
         super.initView(savedInstanceState);
 //        initCommentList();
         initDpBean();
+        etComment.setOnKeyListener(onKeyListener);
     }
 
+    private View.OnKeyListener onKeyListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    /*隐藏软键盘*/
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputMethodManager.isActive()) {
+                    inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                }
+                return true;
+            }
+            return false;
+        }
+    };
 
     private void initDpBean() {
         if (!TextUtils.isEmpty(gpId)) {
@@ -163,11 +185,39 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
         });
     }
 
+    boolean isHuifuTan = false;
+
+    //打开软键盘
+    public void openInputMethodManager() {
+        isHuifuTan = true;
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    //关闭软键盘
+    public void closeInputMethodManager() {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (context.getCurrentFocus() != null) {
+            imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    int clickPosition = -1;
+
     private void initCommentList() {
         imageLoader = ImageLoaderUtils.createImageLoader(context);
         rvComment.setLayoutManager(new LinearLayoutManager(this));
         commentAdapter = new CommentAdapter(context, bean.getCommentList());
         rvComment.setAdapter(commentAdapter);
+
+        commentAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                etComment.requestFocus();
+                clickPosition = position;
+                openInputMethodManager();
+            }
+        });
 
         if (TextUtils.equals(bean.getType(), Global.TYPE_HB)) {
             headView = LayoutInflater.from(this).inflate(R.layout.layout_comment_hb_top, null);
@@ -349,34 +399,47 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
                 if (TextUtils.isEmpty(etComment.getText())) {
                     return;
                 }
-                String message = etComment.getText().toString();
-                loadIngShow();
-                Http.doGP(this, bean.getGpId(), Global.TYPE_COMMENT, message, new CallBack<DoGPResponse>() {
-                    @Override
-                    public void handlerSuccess(DoGPResponse data) {
-                        loadIngDismiss();
-                        LoginResponse user = new Gson().fromJson(SharedPre.getString(Global.KEY_USER_OBJ, ""), LoginResponse.class);
-                        GPResponse.GpListBean.CommentListBean bean = new GPResponse.GpListBean.CommentListBean();
-                        bean.setCommentInfo(message);
-                        bean.setCommentTime(TimeUtils.getNowString());
-                        bean.setCommentUserId(user.getUser().getUid());
-                        bean.setCommentUserName(user.getUser().getNickname());
-                        bean.setCommentUserImagUrl(user.getUser().getAvatarUrl());
-                        commentAdapter.addData(bean);
-                        tvCommentCount.setText(StringFormat.formatForRes(R.string.comment_count, commentAdapter.getData().size()));
-                        tvLY.setText(String.valueOf(commentAdapter.getData().size()));
-                    }
-
-                    @Override
-                    public void fail(int code, String message) {
-                        loadIngDismiss();
-                        ToastUtils.showLong(message);
-                        if (code == Constants.NET_CODE_NEED_LOGIN) {
-                            IntentUtil.startActivity(GPCommentActivity.this, LoginActivity.class, false);
-                        }
-                    }
-                });
+                String message = "";
+                if (isHuifuTan) {
+                    LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
+                    message = loginResponse.getUser().getNickname() + "回复:" + commentAdapter.getData().get(clickPosition).getCommentUserName() + etComment.getText().toString();
+                } else {
+                    message = etComment.getText().toString();
+                }
+                doGP(message);
                 break;
         }
     }
+
+    public void doGP(String message) {
+        loadIngShow();
+        Http.doGP(this, bean.getGpId(), Global.TYPE_COMMENT, message, new CallBack<DoGPResponse>() {
+            @Override
+            public void handlerSuccess(DoGPResponse data) {
+                isHuifuTan = false;
+                loadIngDismiss();
+                etComment.setText("");
+                LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
+                GPResponse.GpListBean.CommentListBean bean = new GPResponse.GpListBean.CommentListBean();
+                bean.setCommentInfo(message);
+                bean.setCommentTime(TimeUtils.getNowString());
+                bean.setCommentUserId(loginResponse.getUser().getUid());
+                bean.setCommentUserName(loginResponse.getUser().getNickname());
+                bean.setCommentUserImagUrl(loginResponse.getUser().getAvatarUrl());
+                commentAdapter.addData(bean);
+                tvCommentCount.setText(StringFormat.formatForRes(R.string.comment_count, commentAdapter.getData().size()));
+                tvLY.setText(String.valueOf(commentAdapter.getData().size()));
+            }
+
+            @Override
+            public void fail(int code, String message) {
+                loadIngDismiss();
+                ToastUtils.showLong(message);
+                if (code == Constants.NET_CODE_NEED_LOGIN) {
+                    IntentUtil.startActivity(GPCommentActivity.this, LoginActivity.class, false);
+                }
+            }
+        });
+    }
+
 }

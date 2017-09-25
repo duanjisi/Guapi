@@ -19,20 +19,33 @@
             android:src="@mipmap/dttb" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="瓜皮"
-                android:textColor="#264c55"
-                android:textSize="17sp" />
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="瓜皮"
+                    android:textColor="#264c55"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv_guapi_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp" />
+            </LinearLayout>
 
             <TextView
+                android:text="暂无消息"
                 android:id="@+id/tv_guapi_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,11 +57,6 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_guapi_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp" />
     </LinearLayout>
 
     <View
@@ -70,22 +78,35 @@
             android:layout_height="40dp"
             android:layout_marginLeft="15dp"
             android:src="@mipmap/dttb" />
-
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="动态"
-                android:textColor="#264c55"
-                android:textSize="17sp" />
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="动态"
+                    android:textColor="#264c55"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv_dongtai_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    />
+            </LinearLayout>
 
             <TextView
+                android:text="暂无消息"
                 android:id="@+id/tv_dongtai_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -96,12 +117,6 @@
                 android:textColor="#aeaeae"
                 android:textSize="14sp" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_dongtai_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp" />
     </LinearLayout>
 
     <View

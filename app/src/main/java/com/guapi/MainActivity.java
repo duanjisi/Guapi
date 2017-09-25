@@ -453,12 +453,10 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
 
                     @Override
                     public void onError(int i, String s) {
-
                     }
 
                     @Override
                     public void onProgress(int i, String s) {
-
                     }
                 });
 
@@ -466,7 +464,11 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
 
             @Override
             public void fail(int code, String message) {
-                showMessage(message);
+                if (code == Constants.NET_CODE_NEED_LOGIN) {
+                    IntentUtil.startActivity(MainActivity.this, LoginActivity.class, false);
+                } else {
+                    showMessage(message);
+                }
             }
         }));
     }

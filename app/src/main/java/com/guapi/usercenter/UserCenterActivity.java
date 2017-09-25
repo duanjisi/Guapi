@@ -141,7 +141,7 @@ public class UserCenterActivity extends BaseActivity<BasePresenterImpl, BaseView
             ivEditData.setVisibility(View.VISIBLE);
             ivFollowOrNotFollow.setVisibility(View.GONE);
         } else if (from.equals("MainActivity_guapi")) {//从首页瓜皮 缩略图跳转过来
-            ivChat.setVisibility(View.GONE);
+            ivChat.setVisibility(View.VISIBLE);
             ivEditData.setVisibility(View.GONE);
             ivFollowOrNotFollow.setVisibility(View.VISIBLE);
         } else {
@@ -168,7 +168,7 @@ public class UserCenterActivity extends BaseActivity<BasePresenterImpl, BaseView
             tvLabelSize.setText("0");
         }
         if (!(CheckUtil.isNull(data.getSex())) && data.getSex().equals("0")) {//男
-
+            GlideUtil.loadPicture("", ivSex, R.mipmap.boy_icon);
         } else if (!(CheckUtil.isNull(data.getSex())) && data.getSex().equals("1")) {//女
             GlideUtil.loadPicture("", ivSex, R.mipmap.nhtb);
         }
@@ -188,11 +188,11 @@ public class UserCenterActivity extends BaseActivity<BasePresenterImpl, BaseView
         tvFansSize.setText(data.getfFocusCount() + "");
         GlideUtil.loadPicture(data.getAvatarUrl(), ivAvatar);
         tvAge.setText(data.getAge());
-        if(!CheckUtil.isNull(data.getNickname())){
+        if (!CheckUtil.isNull(data.getNickname())) {
             tvNickName.setText(data.getNickname());
             tvName.setText(data.getNickname());
         }
-        if(!CheckUtil.isNull(data.getNote())){
+        if (!CheckUtil.isNull(data.getNote())) {
             tvSign.setText(data.getNote());
         }
         imagesUrls.clear();
