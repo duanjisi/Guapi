@@ -243,6 +243,7 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
         toolBarView.setOnRightClickListener(new ToolBarView.OnBarRightClickListener() {
             @Override
             public void onRightClick(View v) {
+//                IntentUtil.startActivity(MainActivity.this, ImageTestActivity.class, false);
                 IntentUtil.startActivity(MainActivity.this, ChooseTypeActivity.class, false);
                 overridePendingTransition(R.anim.slide_in_from_bottom, 0);
             }

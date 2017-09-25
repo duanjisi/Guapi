@@ -3,6 +3,7 @@ package com.guapi.main;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -62,6 +63,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -150,6 +152,7 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
     private Map<String, File> uploadFileArray = new HashMap<>(); // 第一张为线索图片
     private AnimationDrawable animationDrawable;
     private boolean isLighOn = false;
+    private int edgeLength = 0;
 
     @NonNull
     @Override
@@ -348,6 +351,7 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
     }
 
     private void initViewParams() {
+        edgeLength = ivPoint.getLayoutParams().width;
         mSensorManager = (SensorManager) BaseApp.getInstance().getSystemService(Activity.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);// T
 //        initMap();
@@ -369,7 +373,7 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
     @Override
     protected void onPause() {
         super.onPause();
-         closeLightOff();
+        closeLightOff();
     }
 
     @Override
@@ -479,13 +483,15 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
                 BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
                 opts.inSampleSize = ImageTool.computeSampleSize(opts, -1, sceenW * sceenH);
                 opts.inJustDecodeBounds = false;
-                bitmapImg = byteToBitmap(opts, bytes);
+//                bitmapImg = byteToBitmap(opts, bytes);
+                bitmapImg = Utils.ImageCrop(byteToBitmap(opts, bytes), true, edgeLength);
                 if (bitmapImg != null) {
                     ivPoint.setVisibility(View.VISIBLE);
 //                    Glide.with(context).load(bytes).into(ivPoint);
                     ivPoint.setImageBitmap(bitmapImg);
                     animationDrawable.stop();
-                    createFileWithByte(bytes);
+//                    createFileWithByte(bytes);
+                    saveImage(context, bitmapImg);
                     if (imgFile != null && imgFile.length() > 0) {
                         pointKey = imgFile.getAbsolutePath();
                         uploadFileArray.put(pointKey, imgFile);
@@ -613,6 +619,28 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
+    }
+
+    public void saveImage(Context context, Bitmap bmp) {
+        // 首先保存图片
+        // File appDir = new File(Environment.getExternalStorageDirectory(), "boss66Im");
+//        File appDir = new File(context.getFilesDir().getPath(), "boss66Im");
+//        if (!appDir.exists()) {
+//            appDir.mkdir();
+//        }
+        writeToSDFile();
+        String fileName = System.currentTimeMillis() + ".jpg";
+        imgFile = new File(savePath, fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(imgFile);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

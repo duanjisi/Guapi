@@ -178,7 +178,7 @@
             android:layout_marginLeft="11dp"
             android:layout_marginRight="11dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/person"
+            android:visibility="gone"
             app:round_borderRadius="10dp"
             app:round_type="1" />
 

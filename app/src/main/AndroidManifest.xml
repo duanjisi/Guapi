@@ -186,7 +186,9 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ImageTestActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".main.ChooseTypeActivity"
             android:exported="false"
