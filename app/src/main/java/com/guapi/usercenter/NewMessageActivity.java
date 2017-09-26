@@ -137,7 +137,6 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    Log.e("Long", "0000");
                     return;
                 }
                 SelfConversation conversation = conversationListView.getItem(position - 1).second;
@@ -413,7 +412,7 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
                                 tvGContent.setText(data.getMsListBeen().get(i).getMs_content());
                             }
                             tvGTime.setText(data.getMsListBeen().get(i).getMs_time());
-                        } else if (data.getMsListBeen().get(i).getMs_type().equals("7")||data.getMsListBeen().get(i).getMs_type().equals("2")||data.getMsListBeen().get(i).getMs_type().equals("3")||data.getMsListBeen().get(i).getMs_type().equals("4")||data.getMsListBeen().get(i).getMs_type().equals("5")||data.getMsListBeen().get(i).getMs_type().equals("6")) {
+                        } else if (data.getMsListBeen().get(i).getMs_type().equals("7") || data.getMsListBeen().get(i).getMs_type().equals("2") || data.getMsListBeen().get(i).getMs_type().equals("3") || data.getMsListBeen().get(i).getMs_type().equals("4") || data.getMsListBeen().get(i).getMs_type().equals("5") || data.getMsListBeen().get(i).getMs_type().equals("6")) {
                             if (CheckUtil.isNull(data.getMsListBeen().get(i).getMs_content())) {
                                 tvDongTaiContent.setText("暂无消息");
                             } else {
@@ -429,7 +428,7 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
             public void fail(int code, String message) {
                 if (code == Constants.NET_CODE_NEED_LOGIN) {
                     AppManager.getInstance().finishAll();
-                    startActivity(null,LoginActivity.class);
+                    startActivity(null, LoginActivity.class);
                 } else {
                     showMessage(message);
                 }
