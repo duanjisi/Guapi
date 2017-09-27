@@ -31,8 +31,6 @@ import butterknife.OnClick;
 public class ChangePasswordActivity extends BaseActivity<BasePresenterImpl, BaseViewPresenterImpl> {
     @Bind(R.id.titleBar)
     ToolBarView toolBarView;
-    @Bind(R.id.et_old_password)
-    EditText etOldPassword;
     @Bind(R.id.et_new_password)
     EditText etNewPassword;
     @Bind(R.id.tv_get_code)
@@ -90,7 +88,7 @@ public class ChangePasswordActivity extends BaseActivity<BasePresenterImpl, Base
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_confirm:
-                changePassword(etPhone.getText().toString(), etOldPassword.getText().toString(), etNewPassword.getText().toString(), etCode.getText().toString());
+                changePassword(etPhone.getText().toString(), etNewPassword.getText().toString(), etCode.getText().toString());
                 break;
             case R.id.tv_get_code:
                 genCodePswd(etPhone.getText().toString());
@@ -98,21 +96,13 @@ public class ChangePasswordActivity extends BaseActivity<BasePresenterImpl, Base
         }
     }
 
-    public void changePassword(String phone, String oldPSWD, String newPSWD, String code) {
+    public void changePassword(String phone, String newPSWD, String code) {
         if (CheckUtil.isNull(phone)) {
             showMessage("请输入手机号");
             return;
         }
         if (CheckUtil.isNull(code)) {
             showMessage("请输入验证码");
-            return;
-        }
-        if (CheckUtil.isNull(oldPSWD)) {
-            showMessage("请输入旧密码");
-            return;
-        }
-        if (!Hawk.get(PreferenceKey.PASSWORD, "").equals(oldPSWD)) {
-            showMessage("旧密码错误");
             return;
         }
         if (CheckUtil.isNull(newPSWD)) {

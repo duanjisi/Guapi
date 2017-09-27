@@ -89,7 +89,7 @@ public class SystemMessageActivity extends BaseActivity<BasePresenterImpl, BaseV
                 Bundle bundle = new Bundle();
                 if (msg_type.equals("1")) {//瓜皮调到消息详情
                     bundle.putSerializable("MsListBean", mData.get(position));
-//                    startActivity(bundle, SystemMessageDetailActivity.class);
+                    startActivity(bundle, SystemMessageDetailActivity.class);
                 } else if (msg_type.equals("7")) {
                     if (mData.get(position).getMs_type().equals("6")) {//动态中的 关注调到个人资料，
                         bundle.putString("from", "SystemMessageActivity");
@@ -111,7 +111,6 @@ public class SystemMessageActivity extends BaseActivity<BasePresenterImpl, BaseV
         addDisposable(Http.refresh(context, msg_type, new CallBack<RefreshOneMessageResponse>() {
             @Override
             public void handlerSuccess(RefreshOneMessageResponse data) {
-                Log.e("lONG", data.toString());
                 if (data.getMsListBeen().size() > 0) {
                     mData.addAll(data.getMsListBeen());
                     mAdapter.notifyDataSetChanged();

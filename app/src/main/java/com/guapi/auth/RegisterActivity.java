@@ -67,7 +67,7 @@ public class RegisterActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
                 register(etPhone.getText().toString(), etPasswordFirst.getText().toString(), etPasswordTwice.getText().toString(), etCode.getText().toString());
                 break;
             case R.id.tv_register_agreement://注册协议
-                Bundle bundle=new Bundle();
+                Bundle bundle = new Bundle();
                 bundle.putString("title", "注册协议");
                 bundle.putString("url", "file:///android_asset/index.html");
                 startActivity(bundle, WebViewActivity.class);
@@ -89,6 +89,9 @@ public class RegisterActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
 
             @Override
             public void fail(int code, String message) {
+                if (code == 5000101) {
+                    showMessage("该手机号码已经注册，请更换其它手机号码");
+                }
                 loadIngDismiss();
             }
         }));

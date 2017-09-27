@@ -92,7 +92,7 @@ public class ToolBarView extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        LayoutInflater.from(getContext()).inflate(R.layout.view_toolbar, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.layout_view_toolbar, this, true);
         mTvBack = (TextView) findViewById(R.id.tv_bar_back);
         mTvTitle = (TextView) findViewById(R.id.tv_bar_title);
         mTvRight = (TextView) findViewById(R.id.tv_bar_right);
