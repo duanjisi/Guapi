@@ -68,6 +68,7 @@ import com.guapi.usercenter.UserCenterActivity;
 import com.guapi.usercenter.UserGuideActivity;
 import com.guapi.usercenter.chat.ChatActivity;
 import com.guapi.util.PermissonUtil.PermissionUtil;
+import com.guapi.util.SensorEventHelper;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
@@ -123,6 +124,7 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
     private Circle mCircle;
     private AMap aMap;
     private UiSettings mUiSettings;
+    private SensorEventHelper mSensorHelper;
     private AMapLocationClient mLocationClient = null;
     private AMapLocationClientOption mLocationClientOption = null;
     private AMapLocation userLocation;
@@ -131,7 +133,6 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
     private View drawerContentView;
     private List<Marker> markerList = new ArrayList<>();
     private int raduis = 0;
-
     private Gson gson = new Gson();
     private boolean hasQueryGP = false;
     private boolean isFirst = true;
@@ -295,6 +296,10 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
         mapView.onCreate(bundle);
         aMap = mapView.getMap();
         if (aMap != null) {
+            mSensorHelper = new SensorEventHelper(this);
+            if (mSensorHelper != null) {
+                mSensorHelper.registerSensorListener();
+            }
 //            aMap.getUiSettings().setZoomControlsEnabled(false);
             mUiSettings = aMap.getUiSettings();
             mUiSettings
@@ -514,6 +519,9 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
     protected void onResume() {
         super.onResume();
         mapView.onResume();
+        if (mSensorHelper != null) {
+            mSensorHelper.registerSensorListener();
+        }
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
 //        getGP(userLocation);
         setupDrawer();
@@ -523,6 +531,11 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
     protected void onPause() {
         super.onPause();
         mapView.onPause();
+        if (mSensorHelper != null) {
+            mSensorHelper.unRegisterSensorListener();
+            mSensorHelper.setCurrentMarker(null);
+            mSensorHelper = null;
+        }
         if (mLocationClient != null) {
             mLocationClient.stopLocation();
         }
@@ -568,6 +581,7 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
                 scalePoint(mapLocation);
                 addCircle(location, mapLocation.getAccuracy());//添加定位精度圆
                 addMarker(location);//添加定位图标
+                mSensorHelper.setCurrentMarker(mLocMarker);//定位图标旋转
             } else {
                 mCircle.setCenter(location);
                 mCircle.setRadius(30);
@@ -626,7 +640,7 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
             return;
         }
         Bitmap bMap = BitmapFactory.decodeResource(this.getResources(),
-                R.drawable.gps_point);
+                R.drawable.navi_map_gps_locked);//gps_point
         BitmapDescriptor des = BitmapDescriptorFactory.fromBitmap(bMap);
         MarkerOptions options = new MarkerOptions();
         options.icon(des);
@@ -652,7 +666,7 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
                         if (data != null && data.getGpList() != null) {
                             List<GPResponse.GpListBean> gpListBeen = data.getGpList();
                             for (GPResponse.GpListBean bean : gpListBeen) {
-//                                Log.i("info", "===============line:" + bean.getLine());
+                                Log.i("info", "===============Is_find:" + bean.getIs_find());
                                 showGuaPi(bean.getType(), bean);
                             }
                         }

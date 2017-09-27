@@ -26,6 +26,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.gifdecoder.GifDecoder;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.ewuapp.framework.common.utils.IntentUtil;
 import com.ewuapp.framework.presenter.Impl.BasePresenterImpl;
@@ -86,6 +92,8 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
     TextView tvTip;
     @Bind(R.id.iv_point)
     ImageView ivPoint;
+    @Bind(R.id.iv_success)
+    ImageView iv_success;
     @Bind(R.id.iv_user)
     CircleImageView ivUser;
 
@@ -125,7 +133,7 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
             super.handleMessage(msg);
             switch (msg.what) {
                 case 111:
-//                    showDialog();
+                    getGuapiDetails();
                     break;
                 case 0x01:
                     if (localBitmap != null) {
@@ -142,9 +150,8 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
                         Bitmap bitmap = ThumbnailUtils.extractThumbnail(newBitmap, 450, 450);
                         if (isFirstImgBlack) {
                             if (getBitmapColor(bitmap)) {
-//                                getServerData();
 //                                showToast("匹配成功", true);
-                                getGuapiDetails();
+                                playSucessGif();
                             } else {
                                 noMatchDo();
                             }
@@ -163,7 +170,7 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
                                 cameraNum = 0;
 //                                getServerData();
 //                                showToast("匹配成功", true);
-                                getGuapiDetails();
+                                playSucessGif();
                             } else {
                                 cameraNum++;
                                 noMatchDo();
@@ -650,6 +657,53 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
+    }
+
+    private void playSucessGif() {
+        try {
+            if (iv_success != null) {
+                iv_success.setVisibility(View.VISIBLE);
+                Glide.with(this)
+                        .load(R.drawable.catch_guapi_succ0)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .listener(new RequestListener<Integer, GlideDrawable>() {
+
+                            @Override
+                            public boolean onException(Exception arg0, Integer arg1,
+                                                       Target<GlideDrawable> arg2, boolean arg3) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GlideDrawable resource,
+                                                           Integer model, Target<GlideDrawable> target,
+                                                           boolean isFromMemoryCache, boolean isFirstResource) {
+                                // 计算动画时长
+                                GifDrawable drawable = (GifDrawable) resource;
+                                GifDecoder decoder = drawable.getDecoder();
+                                int duration = 0;
+                                for (int i = 0; i < drawable.getFrameCount(); i++) {
+                                    duration += decoder.getDelay(i);
+                                }
+                                if (duration > 2000) {
+                                    duration = 2000;
+                                }
+                                //发送延时消息，通知动画结束
+                                handler.sendEmptyMessageDelayed(111,
+                                        duration);
+                                return false;
+                            }
+                        }) //仅仅加载一次gif动画
+                        .into(new GlideDrawableImageViewTarget(iv_success, 1));
+            }
+        } catch (Exception e) {
+            handler.sendEmptyMessageDelayed(111,
+                    1000);
+        } catch (OutOfMemoryError error) {
+            System.gc();
+            handler.sendEmptyMessageDelayed(111,
+                    1000);
+        }
     }
 
     @Override

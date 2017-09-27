@@ -2,6 +2,8 @@ package com.guapi.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
@@ -69,14 +71,18 @@ public class FindHBDialog extends BaseDialog2 {
     GPResponse.GpListBean bean;
     @Bind(R.id.iv_temp)
     ImageView ivTemp;
+    @Bind(R.id.iv_play)
+    ImageView iv_play;
 
     private Context context;
     private ImageLoader imageLoader;
+    private Resources resources;
 
     public FindHBDialog(Context context, GPResponse.GpListBean bean) {
         super(context, R.style.base_dialog, true);
         this.bean = bean;
         this.context = context;
+        this.resources = context.getResources();
         imageLoader = ImageLoaderUtils.createImageLoader(context);
     }
 
@@ -89,19 +95,31 @@ public class FindHBDialog extends BaseDialog2 {
     protected void initView() {
         super.initView();
         ButterKnife.bind(this);
-        tvSex.setVisibility(View.GONE);
+//        tvSex.setVisibility(View.GONE);
         if (!TextUtils.equals(bean.getType(), Global.TYPE_HB)) {
 //            Glide.with(getContext()).load(bean.getPicFile1Url())
 //                    .bitmapTransform(new GlideCircleTransform(getContext()))
 //                    .placeholder(R.mipmap.ic_launcher).fallback(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(ivTemp);
             if (TextUtils.equals(bean.getType(), Global.TYPE_PIC)) {
                 Glide.with(getContext()).load(bean.getPicFile1Url()).into(ivTemp);
+                iv_play.setVisibility(View.GONE);
             } else {
                 Glide.with(getContext()).load(bean.getVideo_pic()).into(ivTemp);
+                iv_play.setVisibility(View.VISIBLE);
             }
         }
 //        Glide.with(getContext()).load(bean.getUserImagUrl()).into(ivUser);
         imageLoader.displayImage(bean.getUserImagUrl(), ivUser, ImageLoaderUtils.getDisplayImageOptions());
+        int sex = bean.getSex();
+        Drawable nav_up = null;
+        if (sex == 1) {
+            nav_up = resources.getDrawable(R.drawable.ic_sex_gilr);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+        } else {
+            nav_up = resources.getDrawable(R.drawable.boy_icon);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+        }
+        tvSex.setCompoundDrawables(nav_up, null, null, null);
         tvSex.setText(bean.getAge());
         tvMessage.setText(bean.getDesc());
         tvName.setText(bean.getUserName());

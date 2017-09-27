@@ -9,7 +9,9 @@
     <RelativeLayout
         android:id="@+id/rl_preciew"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></RelativeLayout>
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -204,4 +206,11 @@
             android:layout_centerInParent="true"
             android:scaleType="centerCrop" />
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_success"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
 </FrameLayout>

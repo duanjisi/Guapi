@@ -75,7 +75,7 @@ public class CommentAdapter extends BaseQuickAdapter<GPResponse.GpListBean.Comme
             nav_up = resources.getDrawable(R.drawable.ic_sex_gilr);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
         } else {
-            nav_up = resources.getDrawable(R.drawable.ic_sex_gilr);
+            nav_up = resources.getDrawable(R.drawable.boy_icon);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
         }
         tv_sex.setCompoundDrawables(nav_up, null, null, null);

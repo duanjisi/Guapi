@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,14 +25,12 @@ import com.ewuapp.framework.common.http.CallBack;
 import com.ewuapp.framework.common.http.Constants;
 import com.ewuapp.framework.common.utils.CompatUtil;
 import com.ewuapp.framework.common.utils.IntentUtil;
-import com.ewuapp.framework.common.utils.SharedPre;
 import com.ewuapp.framework.common.utils.StringFormat;
 import com.ewuapp.framework.presenter.Impl.BasePresenterImpl;
 import com.ewuapp.framework.presenter.Impl.BaseViewPresenterImpl;
 import com.ewuapp.framework.view.BaseActivity;
 import com.ewuapp.framework.view.widget.HorizontalDividerItemDecoration;
 import com.ewuapp.framework.view.widget.VerticalDividerItemDecoration;
-import com.google.gson.Gson;
 import com.guapi.R;
 import com.guapi.auth.LoginActivity;
 import com.guapi.http.Http;
@@ -241,7 +238,6 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
 //                            tvCommentCount.setText(StringFormat.formatForRes(R.string.comment_count, commentAdapter.getData().size()));
 //                            tvLY.setText(String.valueOf(commentAdapter.getData().size()));
                     }
-
                     @Override
                     public void fail(int code, String message) {
                         loadIngDismiss();
@@ -292,7 +288,6 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
 
         tvCommentCount = (TextView) headView.findViewById(R.id.tv_comment_count);
         CircleImageView ivUser = (CircleImageView) headView.findViewById(R.id.iv_user);
-
         ivUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

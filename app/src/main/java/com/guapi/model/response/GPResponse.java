@@ -70,6 +70,8 @@ public class GPResponse extends Result {
         private double lat;
         @SerializedName("lng")
         private double lng;
+        @SerializedName("is_find")
+        private String is_find;
         @SerializedName("user_imag_url")
         private String userImagUrl;
         @SerializedName("user_id")
@@ -127,6 +129,14 @@ public class GPResponse extends Result {
         public String address;
 
         public float distance;
+
+        public String getIs_find() {
+            return is_find;
+        }
+
+        public void setIs_find(String is_find) {
+            this.is_find = is_find;
+        }
 
         public int getSex() {
             return sex;
