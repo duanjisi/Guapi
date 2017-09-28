@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -248,6 +249,7 @@ public class UserCenterActivity extends BaseActivity<BasePresenterImpl, BaseView
                     userBean.setPic_file6_url(dataBean.getPic_file6_url());
                     userBean.setSex(data.getDataBean().getSex());
                     userBean.setAge(data.getDataBean().getAge());
+                    Log.e("long",data.getDataBean().getAge());
                     userBean.setNickname(data.getDataBean().getNickname());
                     loginResponse.setUser(userBean);
                     Hawk.put(PreferenceKey.LoginResponse, loginResponse);

@@ -63,8 +63,21 @@ public class SystemMessageDetailActivity extends BaseActivity<BasePresenterImpl,
         super.initView(savedInstanceState);
         tvTime.setText(msListBean.getMs_time());
         tvContent.setText(msListBean.getMs_content());
+    }
+
+    @Override
+    protected void setUpToolbar() {
+        super.setUpToolbar();
+        toolBarView.setTitleText("瓜皮详情");
         toolBarView.setVisibility(View.VISIBLE);
         toolBarView.setDrawable(ToolBarView.TEXT_LEFT, R.mipmap.fhan);
-        toolBarView.setDrawable(ToolBarView.TEXT_RIGHT,R.mipmap.dttb);
+        toolBarView.setOnLeftClickListener(new ToolBarView.OnBarLeftClickListener() {
+            @Override
+            public void onLeftClick(View v) {
+                finish();
+            }
+        });
     }
+
+
 }

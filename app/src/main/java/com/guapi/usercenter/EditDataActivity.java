@@ -196,21 +196,12 @@ public class EditDataActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
                     addDisposable(Http.update(context, nickName, sexInt, "", "", sign, age, label, birthday, new CallBack<Result>() {
                         @Override
                         public void handlerSuccess(Result data) {
-                            Hawk.put(PreferenceKey.AVATAR, dataBean.getAvatarUrl());
-                            HxHelper.avatar = Hawk.get(PreferenceKey.AVATAR, "");
-                            PreferenceManager.getInstance().setUserAvatar(dataBean.getAvatarUrl());
                             LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
                             LoginResponse.UserBean userBean = loginResponse.getUser();
-                            userBean.setAvatarUrl(dataBean.getAvatarUrl());
-                            userBean.setPic_file1_url(dataBean.getPic_file1_url());
-                            userBean.setPic_file2_url(dataBean.getPic_file2_url());
-                            userBean.setPic_file3_url(dataBean.getPic_file3_url());
-                            userBean.setPic_file4_url(dataBean.getPic_file4_url());
-                            userBean.setPic_file5_url(dataBean.getPic_file5_url());
-                            userBean.setPic_file6_url(dataBean.getPic_file6_url());
                             userBean.setSex(finalSexInt + "");
                             userBean.setAge(finalAge + "");
                             userBean.setNickname(nickName);
+                            Log.e("LongEditage", finalAge + "");
                             loginResponse.setUser(userBean);
                             Hawk.put(PreferenceKey.LoginResponse, loginResponse);
                             GlideUtil.clear();

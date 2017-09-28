@@ -33,7 +33,7 @@
             android:layout_height="85dp"
             android:layout_centerHorizontal="true"
             android:gravity="center_vertical"
-            android:paddingLeft="30dp"
+            android:paddingLeft="40dp"
             android:textColor="#264c55"
             android:textSize="14sp" />
         <!--android:background="@drawable/shape_bg_black"-->

@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -424,6 +425,7 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
                 bean.setCommentUserImagUrl(loginResponse.getUser().getAvatarUrl());
                 String sex = loginResponse.getUser().getSex();
                 String age = loginResponse.getUser().getAge();
+
                 int ss = 0;
                 int aa = 0;
                 if (!TextUtils.isEmpty(sex)) {
@@ -433,6 +435,7 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
                     aa = Integer.parseInt(age);
                 }
                 bean.setSex(ss);
+                Log.e("LongGPCOMMENT", aa + "__" + ss);
                 bean.setAge(aa);
                 commentAdapter.addData(bean);
                 tvCommentCount.setText(StringFormat.formatForRes(R.string.comment_count, commentAdapter.getData().size()));
