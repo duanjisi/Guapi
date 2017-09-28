@@ -479,6 +479,8 @@ public class Utils {
                         if (times[4] < 1) {
                             if (times[5] < 1) {
                                 str = times[5] + "秒前";
+                            } else {
+                                str = "刚才";
                             }
                         } else {
                             str = times[4] + "分钟前";

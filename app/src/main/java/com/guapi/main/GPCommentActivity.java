@@ -238,6 +238,7 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
 //                            tvCommentCount.setText(StringFormat.formatForRes(R.string.comment_count, commentAdapter.getData().size()));
 //                            tvLY.setText(String.valueOf(commentAdapter.getData().size()));
                     }
+
                     @Override
                     public void fail(int code, String message) {
                         loadIngDismiss();
@@ -421,6 +422,18 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
                 bean.setCommentUserId(loginResponse.getUser().getUid());
                 bean.setCommentUserName(loginResponse.getUser().getNickname());
                 bean.setCommentUserImagUrl(loginResponse.getUser().getAvatarUrl());
+                String sex = loginResponse.getUser().getSex();
+                String age = loginResponse.getUser().getAge();
+                int ss = 0;
+                int aa = 0;
+                if (!TextUtils.isEmpty(sex)) {
+                    ss = Integer.parseInt(sex);
+                }
+                if (!TextUtils.isEmpty(age)) {
+                    aa = Integer.parseInt(age);
+                }
+                bean.setSex(ss);
+                bean.setAge(aa);
                 commentAdapter.addData(bean);
                 tvCommentCount.setText(StringFormat.formatForRes(R.string.comment_count, commentAdapter.getData().size()));
                 tvLY.setText(String.valueOf(commentAdapter.getData().size()));
@@ -436,5 +449,4 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
             }
         });
     }
-
 }
