@@ -182,7 +182,8 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
                 startActivity(bundle, SystemMessageActivity.class);
             }
         });
-        loadData();//动态消息
+        loadDataType1();//瓜皮消息
+        loadDataType7();//动态消息
     }
 
     LinearLayout llDongTai, llGuaPi;
@@ -399,28 +400,51 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
         return list;
     }
 
-    private void loadData() {
-        addDisposable(Http.refreshOne(context, "", new CallBack<RefreshOneMessageResponse>() {
+    private void loadDataType7() {
+        addDisposable(Http.refreshOne(context, "7", new CallBack<RefreshOneMessageResponse>() {
             @Override
             public void handlerSuccess(RefreshOneMessageResponse data) {
                 if (data != null && data.getMsListBeen().size() > 0) {
-                    for (int i = 0; i < data.getMsListBeen().size(); i++) {
-                        if (data.getMsListBeen().get(i).getMs_type().equals("1")) {
-                            if (CheckUtil.isNull(data.getMsListBeen().get(i).getMs_content())) {
-                                tvGContent.setText("暂无消息");
-                            } else {
-                                tvGContent.setText(data.getMsListBeen().get(i).getMs_content());
-                            }
-                            tvGTime.setText(data.getMsListBeen().get(i).getMs_time());
-                        } else if (data.getMsListBeen().get(i).getMs_type().equals("7") || data.getMsListBeen().get(i).getMs_type().equals("2") || data.getMsListBeen().get(i).getMs_type().equals("3") || data.getMsListBeen().get(i).getMs_type().equals("4") || data.getMsListBeen().get(i).getMs_type().equals("5") || data.getMsListBeen().get(i).getMs_type().equals("6")) {
-                            if (CheckUtil.isNull(data.getMsListBeen().get(i).getMs_content())) {
-                                tvDongTaiContent.setText("暂无消息");
-                            } else {
-                                tvDongTaiContent.setText(data.getMsListBeen().get(i).getMs_content());
-                            }
-                            tvDongTaiTime.setText(data.getMsListBeen().get(i).getMs_time());
+                     if (data.getMsListBeen().get(0).getMs_type().equals("7") || data.getMsListBeen().get(0).getMs_type().equals("2") || data.getMsListBeen().get(0).getMs_type().equals("3") || data.getMsListBeen().get(0).getMs_type().equals("4") || data.getMsListBeen().get(0).getMs_type().equals("5") || data.getMsListBeen().get(0).getMs_type().equals("6")) {
+                        if (CheckUtil.isNull(data.getMsListBeen().get(0).getMs_content())) {
+                            tvDongTaiContent.setText("暂无消息");
+                        } else {
+                            tvDongTaiContent.setText(data.getMsListBeen().get(0).getMs_content());
                         }
+                        tvDongTaiTime.setText(data.getMsListBeen().get(0).getMs_time());
                     }
+                }else {
+                    tvDongTaiContent.setText("暂无消息");
+                }
+            }
+
+            @Override
+            public void fail(int code, String message) {
+                if (code == Constants.NET_CODE_NEED_LOGIN) {
+                    AppManager.getInstance().finishAll();
+                    startActivity(null, LoginActivity.class);
+                } else {
+                    showMessage(message);
+                }
+            }
+        }));
+    }
+
+    private void loadDataType1() {
+        addDisposable(Http.refreshOne(context, "1", new CallBack<RefreshOneMessageResponse>() {
+            @Override
+            public void handlerSuccess(RefreshOneMessageResponse data) {
+                if (data != null && data.getMsListBeen().size() > 0) {
+                    if (data.getMsListBeen().get(0).getMs_type().equals("1")) {
+                        if (CheckUtil.isNull(data.getMsListBeen().get(0).getMs_content())) {
+                            tvGContent.setText("暂无消息");
+                        } else {
+                            tvGContent.setText(data.getMsListBeen().get(0).getMs_content());
+                        }
+                        tvGTime.setText(data.getMsListBeen().get(0).getMs_time());
+                    }
+                } else {
+                    tvGContent.setText("暂无消息");
                 }
             }
 

@@ -102,6 +102,16 @@ public class LoginResponse extends Result {
         private String pic_file5_url;
         @SerializedName("pic_file6_url")
         private String pic_file6_url;
+        @SerializedName("age")
+        private String age;
+
+        public String getAge() {
+            return age;
+        }
+
+        public void setAge(String age) {
+            this.age = age;
+        }
 
         public String getPic_file1_url() {
             return pic_file1_url;

@@ -34,9 +34,14 @@ import com.ewuapp.framework.view.widget.alertview.AlertView;
 import com.ewuapp.framework.view.widget.alertview.OnItemClickListener;
 import com.guapi.R;
 import com.guapi.http.Http;
+import com.guapi.model.response.LoginResponse;
 import com.guapi.model.response.UserGetCountResponse;
 import com.guapi.tool.DateUtil;
+import com.guapi.tool.PreferenceKey;
+import com.library.im.controller.HxHelper;
+import com.library.im.utils.PreferenceManager;
 import com.nanchen.compresshelper.CompressHelper;
+import com.orhanobut.hawk.Hawk;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -186,9 +191,28 @@ public class EditDataActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
                 File newFile = CompressHelper.getDefault(context).compressToFile(files[imgList.get(i)]);
                 newFils[imgList.get(i)] = newFile;
                 if (i == photoPathList.size() - 1) {
+                    int finalSexInt = sexInt;
+                    int finalAge = age;
                     addDisposable(Http.update(context, nickName, sexInt, "", "", sign, age, label, birthday, new CallBack<Result>() {
                         @Override
                         public void handlerSuccess(Result data) {
+                            Hawk.put(PreferenceKey.AVATAR, dataBean.getAvatarUrl());
+                            HxHelper.avatar = Hawk.get(PreferenceKey.AVATAR, "");
+                            PreferenceManager.getInstance().setUserAvatar(dataBean.getAvatarUrl());
+                            LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
+                            LoginResponse.UserBean userBean = loginResponse.getUser();
+                            userBean.setAvatarUrl(dataBean.getAvatarUrl());
+                            userBean.setPic_file1_url(dataBean.getPic_file1_url());
+                            userBean.setPic_file2_url(dataBean.getPic_file2_url());
+                            userBean.setPic_file3_url(dataBean.getPic_file3_url());
+                            userBean.setPic_file4_url(dataBean.getPic_file4_url());
+                            userBean.setPic_file5_url(dataBean.getPic_file5_url());
+                            userBean.setPic_file6_url(dataBean.getPic_file6_url());
+                            userBean.setSex(finalSexInt + "");
+                            userBean.setAge(finalAge + "");
+                            userBean.setNickname(nickName);
+                            loginResponse.setUser(userBean);
+                            Hawk.put(PreferenceKey.LoginResponse, loginResponse);
                             GlideUtil.clear();
                             loadIngDismiss();
                             finish();

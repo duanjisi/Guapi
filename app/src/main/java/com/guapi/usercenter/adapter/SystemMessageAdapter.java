@@ -57,7 +57,7 @@ public class SystemMessageAdapter extends RecyclerAdapter<RefreshOneMessageRespo
             }
             tvContent.setText(object.getMs_content());
             tvTime.setText(object.getMs_time());
-            GlideUtil.loadPicture(object.getSms_user_imag_url(), ivAvatar);
+            GlideUtil.loadPicture(object.getSms_user_imag_url(), ivAvatar, R.mipmap.logo);
         }
     }
 

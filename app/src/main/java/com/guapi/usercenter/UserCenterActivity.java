@@ -246,8 +246,9 @@ public class UserCenterActivity extends BaseActivity<BasePresenterImpl, BaseView
                     userBean.setPic_file4_url(dataBean.getPic_file4_url());
                     userBean.setPic_file5_url(dataBean.getPic_file5_url());
                     userBean.setPic_file6_url(dataBean.getPic_file6_url());
-                    userBean.setNickname(data.getDataBean().getNickname());
                     userBean.setSex(data.getDataBean().getSex());
+                    userBean.setAge(data.getDataBean().getAge());
+                    userBean.setNickname(data.getDataBean().getNickname());
                     loginResponse.setUser(userBean);
                     Hawk.put(PreferenceKey.LoginResponse, loginResponse);
                 }
