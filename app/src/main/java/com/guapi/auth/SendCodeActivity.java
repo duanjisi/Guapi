@@ -121,7 +121,7 @@ public class SendCodeActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
             public void handlerSuccess(GetCodeResponse data) {
                 loadIngDismiss();
                 mCountDownTimer.start();
-                tvRemind.setText("验证码短信已发送至：\\n18300072223");
+                tvRemind.setText("验证码短信已发送至：\\n" + phone);
             }
 
             @Override
