@@ -107,7 +107,7 @@ public class BindPhoneActivity extends BaseActivity<BasePresenterImpl, BaseViewP
             return;
         }
         loadIngShow();
-        addDisposable(Http.genCodePswd(context, phone, new CallBack<GetCodeResponse>() {
+        addDisposable(Http.getCode(context, phone, new CallBack<GetCodeResponse>() {
             @Override
             public void handlerSuccess(GetCodeResponse data) {
                 loadIngDismiss();

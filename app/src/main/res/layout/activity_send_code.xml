@@ -20,7 +20,6 @@
         android:layout_marginTop="150dp"
         android:background="@null"
         android:gravity="center"
-        android:hint="验证码短信发送至：\n18300072223"
         android:textColorHint="#aeaeae"
         android:textSize="15sp" />
 
