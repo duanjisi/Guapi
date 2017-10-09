@@ -584,7 +584,7 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
                 mSensorHelper.setCurrentMarker(mLocMarker);//定位图标旋转
             } else {
                 mCircle.setCenter(location);
-                mCircle.setRadius(30);
+                mCircle.setRadius(50);
                 mLocMarker.setPosition(location);
             }
             Log.i("info", "================onLocationChanged()");
@@ -631,7 +631,7 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
         options.strokeColor(STROKE_COLOR);
         options.center(latlng);
 //        options.radius(radius);
-        options.radius(30);
+        options.radius(50);
         mCircle = aMap.addCircle(options);
     }
 
