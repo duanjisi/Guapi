@@ -152,9 +152,10 @@ public class Http {
     }
 
     //获取对应组别的好友
-    public static Disposable getFriends(Context context, int type, CallBack<GetFriendsResponse> callBack) {
+    public static Disposable getFriends(Context context, int type, String userId, CallBack<GetFriendsResponse> callBack) {
         GetFriendsRequest getFriendsRequest = new GetFriendsRequest();
         getFriendsRequest.setType(type);
+        getFriendsRequest.setUser_id(userId);
         return getAPI().getFriends(gson.toJson(getFriendsRequest))
                 .compose(RxSchedulers.<GetFriendsResponse>mainThread(context))
                 .subscribeWith(new BaseSubscriber<>(callBack));

@@ -1,9 +1,11 @@
 package com.guapi.usercenter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -39,6 +41,7 @@ public class FansAndFollowsActivity extends BaseActivity<BasePresenterImpl, Base
 
     private ViewPageAdapter adapter;
     private List<Fragment> list = new ArrayList<>();
+    String userId = "";
 
     @NonNull
     @Override
@@ -50,6 +53,16 @@ public class FansAndFollowsActivity extends BaseActivity<BasePresenterImpl, Base
     @Override
     protected BaseViewPresenterImpl getViewPresent() {
         return new BaseViewPresenterImpl();
+    }
+
+    @Override
+    protected void handleIntent(Intent intent) {
+        super.handleIntent(intent);
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            userId = bundle.getString("user_id", "");
+            Log.e("FansAndFollowsuser_id", userId);
+        }
     }
 
     @Override
@@ -73,8 +86,8 @@ public class FansAndFollowsActivity extends BaseActivity<BasePresenterImpl, Base
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        list.add(new FollowFragment());
-        list.add(new FansFragment());
+        list.add(FollowFragment.getIntance(userId));
+        list.add(FansFragment.getIntance(userId));
         adapter = new ViewPageAdapter(getSupportFragmentManager(), list);
         viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);

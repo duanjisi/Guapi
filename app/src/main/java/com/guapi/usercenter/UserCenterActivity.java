@@ -328,9 +328,11 @@ public class UserCenterActivity extends BaseActivity<BasePresenterImpl, BaseView
                 }
                 break;
             case R.id.ll_focus_size:
+                bundle.putString("user_id", user_id);
                 startActivity(bundle, FansAndFollowsActivity.class);
                 break;
             case R.id.ll_fans_size:
+                bundle.putString("user_id", user_id);
                 startActivity(bundle, FansAndFollowsActivity.class);
                 break;
         }

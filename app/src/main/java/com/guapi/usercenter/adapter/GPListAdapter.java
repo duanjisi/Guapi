@@ -5,12 +5,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amap.api.maps.AMapUtils;
+import com.amap.api.maps.model.LatLng;
 import com.ewuapp.framework.common.utils.GlideUtil;
 import com.ewuapp.framework.view.adapter.BaseViewHolder;
 import com.ewuapp.framework.view.adapter.RecyclerAdapter;
 import com.ewuapp.framework.view.widget.CircleImageView;
 import com.guapi.R;
 import com.guapi.model.response.QueryFocusGpResponse;
+import com.guapi.tool.PreferenceKey;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.List;
 
@@ -43,6 +47,8 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
         ImageView ivHb;
         @Bind(R.id.tv_message)
         TextView tvMessage;
+        @Bind(R.id.tv_remind)
+        TextView tvRemind;
         @Bind(R.id.tv_see)
         TextView tvSee;
         @Bind(R.id.tv_zan)
@@ -84,12 +90,18 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
             tvSex.setCompoundDrawables(nav_up, null, null, null);
             tvTime.setText(object.getCreate_time());
             GlideUtil.loadPicture(object.getKey_file_url(), ivHb);
-            tvMessage.setText(object.getDesc());
+            tvMessage.setText(object.getNote());
+            tvRemind.setText(object.getDesc());
             tvZan.setText(object.getGrant_total() + "");
             tvSee.setText(object.getView_total() + "");
             tvLiuYan.setText(object.getComment_total() + "");
             tvAddress.setText(object.getLine());
-            tvDistance.setText("");
+
+            LatLng latLng = Hawk.get(PreferenceKey.LOCATION_LATLNG, null);
+            if (latLng != null) {
+                float v = AMapUtils.calculateArea(latLng, new LatLng(Double.valueOf(object.getLat()), Double.valueOf(object.getLng())));
+                tvDistance.setText("距离" + v);
+            }
         }
     }
 

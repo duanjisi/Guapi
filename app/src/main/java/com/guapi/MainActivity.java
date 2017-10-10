@@ -577,6 +577,7 @@ MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresenterImpl> impl
         if (mapLocation != null && mapLocation.getErrorCode() == 0) {
             BaseApp.getInstance().setUserLocation(mapLocation);
             LatLng location = new LatLng(mapLocation.getLatitude(), mapLocation.getLongitude());
+            Hawk.put(PreferenceKey.LOCATION_LATLNG, location);
             if (isFirst) {
                 isFirst = false;
                 scalePoint(mapLocation);

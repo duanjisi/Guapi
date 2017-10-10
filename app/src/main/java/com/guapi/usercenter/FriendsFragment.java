@@ -53,9 +53,22 @@ public class FriendsFragment extends BasicFragment {
 
     FriendAdapter mAdapter;
     List<GetFriendsResponse.FriendListBean> mData = new ArrayList<>();
+    String userId = "";
+
+    public static FriendsFragment getIntance(String userId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("user_id", userId);
+        FriendsFragment fragment = new FriendsFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     protected void init() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            userId = bundle.getString("user_id", "");
+        }
         refreshLayout.setEnabled(false);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -91,10 +104,9 @@ public class FriendsFragment extends BasicFragment {
     }
 
     private void loadData() {
-        addDisposable(Http.getFriends(context, 1, new CallBack<GetFriendsResponse>() {
+        addDisposable(Http.getFriends(context, 1, userId, new CallBack<GetFriendsResponse>() {
             @Override
             public void handlerSuccess(GetFriendsResponse data) {
-                Log.e("Long_size", data.getFriendListBeans().size() + "");
                 if (data.getFriendListBeans().size() > 0) {
                     llNoData.setVisibility(View.GONE);
                     refreshLayout.setVisibility(View.VISIBLE);

@@ -1,5 +1,6 @@
 package com.guapi.usercenter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import com.ewuapp.framework.view.BaseActivity;
 import com.ewuapp.framework.view.widget.ToolBarView;
 import com.guapi.R;
 import com.guapi.usercenter.adapter.ViewPageAdapter;
+import com.library.im.EaseConstant;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -44,11 +46,21 @@ public class FriendActivity extends BaseActivity<BasePresenterImpl, BaseViewPres
 
     private ViewPageAdapter adapter;
     private List<Fragment> list = new ArrayList<>();
+    String userId = "";
 
     @NonNull
     @Override
     protected BasePresenterImpl getPresent() {
         return new BasePresenterImpl(getSupportFragmentManager());
+    }
+
+    @Override
+    protected void handleIntent(Intent intent) {
+        super.handleIntent(intent);
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            userId = bundle.getString("user_id", "");
+        }
     }
 
     @Override
@@ -78,9 +90,9 @@ public class FriendActivity extends BaseActivity<BasePresenterImpl, BaseViewPres
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        list.add(new FriendsFragment());
-        list.add(new FollowFragment());
-        list.add(new FansFragment());
+        list.add(FriendsFragment.getIntance(userId));
+        list.add(FollowFragment.getIntance(userId));
+        list.add(FansFragment.getIntance(userId));
         list.add(new MailListFragment());
         adapter = new ViewPageAdapter(getSupportFragmentManager(), list);
         viewPager.setOffscreenPageLimit(2);

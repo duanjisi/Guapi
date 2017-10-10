@@ -49,14 +49,28 @@ public class FollowFragment extends BasicFragment {
 
     FriendAdapter mAdapter;
     List<GetFriendsResponse.FriendListBean> mData = new ArrayList<>();
+    String userId = "";
 
     @Override
     protected int getViewId() {
         return R.layout.refresh_listview;
     }
 
+    public static FollowFragment getIntance(String userId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("user_id", userId);
+        FollowFragment fragment = new FollowFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     protected void init() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            userId = bundle.getString("user_id", "");
+
+        }
         refreshLayout.setEnabled(false);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -92,7 +106,7 @@ public class FollowFragment extends BasicFragment {
     }
 
     private void loadData() {
-        addDisposable(Http.getFriends(context, 2, new CallBack<GetFriendsResponse>() {
+        addDisposable(Http.getFriends(context, 2, userId, new CallBack<GetFriendsResponse>() {
             @Override
             public void handlerSuccess(GetFriendsResponse data) {
                 if (data.getFriendListBeans().size() > 0) {
@@ -102,7 +116,7 @@ public class FollowFragment extends BasicFragment {
                     mData.addAll(data.getFriendListBeans());
                     mAdapter.notifyDataSetChanged();
                 } else {
-                    if(btnNoData==null)
+                    if (btnNoData == null)
                         return;
                     btnNoData.setText("马上关注");
                     llNoData.setVisibility(View.VISIBLE);
