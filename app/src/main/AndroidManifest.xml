@@ -181,6 +181,14 @@
             android:name=".usercenter.SystemMessageDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".usercenter.GPListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".usercenter.FansAndFollowsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
 
         <activity
@@ -303,6 +311,7 @@
                 <category android:name="com.guapi" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".services.VideoCacheService"
             android:enabled="true"

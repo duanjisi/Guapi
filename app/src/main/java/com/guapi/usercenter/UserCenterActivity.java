@@ -249,7 +249,6 @@ public class UserCenterActivity extends BaseActivity<BasePresenterImpl, BaseView
                     userBean.setPic_file6_url(dataBean.getPic_file6_url());
                     userBean.setSex(data.getDataBean().getSex());
                     userBean.setAge(data.getDataBean().getAge());
-                    Log.e("long",data.getDataBean().getAge());
                     userBean.setNickname(data.getDataBean().getNickname());
                     loginResponse.setUser(userBean);
                     Hawk.put(PreferenceKey.LoginResponse, loginResponse);
@@ -267,7 +266,8 @@ public class UserCenterActivity extends BaseActivity<BasePresenterImpl, BaseView
         }));
     }
 
-    @OnClick({R.id.iv_edit_data, R.id.iv_back, R.id.iv_chat, R.id.iv_follow_or_not_follow})
+    @OnClick({R.id.iv_edit_data, R.id.iv_back, R.id.iv_chat, R.id.iv_follow_or_not_follow,
+            R.id.ll_hide_gp_size, R.id.ll_find_gp_size, R.id.ll_focus_size, R.id.ll_fans_size})
     public void onClick(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
@@ -312,6 +312,26 @@ public class UserCenterActivity extends BaseActivity<BasePresenterImpl, BaseView
                         }
                     }));
                 }
+                break;
+            case R.id.ll_hide_gp_size:
+                bundle.putString("user_id", user_id);
+                bundle.putString("type", "2");
+                if (dataBean != null) {
+                    startActivity(bundle, GPListActivity.class);
+                }
+                break;
+            case R.id.ll_find_gp_size:
+                bundle.putString("type", "1");
+                bundle.putString("user_id", user_id);
+                if (dataBean != null) {
+                    startActivity(bundle, GPListActivity.class);
+                }
+                break;
+            case R.id.ll_focus_size:
+                startActivity(bundle, FansAndFollowsActivity.class);
+                break;
+            case R.id.ll_fans_size:
+                startActivity(bundle, FansAndFollowsActivity.class);
                 break;
         }
     }

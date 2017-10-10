@@ -65,15 +65,6 @@ public class LoginResponse extends Result {
         private String uid;
         @SerializedName("hid")
         private String hid;
-
-        public String getHpass() {
-            return hpass;
-        }
-
-        public void setHpass(String hpass) {
-            this.hpass = hpass;
-        }
-
         @SerializedName("hpass")
         private String hpass;
         @SerializedName("lastAccessTime")
@@ -104,6 +95,34 @@ public class LoginResponse extends Result {
         private String pic_file6_url;
         @SerializedName("age")
         private String age;
+        @SerializedName("note")
+        private String note;
+        @SerializedName("line")
+        private String line;
+
+        public String getNote() {
+            return note;
+        }
+
+        public void setNote(String note) {
+            this.note = note;
+        }
+
+        public String getLine() {
+            return line;
+        }
+
+        public void setLine(String line) {
+            this.line = line;
+        }
+
+        public String getHpass() {
+            return hpass;
+        }
+
+        public void setHpass(String hpass) {
+            this.hpass = hpass;
+        }
 
         public String getAge() {
             return age;

@@ -105,7 +105,8 @@ import static com.guapi.tool.Global.TYPE_HB;
 import static com.guapi.tool.Global.TYPE_SHOW_ALL;
 import static com.guapi.tool.Global.TYPE_SHOW_FRIEND;
 
-public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresenterImpl> implements
+public class
+MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresenterImpl> implements
         LocationSource,
         AMapLocationListener,
         AMap.OnMarkerClickListener,

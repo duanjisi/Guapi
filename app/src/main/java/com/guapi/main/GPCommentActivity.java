@@ -381,7 +381,6 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
     @Override
     protected void setUpToolbar() {
         super.setUpToolbar();
-
     }
 
     @OnClick({R.id.iv_face, R.id.iv_send, R.id.iv_back})
