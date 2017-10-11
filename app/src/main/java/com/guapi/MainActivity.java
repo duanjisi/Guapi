@@ -668,7 +668,6 @@ MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresenterImpl> impl
                         if (data != null && data.getGpList() != null) {
                             List<GPResponse.GpListBean> gpListBeen = data.getGpList();
                             for (GPResponse.GpListBean bean : gpListBeen) {
-                                Log.i("info", "===============Is_find:" + bean.getIs_find());
                                 showGuaPi(bean.getType(), bean);
                             }
                         }

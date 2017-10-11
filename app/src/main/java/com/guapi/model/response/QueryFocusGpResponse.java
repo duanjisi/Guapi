@@ -73,7 +73,7 @@ public class QueryFocusGpResponse extends Result {
         @SerializedName("total_value")
         private String total_value;
         @SerializedName("pic_file3_url")
-        private Object pic_file3_url;
+        private String pic_file3_url;
         @SerializedName("user_name")
         private String user_name;
         @SerializedName("line")
@@ -81,7 +81,7 @@ public class QueryFocusGpResponse extends Result {
         @SerializedName("key_file_url")
         private String key_file_url;
         @SerializedName("pic_file8_url")
-        private Object pic_file8_url;
+        private String pic_file8_url;
         @SerializedName("type")
         private String type;
         @SerializedName("grant_total")
@@ -91,13 +91,13 @@ public class QueryFocusGpResponse extends Result {
         @SerializedName("get_type")
         private String get_type;
         @SerializedName("video_url")
-        private Object video_url;
+        private String video_url;
         @SerializedName("pic_file6_url")
-        private Object pic_file6_url;
+        private String pic_file6_url;
         @SerializedName("pic_file2_url")
-        private Object pic_file2_url;
+        private String pic_file2_url;
         @SerializedName("pic_file7_url")
-        private Object pic_file7_url;
+        private String pic_file7_url;
         @SerializedName("lat")
         private String lat;
         @SerializedName("lng")
@@ -109,7 +109,7 @@ public class QueryFocusGpResponse extends Result {
         @SerializedName("sex")
         private String sex;
         @SerializedName("pic_file5_url")
-        private Object pic_file5_url;
+        private String pic_file5_url;
         @SerializedName("user_imag_url")
         private String user_imag_url;
         @SerializedName("pic_file1_url")
@@ -119,17 +119,17 @@ public class QueryFocusGpResponse extends Result {
         @SerializedName("gp_id")
         private String gp_id;
         @SerializedName("pic_file9_url")
-        private Object pic_file9_url;
+        private String pic_file9_url;
         @SerializedName("user_id")
         private String user_id;
         @SerializedName("pic_file4_url")
-        private Object pic_file4_url;
+        private String pic_file4_url;
         @SerializedName("comment_total")
         private int comment_total;
         @SerializedName("age")
         private String age;
         @SerializedName("video_pic")
-        private Object video_pic;
+        private String video_pic;
         @SerializedName("desc")
         private String desc;
         @SerializedName("comment_list")
@@ -151,11 +151,11 @@ public class QueryFocusGpResponse extends Result {
             this.total_value = total_value;
         }
 
-        public Object getPic_file3_url() {
+        public String getPic_file3_url() {
             return pic_file3_url;
         }
 
-        public void setPic_file3_url(Object pic_file3_url) {
+        public void setPic_file3_url(String pic_file3_url) {
             this.pic_file3_url = pic_file3_url;
         }
 
@@ -183,11 +183,11 @@ public class QueryFocusGpResponse extends Result {
             this.key_file_url = key_file_url;
         }
 
-        public Object getPic_file8_url() {
+        public String getPic_file8_url() {
             return pic_file8_url;
         }
 
-        public void setPic_file8_url(Object pic_file8_url) {
+        public void setPic_file8_url(String pic_file8_url) {
             this.pic_file8_url = pic_file8_url;
         }
 
@@ -223,35 +223,35 @@ public class QueryFocusGpResponse extends Result {
             this.get_type = get_type;
         }
 
-        public Object getVideo_url() {
+        public String getVideo_url() {
             return video_url;
         }
 
-        public void setVideo_url(Object video_url) {
+        public void setVideo_url(String video_url) {
             this.video_url = video_url;
         }
 
-        public Object getPic_file6_url() {
+        public String getPic_file6_url() {
             return pic_file6_url;
         }
 
-        public void setPic_file6_url(Object pic_file6_url) {
+        public void setPic_file6_url(String pic_file6_url) {
             this.pic_file6_url = pic_file6_url;
         }
 
-        public Object getPic_file2_url() {
+        public String getPic_file2_url() {
             return pic_file2_url;
         }
 
-        public void setPic_file2_url(Object pic_file2_url) {
+        public void setPic_file2_url(String pic_file2_url) {
             this.pic_file2_url = pic_file2_url;
         }
 
-        public Object getPic_file7_url() {
+        public String getPic_file7_url() {
             return pic_file7_url;
         }
 
-        public void setPic_file7_url(Object pic_file7_url) {
+        public void setPic_file7_url(String pic_file7_url) {
             this.pic_file7_url = pic_file7_url;
         }
 
@@ -295,11 +295,11 @@ public class QueryFocusGpResponse extends Result {
             this.sex = sex;
         }
 
-        public Object getPic_file5_url() {
+        public String getPic_file5_url() {
             return pic_file5_url;
         }
 
-        public void setPic_file5_url(Object pic_file5_url) {
+        public void setPic_file5_url(String pic_file5_url) {
             this.pic_file5_url = pic_file5_url;
         }
 
@@ -335,11 +335,11 @@ public class QueryFocusGpResponse extends Result {
             this.gp_id = gp_id;
         }
 
-        public Object getPic_file9_url() {
+        public String getPic_file9_url() {
             return pic_file9_url;
         }
 
-        public void setPic_file9_url(Object pic_file9_url) {
+        public void setPic_file9_url(String pic_file9_url) {
             this.pic_file9_url = pic_file9_url;
         }
 
@@ -351,11 +351,11 @@ public class QueryFocusGpResponse extends Result {
             this.user_id = user_id;
         }
 
-        public Object getPic_file4_url() {
+        public String getPic_file4_url() {
             return pic_file4_url;
         }
 
-        public void setPic_file4_url(Object pic_file4_url) {
+        public void setPic_file4_url(String pic_file4_url) {
             this.pic_file4_url = pic_file4_url;
         }
 
@@ -375,11 +375,11 @@ public class QueryFocusGpResponse extends Result {
             this.age = age;
         }
 
-        public Object getVideo_pic() {
+        public String getVideo_pic() {
             return video_pic;
         }
 
-        public void setVideo_pic(Object video_pic) {
+        public void setVideo_pic(String video_pic) {
             this.video_pic = video_pic;
         }
 
