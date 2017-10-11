@@ -68,8 +68,8 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
-    compile "com.android.support:design:${supportLibraryVersion}"
+    compile 'com.android.support:appcompat-v7:25+'
+    compile 'com.android.support:design:25+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     //    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     configurations.all {
@@ -113,6 +113,8 @@ dependencies {
     compile project(':openCVLibrary320')
     compile files('libs/pldroid-player-1.5.1.jar')
     compile files('libs/xUtils-2.6.14.jar')
+    compile files('libs/jpush-android-3.0.9.jar')
+    compile files('libs/jcore-android-1.1.7.jar')
 }
 
 //LAMBDA

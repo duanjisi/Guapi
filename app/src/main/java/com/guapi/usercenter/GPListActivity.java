@@ -12,11 +12,16 @@ import com.ewuapp.framework.common.http.CallBack;
 import com.ewuapp.framework.presenter.Impl.BasePresenterImpl;
 import com.ewuapp.framework.presenter.Impl.BaseViewPresenterImpl;
 import com.ewuapp.framework.view.BaseActivity;
+import com.ewuapp.framework.view.adapter.OnItemListener;
 import com.ewuapp.framework.view.widget.ToolBarView;
 import com.guapi.R;
 import com.guapi.http.Http;
+import com.guapi.main.GPCommentActivity;
+import com.guapi.model.response.LoginResponse;
 import com.guapi.model.response.QueryFocusGpResponse;
+import com.guapi.tool.PreferenceKey;
 import com.guapi.usercenter.adapter.GPListAdapter;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +97,19 @@ public class GPListActivity extends BaseActivity<BasePresenterImpl, BaseViewPres
         mAdapter = new GPListAdapter(mData);
         recyclerView.setAdapter(mAdapter);
         loadData();
+        mAdapter.setOnItemClickListener(new OnItemListener() {
+            @Override
+            public void onItem(View view, int position) {
+                LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
+                if (user_id.equals("") || user_id.equals(loginResponse.getUser().getUid())) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("gpId", mData.get(position).getGp_id());
+                    startActivity(bundle, GPCommentActivity.class);
+                } else {
+
+                }
+            }
+        });
     }
 
     public void loadData() {
@@ -100,7 +118,6 @@ public class GPListActivity extends BaseActivity<BasePresenterImpl, BaseViewPres
             public void handlerSuccess(QueryFocusGpResponse data) {
                 if (data.getGpListBeans().size() > 0) {
                     mData.clear();
-                    Log.e("LongSize", data.getGpListBeans().size() + "");
                     mData.addAll(data.getGpListBeans());
                     mAdapter.notifyDataSetChanged();
                 }
