@@ -20,6 +20,8 @@ import com.guapi.widget.scan.CircleImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * ╭╯☆★☆★╭╯
@@ -81,7 +83,7 @@ public class CommentAdapter extends BaseQuickAdapter<GPResponse.GpListBean.Comme
         tv_sex.setCompoundDrawables(nav_up, null, null, null);
         tv_sex.setText("" + item.getAge());
         helper.setText(R.id.tv_name, item.getCommentUserName())
-                .setText(R.id.tv_message, item.getCommentInfo());
+                .setText(R.id.tv_message, getEmoji(mContext, item.getCommentInfo()));
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,5 +95,30 @@ public class CommentAdapter extends BaseQuickAdapter<GPResponse.GpListBean.Comme
                 mContext.startActivity(intent);
             }
         });
+    }
+
+    /**
+     * 将表情描述转换成表情
+     *
+     * @param str
+     * @return
+     */
+    public static String getEmoji(Context context, String str) {
+        String string = str;
+        String rep = "\\{(.*?)\\}";
+        Pattern p = Pattern.compile(rep);
+        Matcher m = p.matcher(string);
+        while (m.find()) {
+            String s1 = m.group().toString();
+            String s2 = s1.substring(1, s1.length() - 1);
+            String s3;
+            try {
+                s3 = String.valueOf((char) Integer.parseInt(s2, 16));
+                string = string.replace(s1, s3);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return string;
     }
 }

@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
@@ -128,6 +129,25 @@ public class Utils {
         return result;
     }
 
+    public static Bitmap changeRoation(Bitmap bmp, int orientations) {
+        Matrix matrixs = new Matrix();
+        if (orientations > 325 || orientations <= 45) {
+            Log.v("time", "Surface.ROTATION_0;" + orientations);
+            matrixs.setRotate(90);
+        } else if (orientations > 45 && orientations <= 135) {
+            Log.v("time", " Surface.ROTATION_270" + orientations);
+            matrixs.setRotate(180);
+        } else if (orientations > 135 && orientations < 225) {
+            Log.v("time", "Surface.ROTATION_180;" + orientations);
+            matrixs.setRotate(270);
+        } else {
+            Log.v("time", "Surface.ROTATION_90" + orientations);
+            matrixs.setRotate(0);
+        }
+        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrixs, true);
+        return bmp;
+    }
+
     /**
      * 按正方形裁切图片
      */
@@ -159,7 +179,6 @@ public class Utils {
             bitmap.recycle();
             bitmap = null;
         }
-
         // 下面这句是关键
         return bmp;// Bitmap.createBitmap(bitmap, retX, retY, wh, wh, null,
         // false);
@@ -268,6 +287,42 @@ public class Utils {
             index = sizes.size() / 2;
         }
         return sizes.get(index);
+    }
+
+    /**
+     * 设置 camera 视大小
+     */
+    public static Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
+        final double ASPECT_TOLERANCE = 0.2;
+        double targetRatio = (double) w / h;
+        if (sizes == null)
+            return null;
+        Camera.Size optimalSize = null;
+        double minDiff = Double.MAX_VALUE;
+        int targetHeight = h;
+        // Try to find an size match aspect ratio and size
+        for (Camera.Size size : sizes) {
+            Log.d("dd", "Checking size " + size.width + "w " + size.height + "h");
+            double ratio = (double) size.width / size.height;
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE)
+                continue;
+            if (Math.abs(size.height - targetHeight) < minDiff) {
+                optimalSize = size;
+                minDiff = Math.abs(size.height - targetHeight);
+            }
+        }
+        // Cannot find the one match the aspect ratio, ignore the
+        // requirement
+        if (optimalSize == null) {
+            minDiff = Double.MAX_VALUE;
+            for (Camera.Size size : sizes) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
+                }
+            }
+        }
+        return optimalSize;
     }
 
     public static int getZoomRank(double distance) {

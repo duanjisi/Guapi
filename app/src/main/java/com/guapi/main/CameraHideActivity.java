@@ -27,6 +27,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -68,6 +69,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -153,6 +155,8 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
     private AnimationDrawable animationDrawable;
     private boolean isLighOn = false;
     private int edgeLength = 0;
+    private int orientations = 0;
+    private OrientationEventListener mOrientationListener;
 
     @NonNull
     @Override
@@ -179,6 +183,14 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
         } else {
             savePath = Environment.getExternalStorageDirectory() + "/guapi/";
         }
+        mOrientationListener = new OrientationEventListener(this) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                orientations = orientation;
+                Log.v("time", "现在是横屏" + orientation);
+            }
+        };
+
         imageLoader = ImageLoaderUtils.createImageLoader(context);
         ivFocus.setImageResource(R.drawable.center_point_bg);
         animationDrawable = (AnimationDrawable) ivFocus.getDrawable();
@@ -199,6 +211,7 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
                 startActivityForResult(intent, 101);
             }
         });
+
         if (!TextUtils.equals(type, TYPE_HB)) {
             picArray.add("head");
         }
@@ -298,11 +311,10 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_cancel:
-//                capture();
                 previewing = true;
                 canFocusIn = true;
                 isHideOk = true;
-                ivPoint.setVisibility(View.GONE);
+//                ivPoint.setVisibility(View.GONE);
                 if (mCamera == null) {
                     initCamera();
                 } else {
@@ -327,7 +339,7 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
         tvTip.setVisibility(shown ? View.GONE : View.VISIBLE);
         btnCancel.setVisibility(shown ? View.VISIBLE : View.GONE);
         btnSubmit.setVisibility(shown ? View.VISIBLE : View.GONE);
-        ivPoint.setVisibility(shown ? View.VISIBLE : View.GONE);
+//        ivPoint.setVisibility(shown ? View.VISIBLE : View.GONE);
 //        if (shown && !uploadFileArray.isEmpty()) {
 //            Bitmap bitmap = BitmapFactory.decodeFile(pointKey);
 //            bitmap = Utils.centerSquareScaleBitmap(bitmap, 200);
@@ -351,16 +363,18 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
     }
 
     private void initViewParams() {
-        edgeLength = ivPoint.getLayoutParams().width;
+        edgeLength = Utils.px2dip(context, ivPoint.getLayoutParams().width);
         mSensorManager = (SensorManager) BaseApp.getInstance().getSystemService(Activity.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);// T
-//        initMap();
         initCamera();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (mOrientationListener != null) {//先判断下防止出现空指针异常
+            mOrientationListener.enable();
+        }
         animationDrawable.start();
 //        getMainHandler().postDelayed(new Runnable() {
 //            @Override
@@ -373,6 +387,9 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
     @Override
     protected void onPause() {
         super.onPause();
+        if (mOrientationListener != null) {
+            mOrientationListener.disable();
+        }
         closeLightOff();
     }
 
@@ -436,17 +453,41 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
             mCamera = mCameraManager.getCamera();
         }
         if (parameters == null && mCamera != null) {
-            mCamera.setDisplayOrientation(90);
+//            mCamera.setDisplayOrientation(90);
             parameters = mCamera.getParameters();
             // 设置预览照片的大小
             List<Camera.Size> supportedPictureSizes =
                     parameters.getSupportedPictureSizes();// 获取支持保存图片的尺寸
-            if (supportedPictureSizes != null && supportedPictureSizes.size() > 0) {
-                Camera.Size pictureSize = Utils.getPictureSize(this, supportedPictureSizes);
-                parameters.setRotation(90);
-                parameters.setPictureSize(pictureSize.width, pictureSize.height);
-            }
+//            if (supportedPictureSizes != null && supportedPictureSizes.size() > 0) {
+//                Camera.Size pictureSize = Utils.getPictureSize(this, supportedPictureSizes);
+//                parameters.setRotation(90);
+//                parameters.setPictureSize(pictureSize.width, pictureSize.height);
+
+//                if (this.getResources().getConfiguration().orientation !=
+//                        Configuration.ORIENTATION_LANDSCAPE) {
+//                    parameters.set("orientation", "portrait");
+//                    parameters.setRotation(90);
+//                } else {
+//                    parameters.set("orientation", "landscape");
+//                }
+
+//                if (Integer.parseInt(Build.VERSION.SDK) >= 8)
+//                    setDisplayOrientation(mCamera, 90);
+//                else {
+//                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+//                        parameters.set("orientation", "portrait");
+//                        parameters.set("rotation", 90);
+//                    }
+//                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                        parameters.set("orientation", "landscape");
+//                        parameters.set("rotation", 90);
+//                    }
+//                }
+//            }
+            Camera.Size optimalSize = Utils.getOptimalPreviewSize(supportedPictureSizes, sceenW, sceenH);
+            parameters.setPictureSize(optimalSize.width, optimalSize.height);
         }
+
         if (parameters != null && mCamera != null) {
             try {
                 parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
@@ -461,6 +502,17 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
         mPreview = new CameraPreview(this, mCamera, mPreviewCallback, autoFocusCB);
         rl_preciew.removeAllViews();
         rl_preciew.addView(mPreview);
+    }
+
+    protected void setDisplayOrientation(Camera camera, int angle) {
+        Method downPolymorphic;
+        try {
+            downPolymorphic = camera.getClass().getMethod(
+                    "setDisplayOrientation", new Class[]{int.class});
+            if (downPolymorphic != null)
+                downPolymorphic.invoke(camera, new Object[]{angle});
+        } catch (Exception e1) {
+        }
     }
 
     /**
@@ -480,15 +532,19 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
                 }
                 BitmapFactory.Options opts = new BitmapFactory.Options();
                 opts.inJustDecodeBounds = true;
-                BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
                 opts.inSampleSize = ImageTool.computeSampleSize(opts, -1, sceenW * sceenH);
                 opts.inJustDecodeBounds = false;
+//                BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
+//                opts.inSampleSize = ImageTool.computeSampleSize(opts, -1, sceenW * sceenH);
+//                opts.inJustDecodeBounds = false;
 //                bitmapImg = byteToBitmap(opts, bytes);
-                bitmapImg = Utils.ImageCrop(byteToBitmap(opts, bytes), true, edgeLength);
+//                bitmapImg = Utils.ImageCrop(byteToBitmap(opts, bytes), true, edgeLength);
+                Bitmap bitmap = Utils.changeRoation(byteToBitmap(opts, bytes), orientations);
+                bitmapImg = Utils.ImageCrop(bitmap, true, edgeLength);
                 if (bitmapImg != null) {
-                    ivPoint.setVisibility(View.VISIBLE);
+//                    ivPoint.setVisibility(View.VISIBLE);
 //                    Glide.with(context).load(bytes).into(ivPoint);
-                    ivPoint.setImageBitmap(bitmapImg);
+//                    ivPoint.setImageBitmap(bitmapImg);
                     animationDrawable.stop();
 //                    createFileWithByte(bytes);
                     saveImage(context, bitmapImg);

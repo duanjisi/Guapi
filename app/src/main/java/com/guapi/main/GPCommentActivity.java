@@ -301,7 +301,6 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
                 context.startActivity(intent);
             }
         });
-
         tv_sex.setText(bean.getAge());
         tvUserName.setText(bean.getUserName());
 //        tvTime.setText(bean.getCreateTime());
@@ -397,15 +396,58 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
                     return;
                 }
                 String message = "";
+                String msg = etComment.getText().toString().trim();
                 if (isHuifuTan) {
                     LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
-                    message = loginResponse.getUser().getNickname() + "回复:" + commentAdapter.getData().get(clickPosition).getCommentUserName() + etComment.getText().toString();
+//                    message = loginResponse.getUser().getNickname() + "回复:" +
+//                            commentAdapter.getData().get(clickPosition).getCommentUserName() +
+//                            etComment.getText().toString();
+                    message = "回复:【" +
+                            commentAdapter.getData().get(clickPosition).getCommentUserName() + "】:" + getString(msg);
                 } else {
-                    message = etComment.getText().toString();
+                    message = getString(msg);
                 }
                 doGP(message);
                 break;
         }
+    }
+
+    /**
+     * 将系统表情转化为字符串
+     *
+     * @param s
+     * @return
+     */
+    public static String getString(String s) {
+        int length = s.length();
+        String context = "";
+        //循环遍历字符串，将字符串拆分为一个一个字符
+        for (int i = 0; i < length; i++) {
+            char codePoint = s.charAt(i);
+            //判断字符是否是emoji表情的字符
+            if (isEmojiCharacter(codePoint)) {
+                //如果是将以大括号括起来
+                String emoji = "{" + Integer.toHexString(codePoint) + "}";
+                context = context + emoji;
+                continue;
+            }
+            context = context + codePoint;
+        }
+        return context;
+    }
+
+    /**
+     * 是否包含表情
+     *
+     * @param codePoint
+     * @return 如果不包含 返回false,包含 则返回true
+     */
+
+    private static boolean isEmojiCharacter(char codePoint) {
+        return !((codePoint == 0x0) || (codePoint == 0x9) || (codePoint == 0xA)
+                || (codePoint == 0xD)
+                || ((codePoint >= 0x20) && (codePoint <= 0xD7FF))
+                || ((codePoint >= 0xE000) && (codePoint <= 0xFFFD)) || ((codePoint >= 0x10000) && (codePoint <= 0x10FFFF)));
     }
 
     public void doGP(String message) {

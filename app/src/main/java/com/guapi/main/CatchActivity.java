@@ -1,6 +1,8 @@
 package com.guapi.main;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
@@ -23,6 +25,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.gifdecoder.GifDecoder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -503,7 +506,15 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
                     parameters.getSupportedPictureSizes();// 获取支持保存图片的尺寸
             if (supportedPictureSizes != null && supportedPictureSizes.size() > 0) {
                 Camera.Size pictureSize = com.guapi.tool.Utils.getPictureSize(this, supportedPictureSizes);
-                parameters.setRotation(90);
+//                parameters.setRotation(90);
+                if (this.getResources().getConfiguration().orientation !=
+                        Configuration.ORIENTATION_LANDSCAPE) {
+                    parameters.set("orientation", "portrait");
+                    parameters.setRotation(90);
+                } else {
+                    parameters.set("orientation", "landscape");
+                }
+
                 parameters.setPictureSize(pictureSize.width, pictureSize.height);
                 Log.i("descriptorMatcher", "pictureSize.width:" + pictureSize.width + "  pictureSize.height:" + pictureSize.height);
                 mCamera.setParameters(parameters);
