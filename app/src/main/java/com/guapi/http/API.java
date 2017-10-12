@@ -7,6 +7,7 @@ import com.guapi.model.response.GetCodeResponse;
 import com.guapi.model.response.GetFriendsResponse;
 import com.guapi.model.response.GpSingleRespone;
 import com.guapi.model.response.LoginResponse;
+import com.guapi.model.response.QueryFocusGpResponse;
 import com.guapi.model.response.QueryUserInfoByHxResponse;
 import com.guapi.model.response.RefreshOneMessageResponse;
 import com.guapi.model.response.UserGetCountResponse;
@@ -115,7 +116,7 @@ public interface API {
     @POST("api/friend/getFriends.do")
     Flowable<GetFriendsResponse> getFriends(@Query("data") String request);
 
-    //个人或者好友信息
+    //5.首页及好友关系
     @POST("api/friend/getCount.do")
     Flowable<UserGetCountResponse> getCount(@Query("data") String request);
 
@@ -146,5 +147,9 @@ public interface API {
     //查询后台消息
     @POST("api/friend/sendInvite.do")
     Flowable<Result> sendInvite(@Query("data") String request);
+
+    //查询瓜皮
+    @POST("api/gp/queryFocusGp.do")
+    Flowable<QueryFocusGpResponse> queryFocusGp(@Query("data") String request);
 
 }

@@ -17,4 +17,5 @@ public class PreferenceKey {
     public static final String SOUND = "SOUND";
     public static final String SHOCK = "SHOCK";
     public static final String MESSAGE_NO_DISTURB = "MESSAGE_NO_DISTURB";
+    public static final String LOCATION_LATLNG = "LOCATION_LATLNG";
 }

@@ -1,4 +1,5 @@
 package com.guapi;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -573,6 +575,7 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
         if (mapLocation != null && mapLocation.getErrorCode() == 0) {
             BaseApp.getInstance().setUserLocation(mapLocation);
             LatLng location = new LatLng(mapLocation.getLatitude(), mapLocation.getLongitude());
+            Hawk.put(PreferenceKey.LOCATION_LATLNG, location);
             if (isFirst) {
                 isFirst = false;
                 scalePoint(mapLocation);

@@ -3,6 +3,7 @@ package com.guapi.usercenter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -49,6 +50,15 @@ public class FansFragment extends BasicFragment {
 
     FriendAdapter mAdapter;
     List<GetFriendsResponse.FriendListBean> mData = new ArrayList<>();
+    String userId = "";
+
+    public static FansFragment getIntance(String userId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("user_id", userId);
+        FansFragment fragment = new FansFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     protected int getViewId() {
@@ -57,6 +67,11 @@ public class FansFragment extends BasicFragment {
 
     @Override
     protected void init() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            userId = bundle.getString("user_id", "");
+            Log.e("FansFragment_user_id", userId);
+        }
         refreshLayout.setEnabled(false);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -93,7 +108,7 @@ public class FansFragment extends BasicFragment {
     }
 
     private void loadData() {
-        addDisposable(Http.getFriends(context, 3, new CallBack<GetFriendsResponse>() {
+        addDisposable(Http.getFriends(context, 3, userId, new CallBack<GetFriendsResponse>() {
             @Override
             public void handlerSuccess(GetFriendsResponse data) {
                 if (data.getFriendListBeans().size() > 0) {

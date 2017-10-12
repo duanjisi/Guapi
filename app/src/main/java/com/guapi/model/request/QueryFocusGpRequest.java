@@ -3,18 +3,21 @@ package com.guapi.model.request;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * author: long
- * date: ON 2017/7/7.
+ * Created by long on 2017/10/9.
  */
 
-public class GetFriendsRequest {
+public class QueryFocusGpRequest {
     @SerializedName("type")
-    private int type;
+    public String type;
     @SerializedName("user_id")
-    private String user_id;
+    public String user_id;
 
-    public int getType() {
+    public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getUser_id() {
@@ -23,9 +26,5 @@ public class GetFriendsRequest {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 }

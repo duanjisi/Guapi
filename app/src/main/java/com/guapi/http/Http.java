@@ -16,6 +16,7 @@ import com.guapi.model.request.GetCodeRequest;
 import com.guapi.model.request.GetFriendsRequest;
 import com.guapi.model.request.LoginRequest;
 import com.guapi.model.request.MoneyRequest;
+import com.guapi.model.request.QueryFocusGpRequest;
 import com.guapi.model.request.QueryGpRequest;
 import com.guapi.model.request.QueryGpSingleRequest;
 import com.guapi.model.request.QueryUserInfoBuHxRequest;
@@ -30,6 +31,7 @@ import com.guapi.model.response.GetCodeResponse;
 import com.guapi.model.response.GetFriendsResponse;
 import com.guapi.model.response.GpSingleRespone;
 import com.guapi.model.response.LoginResponse;
+import com.guapi.model.response.QueryFocusGpResponse;
 import com.guapi.model.response.QueryUserInfoByHxResponse;
 import com.guapi.model.response.RefreshOneMessageResponse;
 import com.guapi.model.response.UserGetCountResponse;
@@ -150,9 +152,10 @@ public class Http {
     }
 
     //获取对应组别的好友
-    public static Disposable getFriends(Context context, int type, CallBack<GetFriendsResponse> callBack) {
+    public static Disposable getFriends(Context context, int type, String userId, CallBack<GetFriendsResponse> callBack) {
         GetFriendsRequest getFriendsRequest = new GetFriendsRequest();
         getFriendsRequest.setType(type);
+        getFriendsRequest.setUser_id(userId);
         return getAPI().getFriends(gson.toJson(getFriendsRequest))
                 .compose(RxSchedulers.<GetFriendsResponse>mainThread(context))
                 .subscribeWith(new BaseSubscriber<>(callBack));
@@ -385,6 +388,16 @@ public class Http {
         sendInviteRequest.setName(name);
         return getAPI().sendInvite(gson.toJson(sendInviteRequest))
                 .compose(RxSchedulers.<Result>mainThread(context))
+                .subscribeWith(new BaseSubscriber<>(callBack));
+    }
+
+    //查询瓜皮
+    public static Disposable queryFocusGp(Context context, String type, String user_id, CallBack<QueryFocusGpResponse> callBack) {
+        QueryFocusGpRequest queryFocusGpRequest = new QueryFocusGpRequest();
+        queryFocusGpRequest.setType(type);
+        queryFocusGpRequest.setUser_id(user_id);
+        return getAPI().queryFocusGp(gson.toJson(queryFocusGpRequest))
+                .compose(RxSchedulers.<QueryFocusGpResponse>mainThread(context))
                 .subscribeWith(new BaseSubscriber<>(callBack));
     }
 

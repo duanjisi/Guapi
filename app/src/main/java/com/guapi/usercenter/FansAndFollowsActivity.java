@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,7 +16,6 @@ import com.ewuapp.framework.view.BaseActivity;
 import com.ewuapp.framework.view.widget.ToolBarView;
 import com.guapi.R;
 import com.guapi.usercenter.adapter.ViewPageAdapter;
-import com.library.im.EaseConstant;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -26,23 +26,18 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
- * author: long
- * date: ON 2017/6/21.
+ * Created by long on 2017/10/10.
  */
 
-public class FriendActivity extends BaseActivity<BasePresenterImpl, BaseViewPresenterImpl> {
+public class FansAndFollowsActivity extends BaseActivity<BasePresenterImpl, BaseViewPresenterImpl> {
     @Bind(R.id.titleBar)
     ToolBarView toolBarView;
     @Bind(R.id.view_pager)
     ViewPager viewPager;
-    @Bind(R.id.iv_friend)
-    ImageView ivFriend;
     @Bind(R.id.iv_follow)
     ImageView ivFollow;
     @Bind(R.id.iv_fans)
     ImageView ivFans;
-    @Bind(R.id.iv_mail_list)
-    ImageView ivMailList;
 
     private ViewPageAdapter adapter;
     private List<Fragment> list = new ArrayList<>();
@@ -54,12 +49,19 @@ public class FriendActivity extends BaseActivity<BasePresenterImpl, BaseViewPres
         return new BasePresenterImpl(getSupportFragmentManager());
     }
 
+    @NonNull
+    @Override
+    protected BaseViewPresenterImpl getViewPresent() {
+        return new BaseViewPresenterImpl();
+    }
+
     @Override
     protected void handleIntent(Intent intent) {
         super.handleIntent(intent);
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             userId = bundle.getString("user_id", "");
+            Log.e("FansAndFollowsuser_id", userId);
         }
     }
 
@@ -76,24 +78,16 @@ public class FriendActivity extends BaseActivity<BasePresenterImpl, BaseViewPres
         });
     }
 
-    @NonNull
-    @Override
-    protected BaseViewPresenterImpl getViewPresent() {
-        return new BaseViewPresenterImpl();
-    }
-
     @Override
     protected int getContentViewID() {
-        return R.layout.activity_friend;
+        return R.layout.activity_fans_follow;
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        list.add(FriendsFragment.getIntance(userId));
         list.add(FollowFragment.getIntance(userId));
         list.add(FansFragment.getIntance(userId));
-        list.add(new MailListFragment());
         adapter = new ViewPageAdapter(getSupportFragmentManager(), list);
         viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);
@@ -120,41 +114,27 @@ public class FriendActivity extends BaseActivity<BasePresenterImpl, BaseViewPres
         viewPager.setCurrentItem(event.page);
     }
 
-    @OnClick({R.id.ll_friend, R.id.ll_follow, R.id.ll_fans, R.id.ll_mail_list})
+    @OnClick({R.id.ll_follow, R.id.ll_fans})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ll_friend:
+            case R.id.ll_follow:
                 viewPager.setCurrentItem(0);
                 break;
-            case R.id.ll_follow:
-                viewPager.setCurrentItem(1);
-                break;
             case R.id.ll_fans:
-                viewPager.setCurrentItem(2);
-                break;
-            case R.id.ll_mail_list:
-                viewPager.setCurrentItem(3);
+                viewPager.setCurrentItem(1);
                 break;
         }
     }
 
     public void setViewTabColor(int position) {
-        ivFriend.setVisibility(View.INVISIBLE);
         ivFollow.setVisibility(View.INVISIBLE);
         ivFans.setVisibility(View.INVISIBLE);
-        ivMailList.setVisibility(View.INVISIBLE);
         switch (position) {
             case 0:
-                ivFriend.setVisibility(View.VISIBLE);
-                break;
-            case 1:
                 ivFollow.setVisibility(View.VISIBLE);
                 break;
-            case 2:
+            case 1:
                 ivFans.setVisibility(View.VISIBLE);
-                break;
-            case 3:
-                ivMailList.setVisibility(View.VISIBLE);
                 break;
         }
     }
