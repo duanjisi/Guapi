@@ -108,6 +108,12 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
     };
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    @Override
     protected void setUpToolbar() {
         super.setUpToolbar();
         toolBarView.setTitleText("消息中心");
