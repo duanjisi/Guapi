@@ -484,7 +484,8 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
 //                    }
 //                }
 //            }
-            Camera.Size optimalSize = Utils.getOptimalPreviewSize(supportedPictureSizes, sceenW, sceenH);
+//            Camera.Size optimalSize = Utils.getOptimalPreviewSize(supportedPictureSizes, sceenW, sceenH);
+            Camera.Size optimalSize = Utils.getPictureSize(this, supportedPictureSizes);
             parameters.setPictureSize(optimalSize.width, optimalSize.height);
         }
 
@@ -530,8 +531,14 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
                 if (Build.VERSION.SDK_INT >= 24) {
                     mCamera.stopPreview();
                 }
+//                BitmapFactory.Options opts = new BitmapFactory.Options();
+//                opts.inJustDecodeBounds = true;
+//                opts.inSampleSize = ImageTool.computeSampleSize(opts, -1, sceenW * sceenH);
+//                opts.inJustDecodeBounds = false;
+                int roation = orientations;
                 BitmapFactory.Options opts = new BitmapFactory.Options();
                 opts.inJustDecodeBounds = true;
+                BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
                 opts.inSampleSize = ImageTool.computeSampleSize(opts, -1, sceenW * sceenH);
                 opts.inJustDecodeBounds = false;
 //                BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
@@ -539,8 +546,8 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
 //                opts.inJustDecodeBounds = false;
 //                bitmapImg = byteToBitmap(opts, bytes);
 //                bitmapImg = Utils.ImageCrop(byteToBitmap(opts, bytes), true, edgeLength);
-                Bitmap bitmap = Utils.changeRoation(byteToBitmap(opts, bytes), orientations);
-                bitmapImg = Utils.ImageCrop(bitmap, true, edgeLength);
+                Bitmap bitmap = Utils.ImageCrop(byteToBitmap(opts, bytes), true, edgeLength);
+                bitmapImg = Utils.changeRoation(bitmap, roation, edgeLength);
                 if (bitmapImg != null) {
 //                    ivPoint.setVisibility(View.VISIBLE);
 //                    Glide.with(context).load(bytes).into(ivPoint);

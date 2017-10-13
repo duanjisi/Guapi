@@ -129,7 +129,7 @@ public class Utils {
         return result;
     }
 
-    public static Bitmap changeRoation(Bitmap bmp, int orientations) {
+    public static Bitmap changeRoation(Bitmap bmp, int orientations, int edgeLength) {
         Matrix matrixs = new Matrix();
         if (orientations > 325 || orientations <= 45) {
             Log.v("time", "Surface.ROTATION_0;" + orientations);
@@ -144,7 +144,8 @@ public class Utils {
             Log.v("time", "Surface.ROTATION_90" + orientations);
             matrixs.setRotate(0);
         }
-        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrixs, true);
+//        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrixs, true);
+        bmp = Bitmap.createBitmap(bmp, 0, 0, edgeLength, edgeLength, matrixs, true);
         return bmp;
     }
 

@@ -92,15 +92,11 @@ import com.zijing.sharesdk.BitmapUtil;
 import com.zijing.sharesdk.ShareCallBack;
 import com.zijing.sharesdk.ShareDialog;
 import com.zijing.sharesdk.ShareSdkUtil;
-
 import org.greenrobot.eventbus.Subscribe;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.Bind;
 import butterknife.OnClick;
-
 import static com.guapi.tool.Global.TYPE_HB;
 import static com.guapi.tool.Global.TYPE_SHOW_ALL;
 import static com.guapi.tool.Global.TYPE_SHOW_FRIEND;
