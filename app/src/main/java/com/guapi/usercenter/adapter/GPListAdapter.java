@@ -5,8 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amap.api.maps.AMapUtils;
-import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps2d.model.LatLng;
 import com.ewuapp.framework.common.utils.GlideUtil;
 import com.ewuapp.framework.view.adapter.BaseViewHolder;
 import com.ewuapp.framework.view.adapter.RecyclerAdapter;
@@ -99,7 +98,7 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
 
             LatLng latLng = Hawk.get(PreferenceKey.LOCATION_LATLNG, null);
             if (latLng != null) {
-                float v = AMapUtils.calculateArea(latLng, new LatLng(Double.valueOf(object.getLat()), Double.valueOf(object.getLng())));
+                float v = com.amap.api.maps2d.AMapUtils.calculateArea(latLng, new LatLng(Double.valueOf(object.getLat()), Double.valueOf(object.getLng())));
                 tvDistance.setText("距离" + v);
             }
         }
