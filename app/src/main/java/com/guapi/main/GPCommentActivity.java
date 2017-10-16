@@ -401,11 +401,12 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
 //                    message = loginResponse.getUser().getNickname() + "回复:" +
 //                            commentAdapter.getData().get(clickPosition).getCommentUserName() +
 //                            etComment.getText().toString();
-                    message = "回复:【" +
+                    message = "回复 【" +
                             commentAdapter.getData().get(clickPosition).getCommentUserName() + "】:" + getString(msg);
                 } else {
                     message = getString(msg);
                 }
+                Log.i("info", "==============message:" + message);
                 doGP(message);
                 break;
         }

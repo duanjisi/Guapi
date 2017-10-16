@@ -99,10 +99,25 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
             LatLng latLng = Hawk.get(PreferenceKey.LOCATION_LATLNG, null);
             if (latLng != null) {
                 float v = com.amap.api.maps2d.AMapUtils.calculateArea(latLng, new LatLng(Double.valueOf(object.getLat()), Double.valueOf(object.getLng())));
-                tvDistance.setText("距离" + v);
+                tvDistance.setText("距离" + getDistance(v));
             }
         }
     }
 
+    private String getDistance(float ad) {
+        String distance = "";
+        if (ad > 1000) {
+            int k = (int) ad / 1000;
+            int m = (int) (ad % 1000) / 100;
+            if (m != 0) {
+                distance = k + "." + m + " km";
+            } else {
+                distance = k + " km";
+            }
+        } else {
+            distance = (int) ad + " m";
+        }
+        return distance;
+    }
 
 }
