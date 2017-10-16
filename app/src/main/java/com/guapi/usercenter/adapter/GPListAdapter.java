@@ -1,10 +1,12 @@
 package com.guapi.usercenter.adapter;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amap.api.maps2d.AMapUtils;
 import com.amap.api.maps2d.model.LatLng;
 import com.ewuapp.framework.common.utils.GlideUtil;
 import com.ewuapp.framework.view.adapter.BaseViewHolder;
@@ -15,6 +17,7 @@ import com.guapi.model.response.QueryFocusGpResponse;
 import com.guapi.tool.PreferenceKey;
 import com.orhanobut.hawk.Hawk;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import butterknife.Bind;
@@ -98,10 +101,15 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
 
             LatLng latLng = Hawk.get(PreferenceKey.LOCATION_LATLNG, null);
             if (latLng != null) {
-                float v = com.amap.api.maps2d.AMapUtils.calculateArea(latLng, new LatLng(Double.valueOf(object.getLat()), Double.valueOf(object.getLng())));
+                float v = AMapUtils.calculateLineDistance(latLng, new LatLng(Double.valueOf(object.getLat()), Double.valueOf(object.getLng())));
                 tvDistance.setText("距离" + getDistance(v));
             }
         }
+    }
+
+    public String getNumber(float dist) {
+        BigDecimal bd1 = new BigDecimal(dist);
+        return bd1.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString();
     }
 
     private String getDistance(float ad) {

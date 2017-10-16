@@ -149,6 +149,7 @@ public class GPListActivity extends BaseActivity<BasePresenterImpl, BaseViewPres
                         LatLng latLng2 = new LatLng(Double.valueOf(mData.get(position).getLat()), Double.valueOf(mData.get(position).getLng()));
                         distance = AMapUtils.calculateLineDistance(latLng1, latLng2);
                     }
+                    gpListBean.distance = distance;
                     if (distance > 50) {
                         showHBDialog(gpListBean);
                     } else {

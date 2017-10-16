@@ -38,14 +38,13 @@ import com.guapi.model.response.LoginResponse;
 import com.guapi.model.response.UserGetCountResponse;
 import com.guapi.tool.DateUtil;
 import com.guapi.tool.PreferenceKey;
-import com.library.im.controller.HxHelper;
-import com.library.im.utils.PreferenceManager;
 import com.nanchen.compresshelper.CompressHelper;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -342,17 +341,47 @@ public class EditDataActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
      * 时间选择
      */
     private void showTimeDialog() {
-        if (pvTime == null) {
-            pvTime = new TimePickerView(this, TimePickerView.Type.YEAR_MONTH_DAY);
-            pvTime.setTime(new Date());
-            pvTime.setRange(1990, Integer.valueOf(DateUtil.getNowTimeYear()));
-            pvTime.setCyclic(false);
-            pvTime.setCancelable(true);
-        }
-        //时间选择后回调
-        pvTime.setOnTimeSelectListener(new TimePickerView.OnTimeSelectListener() {
+//        if (pvTime == null) {
+//            pvTime = new TimePickerView(this, TimePickerView.Type.YEAR_MONTH_DAY);
+//            pvTime.setTime(new Date());
+//            pvTime.setRange(1950,2100);
+//            pvTime.setCyclic(false);
+//            pvTime.setCancelable(true);
+//        }
+//        //时间选择后回调
+//        pvTime.setOnTimeSelectListener(new TimePickerView.OnTimeSelectListener() {
+//            @Override
+//            public void onTimeSelect(Date date) {
+//                String nowYear, nowMonth, nowDay;
+//                nowYear = DateUtil.getNowTimeYear();
+//                nowMonth = DateUtil.getNowTimeOnlyMonth();
+//                nowDay = DateUtil.getNowTimeOnlDay();
+//                String chooseDat = getTime(date);
+//                String[] splits = chooseDat.split("-");
+//                String chooseYear, chooseMonth, chooseDay;
+//                chooseYear = splits[0];
+//                chooseMonth = splits[1];
+//                chooseDay = splits[2];
+//                if (Integer.valueOf((chooseYear + "" + chooseMonth + "" + chooseDay)) > Integer.valueOf((nowYear + "" + nowMonth + "" + nowDay))) {
+//                    showMessage("请正确选择出生日期");
+//                } else {
+//                    tvBirthday.setText(getTime(date));
+//                }
+//            }
+//        });
+//        if (tvBirthday != null) {
+//            pvTime.show();
+//        }
+        Calendar selectedDate = Calendar.getInstance();
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        //正确设置方式 原因：注意事项有说明
+//        selectedDate.s
+        startDate.set(1900, 0, 1);
+        endDate.set(2050, 11, 31);
+        pvTime = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
             @Override
-            public void onTimeSelect(Date date) {
+            public void onTimeSelect(Date date, View v) {//选中事件回调
                 String nowYear, nowMonth, nowDay;
                 nowYear = DateUtil.getNowTimeYear();
                 nowMonth = DateUtil.getNowTimeOnlyMonth();
@@ -369,7 +398,23 @@ public class EditDataActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
                     tvBirthday.setText(getTime(date));
                 }
             }
-        });
+        }).setType(new boolean[]{true, true, true, false, false, false})// 默认全部显示
+                .setCancelText("取消")//取消按钮文字
+                .setSubmitText("确定")//确认按钮文字
+                .setContentSize(18)//滚轮文字大小
+                .setTitleSize(20)//标题文字大小
+                .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示
+                .isCyclic(false)//是否循环滚动
+                .setTitleColor(Color.BLACK)//标题文字颜色
+                .setSubmitColor(Color.BLUE)//确定按钮文字颜色
+                .setCancelColor(Color.BLUE)//取消按钮文字颜色
+                .setBgColor(0xFFffffff)//滚轮背景颜色 Night mode
+                .setRangDate(startDate, endDate)//起始终止年月日设定
+                .setDate(selectedDate)
+                .setLabel("年", "月", "日", "", "", "")//默认设置为年月日时分秒
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .isDialog(false)//是否显示为对话框样式
+                .build();
         if (tvBirthday != null) {
             pvTime.show();
         }

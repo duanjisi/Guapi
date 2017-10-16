@@ -313,7 +313,7 @@ public class Http {
                 .subscribeWith(new BaseSubscriber<>(callBack));
     }
 
-    //获取对应组别的好友
+    //操作瓜皮，包括抢红包，评论，点赞
     public static Disposable doGP(Context context, String id, String type, String desc, CallBack<DoGPResponse> callBack) {
         DoGPRequest doGPRequest = new DoGPRequest();
         doGPRequest.id = id;

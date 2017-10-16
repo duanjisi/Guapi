@@ -16,7 +16,7 @@ android {
         targetSdkVersion rootProject.ext.targetSDKVersion
         versionCode 1
         versionName "1.0"
-        ndk { abiFilters "armeabi" }
+        ndk { abiFilters "armeabi", "x86" }
 //, "armeabi-v7a", "arm64-v8a", "x86","arm64-v8a","x86_64"} //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
         multiDexEnabled true
     }
@@ -87,7 +87,8 @@ dependencies {
         exclude module: "support-v13"
     }
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
-    compile 'com.bigkoo:pickerview:2.0.8'
+//    compile 'com.bigkoo:pickerview:2.0.8'
+    compile 'com.contrarywind:Android-PickerView:3.2.6'
     compile project(':framework')
     compile project(':im')
     // 拍照录像
