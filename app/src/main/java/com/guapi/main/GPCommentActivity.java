@@ -94,6 +94,7 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
     private ImageLoader imageLoader;
 
     private String gpId;
+    private String from;
 
     @NonNull
     @Override
@@ -116,6 +117,7 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
     protected void handleIntent(Intent intent) {
         super.handleIntent(intent);
         gpId = getIntent().getExtras().getString("gpId", "");
+        from = getIntent().getExtras().getString("from", "");
 //        bean = (GPResponse.GpListBean) getIntent().getSerializableExtra(Global.KEY_OBJ);
     }
 
@@ -164,7 +166,9 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
     private void initData(GpSingleRespone data) {
         if (data != null) {
             this.bean = data.getBean();
-            lookStatics();
+            if(from.equals("CatchActivity")){
+                lookStatics();
+            }
             initToolBar();
             initCommentList();
         }

@@ -190,6 +190,7 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
             Bundle bundle = new Bundle();
 //            bundle.putSerializable(Global.KEY_OBJ, bean);
             bundle.putString("gpId", bean.getGpId());
+            bundle.putString("from","CatchActivity");
             IntentUtil.startActivityWithBundle(this, GPCommentActivity.class, bundle, false);
             finish();
         }

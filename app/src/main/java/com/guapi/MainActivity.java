@@ -40,6 +40,7 @@ import com.amap.api.maps2d.model.MyLocationStyle;
 import com.ewuapp.framework.common.http.CallBack;
 import com.ewuapp.framework.common.http.Constants;
 import com.ewuapp.framework.common.http.Result;
+import com.ewuapp.framework.common.utils.AppManager;
 import com.ewuapp.framework.common.utils.CompatUtil;
 import com.ewuapp.framework.common.utils.GlideUtil;
 import com.ewuapp.framework.common.utils.IntentUtil;
@@ -92,14 +93,19 @@ import com.zijing.sharesdk.BitmapUtil;
 import com.zijing.sharesdk.ShareCallBack;
 import com.zijing.sharesdk.ShareDialog;
 import com.zijing.sharesdk.ShareSdkUtil;
+
 import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.Bind;
 import butterknife.OnClick;
+
 import static com.guapi.tool.Global.TYPE_HB;
 import static com.guapi.tool.Global.TYPE_SHOW_ALL;
 import static com.guapi.tool.Global.TYPE_SHOW_FRIEND;
+
 public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresenterImpl> implements
         LocationSource,
         AMapLocationListener,
@@ -672,7 +678,8 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
                     public void fail(int code, String message) {
                         hasQueryGP = false;
                         if (code == Constants.NET_CODE_NEED_LOGIN) {
-                            IntentUtil.startActivity(MainActivity.this, LoginActivity.class, false);
+                            AppManager.getInstance().finishAll();
+                            startActivity(null, LoginActivity.class);
                         }
                     }
                 });

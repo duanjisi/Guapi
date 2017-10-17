@@ -62,7 +62,7 @@ public class GPListActivity extends BaseActivity<BasePresenterImpl, BaseViewPres
     @Override
     protected void onResume() {
         super.onResume();
-
+        loadData();
     }
 
     @NonNull
