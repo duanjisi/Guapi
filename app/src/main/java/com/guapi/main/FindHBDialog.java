@@ -132,6 +132,7 @@ public class FindHBDialog extends BaseDialog2 {
             }
             tvTime.setText(Utils.getTimeStr(time));
         }
+        tvSee.setText(bean.getView_total());
         tvLiuyan.setText(bean.getCommentTotal());
         tvZan.setText(bean.getGrantTotal());
         tvLocation.setText(bean.getLine());

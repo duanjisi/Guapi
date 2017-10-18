@@ -108,6 +108,8 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
             if (latLng != null) {
                 float v = AMapUtils.calculateLineDistance(latLng, new LatLng(Double.valueOf(object.getLat()), Double.valueOf(object.getLng())));
                 tvDistance.setText("距离" + getDistance(v));
+            }else {
+                tvDistance.setText("距离10km");
             }
         }
     }
