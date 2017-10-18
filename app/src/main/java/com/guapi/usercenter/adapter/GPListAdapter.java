@@ -1,23 +1,25 @@
 package com.guapi.usercenter.adapter;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amap.api.maps2d.AMapUtils;
 import com.amap.api.maps2d.model.LatLng;
+import com.ewuapp.framework.common.utils.CheckUtil;
 import com.ewuapp.framework.common.utils.GlideUtil;
 import com.ewuapp.framework.view.adapter.BaseViewHolder;
 import com.ewuapp.framework.view.adapter.RecyclerAdapter;
 import com.ewuapp.framework.view.widget.CircleImageView;
 import com.guapi.R;
 import com.guapi.model.response.QueryFocusGpResponse;
+import com.guapi.tool.DateUtil;
 import com.guapi.tool.PreferenceKey;
+import com.guapi.tool.Utils;
+import com.hyphenate.util.TimeInfo;
 import com.orhanobut.hawk.Hawk;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import butterknife.Bind;
@@ -90,7 +92,10 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
                 nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             }
             tvSex.setCompoundDrawables(nav_up, null, null, null);
-            tvTime.setText(object.getCreate_time());
+            if (!CheckUtil.isNull(object.getCreate_time())) {
+                tvTime.setText(getTimeStr(object.getCreate_time()));
+            }
+
             GlideUtil.loadPicture(object.getKey_file_url(), ivHb);
             tvMessage.setText(object.getNote());
             tvRemind.setText(object.getDesc());
@@ -107,9 +112,43 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
         }
     }
 
-    public String getNumber(float dist) {
-        BigDecimal bd1 = new BigDecimal(dist);
-        return bd1.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString();
+
+    public String getTimeStr(String time) {
+        //create_time : 2017-09-23 19:11:59.0
+        String[] timeStr1 = time.split(" ");//timeStr1[0]=2017-09-23,timeStr[1]=19:11:59.0
+        String[] timeStr2 = timeStr1[0].split("-");//timeStr2[0]=2017,timeStr2[1]=09,timeStr2[2]=23
+        String monthStr = "";
+        String dayStr = "";
+        if (timeStr2[1].startsWith("0")) {
+            monthStr = timeStr2[1].substring(0);
+        } else {
+            monthStr = timeStr2[1];
+        }
+        if (timeStr2[2].startsWith("0")) {
+            dayStr = timeStr2[2].substring(0);
+        } else {
+            dayStr = timeStr2[2];
+        }
+        String str = "";
+        long[] times = Utils.getDistanceTimes(time, Utils.getDate("" + (System.currentTimeMillis() / 1000)));
+        if (DateUtil.isSameDay(DateUtil.formatDateMills(time, DateUtil.yyyy_MMddHHmmss))) {
+            if (times[3] < 1) {
+                if (times[4] < 1) {
+                    if (times[5] < 1) {
+                        str = times[5] + "秒前";
+                    } else {
+                        str = "刚才";
+                    }
+                } else {
+                    str = times[4] + "分钟前";
+                }
+            } else {
+                str = times[3] + "小时前";
+            }
+        } else {
+            str = timeStr2[0] + "年" + monthStr + "月" + dayStr + "日";
+        }
+        return str;
     }
 
     private String getDistance(float ad) {
