@@ -71,7 +71,7 @@
         android:layout_marginRight="15dp"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.ewuapp.framework.view.widget.CircleImageView
             android:id="@+id/iv_hb"
             android:layout_width="50dp"
             android:layout_height="50dp"

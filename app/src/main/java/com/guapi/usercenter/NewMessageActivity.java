@@ -36,6 +36,8 @@ import com.guapi.R;
 import com.guapi.auth.LoginActivity;
 import com.guapi.http.Http;
 import com.guapi.model.response.RefreshOneMessageResponse;
+import com.guapi.tool.DateUtil;
+import com.guapi.tool.Utils;
 import com.guapi.usercenter.chat.ChatActivity;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
@@ -411,7 +413,7 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
             @Override
             public void handlerSuccess(RefreshOneMessageResponse data) {
                 if (data != null && data.getMsListBeen().size() > 0) {
-                     if (data.getMsListBeen().get(0).getMs_type().equals("7") || data.getMsListBeen().get(0).getMs_type().equals("2") || data.getMsListBeen().get(0).getMs_type().equals("3") || data.getMsListBeen().get(0).getMs_type().equals("4") || data.getMsListBeen().get(0).getMs_type().equals("5") || data.getMsListBeen().get(0).getMs_type().equals("6")) {
+                    if (data.getMsListBeen().get(0).getMs_type().equals("7") || data.getMsListBeen().get(0).getMs_type().equals("2") || data.getMsListBeen().get(0).getMs_type().equals("3") || data.getMsListBeen().get(0).getMs_type().equals("4") || data.getMsListBeen().get(0).getMs_type().equals("5") || data.getMsListBeen().get(0).getMs_type().equals("6")) {
                         if (CheckUtil.isNull(data.getMsListBeen().get(0).getMs_content())) {
                             tvDongTaiContent.setText("暂无消息");
                         } else {
@@ -419,7 +421,7 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
                         }
                         tvDongTaiTime.setText(data.getMsListBeen().get(0).getMs_time());
                     }
-                }else {
+                } else {
                     tvDongTaiContent.setText("暂无消息");
                 }
             }
@@ -447,7 +449,9 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
                         } else {
                             tvGContent.setText(data.getMsListBeen().get(0).getMs_content());
                         }
-                        tvGTime.setText(data.getMsListBeen().get(0).getMs_time());
+                        if (!CheckUtil.isNull(data.getMsListBeen().get(0).getMs_time())) {
+                            tvGTime.setText(getTimeStr(data.getMsListBeen().get(0).getMs_time()));
+                        }
                     }
                 } else {
                     tvGContent.setText("暂无消息");
@@ -464,6 +468,44 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
                 }
             }
         }));
+    }
+
+    public String getTimeStr(String time) {
+        //create_time : 2017-09-23 19:11:59.0
+        String[] timeStr1 = time.split(" ");//timeStr1[0]=2017-09-23,timeStr[1]=19:11:59.0
+        String[] timeStr2 = timeStr1[0].split("-");//timeStr2[0]=2017,timeStr2[1]=09,timeStr2[2]=23
+        String monthStr = "";
+        String dayStr = "";
+        if (timeStr2[1].startsWith("0")) {
+            monthStr = timeStr2[1].substring(0);
+        } else {
+            monthStr = timeStr2[1];
+        }
+        if (timeStr2[2].startsWith("0")) {
+            dayStr = timeStr2[2].substring(1);
+        } else {
+            dayStr = timeStr2[2];
+        }
+        String str = "";
+        long[] times = Utils.getDistanceTimes(time, Utils.getDate("" + (System.currentTimeMillis() / 1000)));
+        if (DateUtil.isSameDay(DateUtil.formatDateMills(time, DateUtil.yyyy_MMddHHmmss))) {
+            if (times[3] < 1) {
+                if (times[4] < 1) {
+                    if (times[5] < 1) {
+                        str = times[5] + "秒前";
+                    } else {
+                        str = "刚才";
+                    }
+                } else {
+                    str = times[4] + "分钟前";
+                }
+            } else {
+                str = times[3] + "小时前";
+            }
+        } else {
+            str = timeStr2[0] + "年" + monthStr + "月" + dayStr + "日";
+        }
+        return str;
     }
 
     /**
