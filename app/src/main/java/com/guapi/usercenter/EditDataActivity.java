@@ -304,7 +304,9 @@ public class EditDataActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
                 showPickUp(6);
                 break;
             case R.id.ll_label:
-                startForResult(null, GET_LABEL, ChooseLabelActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("lable", tvLabel.getText().toString());
+                startForResult(bundle, GET_LABEL, ChooseLabelActivity.class);
                 break;
             case R.id.ll_sex:
                 showSexChoose();
@@ -341,37 +343,6 @@ public class EditDataActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
      * 时间选择
      */
     private void showTimeDialog() {
-//        if (pvTime == null) {
-//            pvTime = new TimePickerView(this, TimePickerView.Type.YEAR_MONTH_DAY);
-//            pvTime.setTime(new Date());
-//            pvTime.setRange(1950,2100);
-//            pvTime.setCyclic(false);
-//            pvTime.setCancelable(true);
-//        }
-//        //时间选择后回调
-//        pvTime.setOnTimeSelectListener(new TimePickerView.OnTimeSelectListener() {
-//            @Override
-//            public void onTimeSelect(Date date) {
-//                String nowYear, nowMonth, nowDay;
-//                nowYear = DateUtil.getNowTimeYear();
-//                nowMonth = DateUtil.getNowTimeOnlyMonth();
-//                nowDay = DateUtil.getNowTimeOnlDay();
-//                String chooseDat = getTime(date);
-//                String[] splits = chooseDat.split("-");
-//                String chooseYear, chooseMonth, chooseDay;
-//                chooseYear = splits[0];
-//                chooseMonth = splits[1];
-//                chooseDay = splits[2];
-//                if (Integer.valueOf((chooseYear + "" + chooseMonth + "" + chooseDay)) > Integer.valueOf((nowYear + "" + nowMonth + "" + nowDay))) {
-//                    showMessage("请正确选择出生日期");
-//                } else {
-//                    tvBirthday.setText(getTime(date));
-//                }
-//            }
-//        });
-//        if (tvBirthday != null) {
-//            pvTime.show();
-//        }
         Calendar selectedDate = Calendar.getInstance();
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
@@ -461,6 +432,7 @@ public class EditDataActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
             return;
         switch (requestCode) {
             case GET_LABEL:
+                Log.e("Long_lable", data.getStringExtra("LABEL"));
                 tvLabel.setText(data.getStringExtra("LABEL"));
                 break;
             case REQUEST_CODE_CAMERA:

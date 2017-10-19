@@ -12,99 +12,206 @@
         android:background="@color/colorPrimary"
         app:textColorTitle="@color/md_white_1000" />
 
-    <TextView
-        android:id="@+id/tv_go_to_bed_late_man"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical"
-        android:text="夜猫子"
-        android:textColor="#dbdbdb"
-        android:textSize="18sp" />
+    <!-- <TextView
+         android:id="@+id/tv_go_to_bed_late_man"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:paddingLeft="15dp"
+         android:gravity="center_vertical"
+         android:text="夜猫子"
+         android:textColor="#dbdbdb"
+         android:textSize="18sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
-        android:background="#ebebeb" />
+     <View
+         android:layout_width="match_parent"
+         android:layout_height="1dp"
+         android:layout_marginLeft="15dp"
+         android:background="#ebebeb" />
 
-    <TextView
-        android:id="@+id/tv_young_cynic"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical"
-        android:text="愤青"
-        android:textColor="#dbdbdb"
-        android:textSize="18sp" />
+     <TextView
+         android:id="@+id/tv_young_cynic"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:paddingLeft="15dp"
+         android:gravity="center_vertical"
+         android:text="愤青"
+         android:textColor="#dbdbdb"
+         android:textSize="18sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
-        android:background="#ebebeb" />
+     <View
+         android:layout_width="match_parent"
+         android:layout_height="1dp"
+         android:layout_marginLeft="15dp"
+         android:background="#ebebeb" />
 
-    <TextView
-        android:id="@+id/tv_little_fresh_meat"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical"
-        android:text="小鲜肉"
-        android:textColor="#dbdbdb"
-        android:textSize="18sp" />
+     <TextView
+         android:id="@+id/tv_little_fresh_meat"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:paddingLeft="15dp"
+         android:gravity="center_vertical"
+         android:text="小鲜肉"
+         android:textColor="#dbdbdb"
+         android:textSize="18sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
-        android:background="#ebebeb" />
+     <View
+         android:layout_width="match_parent"
+         android:layout_height="1dp"
+         android:layout_marginLeft="15dp"
+         android:background="#ebebeb" />
 
-    <TextView
-        android:id="@+id/tv_lolita"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical"
-        android:text="萝莉"
-        android:textColor="#dbdbdb"
-        android:textSize="18sp" />
+     <TextView
+         android:id="@+id/tv_lolita"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:paddingLeft="15dp"
+         android:gravity="center_vertical"
+         android:text="萝莉"
+         android:textColor="#dbdbdb"
+         android:textSize="18sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
-        android:background="#ebebeb" />
+     <View
+         android:layout_width="match_parent"
+         android:layout_height="1dp"
+         android:layout_marginLeft="15dp"
+         android:background="#ebebeb" />
 
-    <TextView
-        android:id="@+id/tv_quadratic_element"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical"
-        android:text="二次元"
-        android:textColor="#dbdbdb"
-        android:textSize="18sp" />
+     <TextView
+         android:id="@+id/tv_quadratic_element"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:paddingLeft="15dp"
+         android:gravity="center_vertical"
+         android:text="二次元"
+         android:textColor="#dbdbdb"
+         android:textSize="18sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
-        android:background="#ebebeb" />
+     <View
+         android:layout_width="match_parent"
+         android:layout_height="1dp"
+         android:layout_marginLeft="15dp"
+         android:background="#ebebeb" />
 
-    <TextView
-        android:id="@+id/tv_other"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="15dp"
-        android:gravity="center_vertical"
-        android:text="其他"
-        android:textColor="#dbdbdb"
-        android:textSize="18sp" />
+     <TextView
+         android:id="@+id/tv_other"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:paddingLeft="15dp"
+         android:gravity="center_vertical"
+         android:text="其他"
+         android:textColor="#dbdbdb"
+         android:textSize="18sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
-        android:background="#ebebeb" />
+     <View
+         android:layout_width="match_parent"
+         android:layout_height="1dp"
+         android:layout_marginLeft="15dp"
+         android:background="#ebebeb" />-->
+
+
+
+
+        <CheckBox
+            android:id="@+id/cb_go_to_bed_late_man"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:button="@null"
+            android:checked="true"
+            android:text="夜猫子"
+            android:textColor="@drawable/select_text_color"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="#ebebeb" />
+
+
+        <CheckBox
+            android:id="@+id/cb_young_cynic"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:button="@null"
+            android:checked="false"
+            android:text="愤青"
+            android:textColor="@drawable/select_text_color"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="#ebebeb" />
+
+        <CheckBox
+            android:id="@+id/cb_little_fresh_meat"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:button="@null"
+            android:checked="false"
+            android:text="小鲜肉"
+            android:textColor="@drawable/select_text_color"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="#ebebeb" />
+
+        <CheckBox
+            android:id="@+id/cb_lolita"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:button="@null"
+            android:checked="false"
+            android:text="萝莉"
+            android:textColor="@drawable/select_text_color"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="#ebebeb" />
+
+        <CheckBox
+            android:id="@+id/cb_quadratic_element"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:button="@null"
+            android:checked="false"
+            android:text="二次元"
+            android:textColor="@drawable/select_text_color"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="#ebebeb" />
+
+        <CheckBox
+            android:id="@+id/cb_other"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:button="@null"
+            android:checked="false"
+            android:text="其他"
+            android:textColor="@drawable/select_text_color"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="#ebebeb" />
+
 </LinearLayout>
