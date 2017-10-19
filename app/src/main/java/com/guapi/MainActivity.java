@@ -804,6 +804,7 @@ public class MainActivity extends BaseActivity<BasePresenterImpl, BaseViewPresen
     public class MyContactListener implements EMContactListener {
         @Override
         public void onContactAdded(String username) {
+
         }
 
         @Override

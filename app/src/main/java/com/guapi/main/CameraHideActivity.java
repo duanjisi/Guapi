@@ -546,8 +546,8 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
 //                opts.inJustDecodeBounds = false;
 //                bitmapImg = byteToBitmap(opts, bytes);
 //                bitmapImg = Utils.ImageCrop(byteToBitmap(opts, bytes), true, edgeLength);
-                Bitmap bitmap = Utils.ImageCrop(byteToBitmap(opts, bytes), true, edgeLength);
-                bitmapImg = Utils.changeRoation(bitmap, roation, edgeLength);
+                Bitmap bitmap = Utils.ImageCrop(context, byteToBitmap(opts, bytes), true, edgeLength);
+                bitmapImg = Utils.changeRoation(context, bitmap, roation, edgeLength);
                 if (bitmapImg != null) {
 //                    ivPoint.setVisibility(View.VISIBLE);
 //                    Glide.with(context).load(bytes).into(ivPoint);

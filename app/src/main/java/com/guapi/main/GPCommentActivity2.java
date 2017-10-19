@@ -205,9 +205,9 @@ public class GPCommentActivity2 extends BaseActivity<BasePresenterImpl, BaseView
             }
             tvTime.setText(time);
         }
-        int sex = bean.getSex();
+        String sex = bean.getSex();
         Drawable nav_up = null;
-        if (sex == 1) {
+        if (sex.equals("1")) {
             nav_up = getResources().getDrawable(R.drawable.ic_sex_gilr);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
         } else {

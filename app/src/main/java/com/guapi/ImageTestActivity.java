@@ -27,7 +27,7 @@ public class ImageTestActivity extends BaseActivity {
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.person);
         if (bitmap != null) {
-            Bitmap bit = Utils.ImageCrop(bitmap, true, 200);
+            Bitmap bit = Utils.ImageCrop(context,bitmap, true, 200);
             if (bit != null) {
                 ivImage.setImageBitmap(bit);
             }

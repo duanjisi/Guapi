@@ -81,7 +81,7 @@ public class GPResponse extends Result {
         @SerializedName("note")
         private String note;
         @SerializedName("sex")
-        private int sex;
+        private String sex;
         @SerializedName("age")
         private String age;
         @SerializedName("desc")
@@ -138,11 +138,11 @@ public class GPResponse extends Result {
             this.is_find = is_find;
         }
 
-        public int getSex() {
+        public String getSex() {
             return sex;
         }
 
-        public void setSex(int sex) {
+        public void setSex(String sex) {
             this.sex = sex;
         }
 

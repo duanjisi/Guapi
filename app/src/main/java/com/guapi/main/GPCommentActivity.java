@@ -71,11 +71,9 @@ import butterknife.OnClick;
  * @version 1.0
  * @since 2017/7/11 0011
  */
-
 public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewPresenterImpl> {
-
     //    @Bind(R.id.titleBar)
-//    ToolBarView toolBarView;
+    //    ToolBarView toolBarView;
     @Bind(R.id.iv_back)
     ImageView ivBack;
     @Bind(R.id.tv_title)
@@ -84,15 +82,12 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
     RecyclerView rvComment;
     @Bind(R.id.et_comment)
     EditText etComment;
-
     View headView;
     TextView tvCommentCount;
     TextView tvLY;
-
     private CommentAdapter commentAdapter;
     private GPResponse.GpListBean bean;
     private ImageLoader imageLoader;
-
     private String gpId;
     private String from;
 
@@ -125,7 +120,10 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
 //        initCommentList();
-        initDpBean();
+//        initDpBean();
+        if (from.equals("CatchActivity")) {
+            lookStatics();
+        }
         etComment.setOnKeyListener(onKeyListener);
     }
 
@@ -166,9 +164,6 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
     private void initData(GpSingleRespone data) {
         if (data != null) {
             this.bean = data.getBean();
-            if(from.equals("CatchActivity")){
-                lookStatics();
-            }
             initToolBar();
             initCommentList();
         }
@@ -178,6 +173,7 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
         Http.doGP(GPCommentActivity.this, bean.getGpId(), Global.TYPE_SEE, "", new CallBack<DoGPResponse>() {
             @Override
             public void handlerSuccess(DoGPResponse data) {
+                initDpBean();
             }
 
             @Override
@@ -320,9 +316,9 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
             }
             tvTime.setText(com.guapi.tool.Utils.getTimeStr(time));
         }
-        int sex = bean.getSex();
+        String sex = bean.getSex();
         Drawable nav_up = null;
-        if (sex == 1) {
+        if (sex.equals("1")) {
             nav_up = getResources().getDrawable(R.drawable.ic_sex_gilr);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
         } else {

@@ -142,7 +142,10 @@ public class GPListActivity extends BaseActivity<BasePresenterImpl, BaseViewPres
                     gpListBean.setUserImagUrl(gpListBeanQueryFocusGpResponse.getUser_imag_url());
                     gpListBean.setUserId(gpListBeanQueryFocusGpResponse.getUser_id());
                     gpListBean.setUser_hid(gpListBeanQueryFocusGpResponse.getUser_hid());
-                    gpListBean.setSex(Integer.valueOf(gpListBeanQueryFocusGpResponse.getSex()));
+                    gpListBean.setSex(gpListBeanQueryFocusGpResponse.getSex());
+                    gpListBean.setPointPicture(gpListBeanQueryFocusGpResponse.getKey_file_url());
+//                    gpListBean.setSex(Integer.valueOf(gpListBeanQueryFocusGpResponse.getSex()));
+
                     LatLng latLng1 = Hawk.get(PreferenceKey.LOCATION_LATLNG);
                     float distance = 10000;
                     if (latLng1 != null) {

@@ -110,9 +110,9 @@ public class FindHBDialog extends BaseDialog2 {
         }
 //        Glide.with(getContext()).load(bean.getUserImagUrl()).into(ivUser);
         imageLoader.displayImage(bean.getUserImagUrl(), ivUser, ImageLoaderUtils.getDisplayImageOptions());
-        int sex = bean.getSex();
+        String sex = bean.getSex();
         Drawable nav_up = null;
-        if (sex == 1) {
+        if (sex.equals("1")) {
             nav_up = resources.getDrawable(R.drawable.ic_sex_gilr);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
         } else {

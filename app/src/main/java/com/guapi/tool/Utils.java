@@ -129,7 +129,8 @@ public class Utils {
         return result;
     }
 
-    public static Bitmap changeRoation(Bitmap bmp, int orientations, int edgeLength) {
+    public static Bitmap changeRoation(Context context,Bitmap bmp, int orientations, int length) {
+        int edgeLength = length - Utils.dip2px(context, 5);
         Matrix matrixs = new Matrix();
         if (orientations > 325 || orientations <= 45) {
             Log.v("time", "Surface.ROTATION_0;" + orientations);
@@ -149,41 +150,41 @@ public class Utils {
         return bmp;
     }
 
-    /**
-     * 按正方形裁切图片
-     */
-    public static Bitmap ImageCrop(Bitmap bitmap, boolean isRecycled, int edgeLength) {
-        if (bitmap == null) {
-            return null;
-        }
-        int w = bitmap.getWidth(); // 得到图片的宽，高
-        int h = bitmap.getHeight();
-
-        int longerEdge = (int) (edgeLength * Math.max(w, h) / Math.min(w, h));
-        int scaledWidth = w > h ? longerEdge : edgeLength;
-        int scaledHeight = w > h ? edgeLength : longerEdge;
-
-
-        //从图中截取正中间的正方形部分。
-        int xTopLeft = (w - edgeLength) / 2;
-        int yTopLeft = (h - edgeLength) / 2;
-
-//        int wh = w > h ? h : w;// 裁切后所取的正方形区域边长
-//       Log.i("info", "========wh:" + wh);
-//        int retX = w > h ? (w - h) / 2 : 0;// 基于原图，取正方形左上角x坐标
-//        int retY = w > h ? 0 : (h - w) / 2;
-
-        Bitmap bmp = Bitmap.createBitmap(bitmap, xTopLeft, yTopLeft, edgeLength, edgeLength, null,
-                false);
-        if (isRecycled && bitmap != null && !bitmap.equals(bmp)
-                && !bitmap.isRecycled()) {
-            bitmap.recycle();
-            bitmap = null;
-        }
-        // 下面这句是关键
-        return bmp;// Bitmap.createBitmap(bitmap, retX, retY, wh, wh, null,
-        // false);
-    }
+//    /**
+    //     * 按正方形裁切图片
+    //     */
+//    public static Bitmap ImageCrop(Bitmap bitmap, boolean isRecycled, int edgeLength) {
+//        if (bitmap == null) {
+//            return null;
+//        }
+//        int w = bitmap.getWidth(); // 得到图片的宽，高
+//        int h = bitmap.getHeight();
+//
+//        int longerEdge = (int) (edgeLength * Math.max(w, h) / Math.min(w, h));
+//        int scaledWidth = w > h ? longerEdge : edgeLength;
+//        int scaledHeight = w > h ? edgeLength : longerEdge;
+//
+//
+//        //从图中截取正中间的正方形部分。
+//        int xTopLeft = (w - edgeLength) / 2;
+//        int yTopLeft = (h - edgeLength) / 2;
+//
+////        int wh = w > h ? h : w;// 裁切后所取的正方形区域边长
+////       Log.i("info", "========wh:" + wh);
+////        int retX = w > h ? (w - h) / 2 : 0;// 基于原图，取正方形左上角x坐标
+////        int retY = w > h ? 0 : (h - w) / 2;
+//
+//        Bitmap bmp = Bitmap.createBitmap(bitmap, xTopLeft, yTopLeft, edgeLength, edgeLength, null,
+//                false);
+//        if (isRecycled && bitmap != null && !bitmap.equals(bmp)
+//                && !bitmap.isRecycled()) {
+//            bitmap.recycle();
+//            bitmap = null;
+//        }
+//        // 下面这句是关键
+//        return bmp;// Bitmap.createBitmap(bitmap, retX, retY, wh, wh, null,
+//        // false);
+//    }
 
 //    /**
 //     * 按正方形裁切图片
@@ -215,6 +216,37 @@ public class Utils {
 //        return bmp;// Bitmap.createBitmap(bitmap, retX, retY, wh, wh, null,
 //        // false);
 //    }
+
+    /**
+     * 按正方形裁切图片
+     */
+    public static Bitmap ImageCrop(Context context, Bitmap bitmap, boolean isRecycled, int length) {
+        int edgeLength = length - Utils.dip2px(context, 5);
+        if (bitmap == null) {
+            return null;
+        }
+        int w = bitmap.getWidth(); // 得到图片的宽，高
+        int h = bitmap.getHeight();
+
+        int longerEdge = (int) (edgeLength * Math.max(w, h) / Math.min(w, h));
+        int scaledWidth = w > h ? longerEdge : edgeLength;
+        int scaledHeight = w > h ? edgeLength : longerEdge;
+
+        //从图中截取正中间的正方形部分。
+        int xTopLeft = (w - edgeLength) / 2;
+        int yTopLeft = (h - edgeLength) / 2;
+
+        Bitmap bmp = Bitmap.createBitmap(bitmap, xTopLeft, yTopLeft, edgeLength, edgeLength, null,
+                false);
+        if (isRecycled && bitmap != null && !bitmap.equals(bmp)
+                && !bitmap.isRecycled()) {
+            bitmap.recycle();
+            bitmap = null;
+        }
+        // 下面这句是关键
+        return bmp;// Bitmap.createBitmap(bitmap, retX, retY, wh, wh, null,
+        // false);
+    }
 
     /**
      * 按照一定的宽高比例裁剪图片
