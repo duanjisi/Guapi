@@ -1,6 +1,7 @@
 package com.guapi.usercenter.adapter;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +18,7 @@ import com.guapi.model.response.QueryFocusGpResponse;
 import com.guapi.tool.DateUtil;
 import com.guapi.tool.PreferenceKey;
 import com.guapi.tool.Utils;
-import com.hyphenate.util.TimeInfo;
+import com.guapi.widget.scan.RoundImageView;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
         @Bind(R.id.tv_time)
         TextView tvTime;
         @Bind(R.id.iv_hb)
-        ImageView ivHb;
+        RoundImageView ivHb;
         @Bind(R.id.tv_message)
         TextView tvMessage;
         @Bind(R.id.tv_remind)
@@ -70,15 +71,9 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
 
         @Override
         public void build(QueryFocusGpResponse.GpListBean object, int position) {
-//            if (object.getComment_list() != null && object.getComment_list().size() > 0 && object.getComment_list().get(0).getComment_user_imag_url() != null) {
-//                GlideUtil.loadPicture(object.getComment_list().get(0).getComment_user_imag_url(), ivUser);
-//            }
             if (object.getUser_imag_url() != null) {
                 GlideUtil.loadPicture(object.getUser_imag_url(), ivUser);
             }
-//            if (object.getComment_list() != null&& object.getComment_list().size() > 0  && object.getComment_list().get(0) != null && object.getComment_list().get(0).getComment_user_name() != null) {
-//                tvName.setText(object.getComment_list().get(0).getComment_user_name());
-//            }
             if (object.getUser_name() != null) {
                 tvName.setText(object.getUser_name());
             }
@@ -95,7 +90,6 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
             if (!CheckUtil.isNull(object.getCreate_time())) {
                 tvTime.setText(getTimeStr(object.getCreate_time()));
             }
-
             GlideUtil.loadPicture(object.getKey_file_url(), ivHb);
             tvMessage.setText(object.getNote());
             tvRemind.setText(object.getDesc());
@@ -103,12 +97,11 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
             tvSee.setText(object.getView_total() + "");
             tvLiuYan.setText(object.getComment_total() + "");
             tvAddress.setText(object.getLine());
-
             LatLng latLng = Hawk.get(PreferenceKey.LOCATION_LATLNG, null);
             if (latLng != null) {
                 float v = AMapUtils.calculateLineDistance(latLng, new LatLng(Double.valueOf(object.getLat()), Double.valueOf(object.getLng())));
                 tvDistance.setText("距离" + getDistance(v));
-            }else {
+            } else {
                 tvDistance.setText("距离10km");
             }
         }
@@ -127,7 +120,7 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
             monthStr = timeStr2[1];
         }
         if (timeStr2[2].startsWith("0")) {
-            dayStr = timeStr2[2].substring(0);
+            dayStr = timeStr2[2].substring(1);
         } else {
             dayStr = timeStr2[2];
         }

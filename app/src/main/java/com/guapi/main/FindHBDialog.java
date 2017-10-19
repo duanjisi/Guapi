@@ -70,7 +70,7 @@ public class FindHBDialog extends BaseDialog2 {
 
     GPResponse.GpListBean bean;
     @Bind(R.id.iv_temp)
-    ImageView ivTemp;
+    com.ewuapp.framework.view.widget.CircleImageView ivTemp;
     @Bind(R.id.iv_play)
     ImageView iv_play;
 
