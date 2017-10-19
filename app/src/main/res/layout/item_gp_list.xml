@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -71,14 +72,17 @@
         android:layout_marginRight="15dp"
         android:orientation="horizontal">
 
-        <com.ewuapp.framework.view.widget.CircleImageView
+        <com.guapi.widget.scan.RoundImageView
             android:id="@+id/iv_hb"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignLeft="@+id/tv_name"
             android:layout_below="@+id/tv_message"
             android:layout_marginTop="@dimen/dp20"
-            android:src="@mipmap/ic_hb_x" />
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_hb_x"
+            app:round_borderRadius="10dp"
+            app:round_type="1" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -99,8 +103,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textColor="@color/gray_888"
-                android:text="太远了，再走近一点吧~" />
+                android:text="太远了，再走近一点吧~"
+                android:textColor="@color/gray_888" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"

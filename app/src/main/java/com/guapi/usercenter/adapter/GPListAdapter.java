@@ -18,6 +18,7 @@ import com.guapi.model.response.QueryFocusGpResponse;
 import com.guapi.tool.DateUtil;
 import com.guapi.tool.PreferenceKey;
 import com.guapi.tool.Utils;
+import com.guapi.widget.scan.RoundImageView;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class GPListAdapter extends RecyclerAdapter<QueryFocusGpResponse.GpListBe
         @Bind(R.id.tv_time)
         TextView tvTime;
         @Bind(R.id.iv_hb)
-        CircleImageView ivHb;
+        RoundImageView ivHb;
         @Bind(R.id.tv_message)
         TextView tvMessage;
         @Bind(R.id.tv_remind)
