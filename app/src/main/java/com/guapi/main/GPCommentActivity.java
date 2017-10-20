@@ -121,8 +121,12 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
         super.initView(savedInstanceState);
 //        initCommentList();
 //        initDpBean();
+        gpId = getIntent().getExtras().getString("gpId", "");
+        from = getIntent().getExtras().getString("from", "");
         if (from.equals("CatchActivity")) {
             lookStatics();
+        } else {
+            initDpBean();
         }
         etComment.setOnKeyListener(onKeyListener);
     }
@@ -170,7 +174,7 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
     }
 
     private void lookStatics() {
-        Http.doGP(GPCommentActivity.this, bean.getGpId(), Global.TYPE_SEE, "", new CallBack<DoGPResponse>() {
+        Http.doGP(GPCommentActivity.this, gpId, Global.TYPE_SEE, "", new CallBack<DoGPResponse>() {
             @Override
             public void handlerSuccess(DoGPResponse data) {
                 initDpBean();
