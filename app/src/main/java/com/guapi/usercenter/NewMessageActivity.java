@@ -419,7 +419,9 @@ public class NewMessageActivity extends BaseActivity<BasePresenterImpl, BaseView
                         } else {
                             tvDongTaiContent.setText(data.getMsListBeen().get(0).getMs_content());
                         }
-                        tvDongTaiTime.setText(data.getMsListBeen().get(0).getMs_time());
+                        if (!CheckUtil.isNull(data.getMsListBeen().get(0).getMs_time())) {
+                            tvDongTaiTime.setText(getTimeStr(data.getMsListBeen().get(0).getMs_time()));
+                        }
                     }
                 } else {
                     tvDongTaiContent.setText("暂无消息");

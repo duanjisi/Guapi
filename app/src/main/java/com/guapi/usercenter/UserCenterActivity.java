@@ -175,7 +175,7 @@ public class UserCenterActivity extends BaseActivity<BasePresenterImpl, BaseView
         }
         if (!CheckUtil.isNull(data.getLingInfor())) {
             String[] lings = data.getLingInfor().split(",");
-            tvLabelSize.setText(lings.length + "");
+            tvLingSize.setText(lings.length + "");
             List<String> lingList = new ArrayList<>();
             lingList = Arrays.asList(lings);
             lingAdapter = new LingAdapter(context, lingList);
