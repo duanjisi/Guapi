@@ -22,6 +22,7 @@ import com.guapi.model.response.QueryUserInfoByHxResponse;
 import com.guapi.tool.JPushUtil;
 import com.guapi.tool.PreferenceKey;
 import com.guapi.usercenter.chat.ChatActivity;
+import com.guapi.util.NotificationSoundUtil;
 import com.library.im.cache.ContactsCacheUtils;
 import com.library.im.cache.Process;
 import com.library.im.controller.HxHelper;
@@ -83,6 +84,7 @@ public class BaseApp extends BaseApplication {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             builder.detectFileUriExposure();
         }
+        NotificationSoundUtil.init(this);
         initJPush();
         SharedPre.init(this, getPackageName());
         SdCardUtil.initFileDir(this);
@@ -172,8 +174,9 @@ public class BaseApp extends BaseApplication {
         builder.statusBarDrawable = R.mipmap.gywm;
         builder.notificationFlags = Notification.FLAG_AUTO_CANCEL
                 | Notification.FLAG_SHOW_LIGHTS;  //设置为自动消失和呼吸灯闪烁
-        builder.notificationDefaults = Notification.DEFAULT_VIBRATE
-                | Notification.DEFAULT_LIGHTS; // 设置为铃声、震动、呼吸灯闪烁都要
+        builder.notificationDefaults = Notification.DEFAULT_LIGHTS;
+//        builder.notificationDefaults = Notification.DEFAULT_VIBRATE
+//                | Notification.DEFAULT_LIGHTS; // 设置为铃声、震动、呼吸灯闪烁都要
 //                | Notification.DEFAULT_SOUND;
         JPushInterface.setDefaultPushNotificationBuilder(builder);
         JPushUtil.init(this);
