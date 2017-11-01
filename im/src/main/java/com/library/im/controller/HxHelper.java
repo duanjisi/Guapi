@@ -658,8 +658,10 @@ public class HxHelper {
         inviteMessgeDao.saveMessage(msg);
         //保存未读数，这里没有精确计算
         inviteMessgeDao.saveUnreadMessageCount(1);
-        // 提示有新消息
-        getNotifier().viberateAndPlayTone(null);
+        if (!PreferenceManager.getInstance().getMessageNoDisturb()) {
+            // 提示有新消息
+            getNotifier().viberateAndPlayTone(null);
+        }
     }
 
     /**
@@ -671,9 +673,9 @@ public class HxHelper {
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Constant.ACCOUNT_CONFLICT, true);
-        if(isMainActivityRun) {
+        if (isMainActivityRun) {
             appContext.startActivity(intent);
-        }else {
+        } else {
 //            Hawk.put(Constant.ACCOUNT_CONFLICT,true);
         }
     }
@@ -688,9 +690,9 @@ public class HxHelper {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Constant.ACCOUNT_REMOVED, true);
 
-        if(isMainActivityRun) {
+        if (isMainActivityRun) {
             appContext.startActivity(intent);
-        }else {
+        } else {
 //            Hawk.put(Constant.ACCOUNT_REMOVED,true);
         }
     }
@@ -719,6 +721,7 @@ public class HxHelper {
 
             @Override
             public void onMessageReceived(List<EMMessage> messages) {
+
                 for (EMMessage message : messages) {
                     EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
                     //应用在后台，不需要刷新UI,通知栏提示新消息

@@ -1,6 +1,7 @@
 package com.library.im.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
