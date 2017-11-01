@@ -17,6 +17,8 @@ import com.guapi.auth.BindPhoneActivity;
 import com.guapi.auth.ChangePasswordActivity;
 import com.guapi.auth.LoginActivity;
 import com.guapi.http.Http;
+import com.guapi.model.response.LoginResponse;
+import com.guapi.tool.JPushUtil;
 import com.guapi.tool.PreferenceKey;
 //import com.guapi.util.GlideCatchUtil;
 import com.guapi.util.GlideCatchUtil;
@@ -26,6 +28,7 @@ import com.orhanobut.hawk.Hawk;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * author: long
@@ -79,8 +82,15 @@ public class SettingActivity extends BaseActivity<BasePresenterImpl, BaseViewPre
         super.initView(savedInstanceState);
         tvCache.setText(GlideCatchUtil.getInstance().getCacheSize());
         ivMesageNotDisturb.setSelected(Hawk.get(PreferenceKey.MESSAGE_NO_DISTURB, false));
-        ivSound.setSelected(Hawk.get(PreferenceKey.SOUND, false));
-        ivShock.setSelected(Hawk.get(PreferenceKey.SHOCK, false));
+        if(Hawk.get(PreferenceKey.MESSAGE_NO_DISTURB, false)){
+            ivSound.setSelected(false);
+            Hawk.put(PreferenceKey.SOUND, false);
+            ivShock.setSelected(false);
+            Hawk.put(PreferenceKey.SHOCK, false);
+        }else {
+            ivSound.setSelected(Hawk.get(PreferenceKey.SOUND, true));
+            ivShock.setSelected(Hawk.get(PreferenceKey.SHOCK, true));
+        }
     }
 
     @OnClick({R.id.rl_change_password, R.id.rl_bind_phone, R.id.iv_message_not_disturb, R.id.iv_sound, R.id.iv_shock,
@@ -98,27 +108,50 @@ public class SettingActivity extends BaseActivity<BasePresenterImpl, BaseViewPre
                 if (ivMesageNotDisturb.isSelected()) {
                     Hawk.put(PreferenceKey.MESSAGE_NO_DISTURB, false);
                     ivMesageNotDisturb.setSelected(false);
+                    ivSound.setSelected(true);
+                    Hawk.put(PreferenceKey.SOUND, true);
+                    ivShock.setSelected(true);
+                    Hawk.put(PreferenceKey.SHOCK, true);
+                    LoginResponse loginResponse=Hawk.get(PreferenceKey.LoginResponse);
+                    JPushUtil.get().setAlias(loginResponse.getUser().getHid());
+                    JPushInterface.resumePush(getBaseContext());
                 } else {
+                    JPushUtil.get().setAlias("");
+                    JPushInterface.stopPush(getBaseContext());
                     Hawk.put(PreferenceKey.MESSAGE_NO_DISTURB, true);
                     ivMesageNotDisturb.setSelected(true);
+                    ivSound.setSelected(false);
+                    Hawk.put(PreferenceKey.SOUND, false);
+                    ivShock.setSelected(false);
+                    Hawk.put(PreferenceKey.SHOCK, false);
                 }
                 break;
             case R.id.iv_sound://声音
+                if(ivMesageNotDisturb.isSelected()){
+                    return;
+                }
                 if (ivSound.isSelected()) {
                     ivSound.setSelected(false);
                     Hawk.put(PreferenceKey.SOUND, false);
+
                 } else {
                     Hawk.put(PreferenceKey.SOUND, true);
                     ivSound.setSelected(true);
+
                 }
                 break;
             case R.id.iv_shock://震动
+                if(ivMesageNotDisturb.isSelected()){
+                    return;
+                }
                 if (ivShock.isSelected()) {
                     Hawk.put(PreferenceKey.SHOCK, false);
                     ivShock.setSelected(false);
+
                 } else {
                     Hawk.put(PreferenceKey.SHOCK, true);
                     ivShock.setSelected(true);
+
                 }
                 break;
             case R.id.rl_clear_cache://清除缓存

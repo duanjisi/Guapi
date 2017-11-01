@@ -5,10 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.guapi.auth.SplashActivity;
+import com.guapi.tool.PreferenceKey;
+import com.guapi.util.NotificationSoundUtil;
+import com.orhanobut.hawk.Hawk;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,10 +48,20 @@ public class PushReceiver extends BroadcastReceiver {
             Log.d(TAG, "[PushReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
             String extra_message = bundle.getString(JPushInterface.EXTRA_MESSAGE) + "";
             Log.d(TAG, extra_message);
+            if (Hawk.get(PreferenceKey.SOUND, false)) {
+                NotificationSoundUtil.get().startAlarm();
+            }
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
             Log.d(TAG, "[PushReceiver] 接收到推送下来的通知");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_MESSAGE);
             Log.d(TAG, "[PushReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+            if (Hawk.get(PreferenceKey.SOUND, false)) {
+                NotificationSoundUtil.get().startAlarm();
+            }
+            if(Hawk.get(PreferenceKey.SHOCK,false)){
+                Vibrator vibrator = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
+                vibrator.vibrate(800);
+            }
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "[PushReceiver] 用户点击打开了通知");
             Intent i = null;
