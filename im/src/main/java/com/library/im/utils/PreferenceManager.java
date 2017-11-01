@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class PreferenceManager {
+
     /**
      * 保存Preference的name
      */
@@ -45,6 +46,36 @@ public class PreferenceManager {
 
     private static String USER_U_ID = "USER_U_ID";
     private static String USER_AVATAR = "USER_AVATAR";
+    private static String SOUND = "SOUND";
+    private static String SHOCK = "SHOCK";
+    private static String MESSAGE_NO_DISTURB = "MESSAGE_NO_DISTURB";
+
+    public boolean getSOUND() {
+        return mSharedPreferences.getBoolean(SOUND, false);
+    }
+
+    public void setSOUND(boolean sound) {
+        editor.putBoolean(SOUND, sound);
+        editor.commit();
+    }
+
+    public boolean getSHOCK() {
+        return mSharedPreferences.getBoolean(SHOCK, false);
+    }
+
+    public void setSHOCK(boolean shock) {
+        editor.putBoolean(SHOCK, shock);
+        editor.commit();
+    }
+
+    public boolean getMessageNoDisturb() {
+        return mSharedPreferences.getBoolean(MESSAGE_NO_DISTURB, false);
+    }
+
+    public void setMessageNoDisturb(boolean messageNoDisturb) {
+        editor.putBoolean(MESSAGE_NO_DISTURB, messageNoDisturb);
+        editor.commit();
+    }
 
     public String getUserAvatar() {
         return mSharedPreferences.getString(USER_AVATAR, "");

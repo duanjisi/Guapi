@@ -24,6 +24,7 @@ import com.guapi.tool.PreferenceKey;
 import com.guapi.util.GlideCatchUtil;
 import com.hyphenate.EMCallBack;
 import com.library.im.controller.HxHelper;
+import com.library.im.utils.PreferenceManager;
 import com.orhanobut.hawk.Hawk;
 
 import butterknife.Bind;
@@ -82,14 +83,16 @@ public class SettingActivity extends BaseActivity<BasePresenterImpl, BaseViewPre
         super.initView(savedInstanceState);
         tvCache.setText(GlideCatchUtil.getInstance().getCacheSize());
         ivMesageNotDisturb.setSelected(Hawk.get(PreferenceKey.MESSAGE_NO_DISTURB, false));
-        if(Hawk.get(PreferenceKey.MESSAGE_NO_DISTURB, false)){
+        if (Hawk.get(PreferenceKey.MESSAGE_NO_DISTURB, false)) {
             ivSound.setSelected(false);
             Hawk.put(PreferenceKey.SOUND, false);
+            PreferenceManager.getInstance().setSOUND(false);
             ivShock.setSelected(false);
             Hawk.put(PreferenceKey.SHOCK, false);
-        }else {
-            ivSound.setSelected(Hawk.get(PreferenceKey.SOUND, true));
-            ivShock.setSelected(Hawk.get(PreferenceKey.SHOCK, true));
+            PreferenceManager.getInstance().setSHOCK(false);
+        } else {
+            ivSound.setSelected(Hawk.get(PreferenceKey.SOUND, false));
+            ivShock.setSelected(Hawk.get(PreferenceKey.SHOCK, false));
         }
     }
 
@@ -107,51 +110,57 @@ public class SettingActivity extends BaseActivity<BasePresenterImpl, BaseViewPre
             case R.id.iv_message_not_disturb://消息免打扰
                 if (ivMesageNotDisturb.isSelected()) {
                     Hawk.put(PreferenceKey.MESSAGE_NO_DISTURB, false);
+                    PreferenceManager.getInstance().setMessageNoDisturb(false);
                     ivMesageNotDisturb.setSelected(false);
                     ivSound.setSelected(true);
                     Hawk.put(PreferenceKey.SOUND, true);
+                    PreferenceManager.getInstance().setSOUND(true);
                     ivShock.setSelected(true);
                     Hawk.put(PreferenceKey.SHOCK, true);
-                    LoginResponse loginResponse=Hawk.get(PreferenceKey.LoginResponse);
+                    PreferenceManager.getInstance().setSHOCK(true);
+                    LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
                     JPushUtil.get().setAlias(loginResponse.getUser().getHid());
                     JPushInterface.resumePush(getBaseContext());
                 } else {
                     JPushUtil.get().setAlias("");
                     JPushInterface.stopPush(getBaseContext());
                     Hawk.put(PreferenceKey.MESSAGE_NO_DISTURB, true);
+                    PreferenceManager.getInstance().setMessageNoDisturb(true);
                     ivMesageNotDisturb.setSelected(true);
                     ivSound.setSelected(false);
                     Hawk.put(PreferenceKey.SOUND, false);
+                    PreferenceManager.getInstance().setSOUND(false);
                     ivShock.setSelected(false);
                     Hawk.put(PreferenceKey.SHOCK, false);
+                    PreferenceManager.getInstance().setSHOCK(false);
                 }
                 break;
             case R.id.iv_sound://声音
-                if(ivMesageNotDisturb.isSelected()){
+                if (ivMesageNotDisturb.isSelected()) {
                     return;
                 }
                 if (ivSound.isSelected()) {
                     ivSound.setSelected(false);
                     Hawk.put(PreferenceKey.SOUND, false);
-
+                    PreferenceManager.getInstance().setSOUND(false);
                 } else {
                     Hawk.put(PreferenceKey.SOUND, true);
+                    PreferenceManager.getInstance().setSOUND(true);
                     ivSound.setSelected(true);
-
                 }
                 break;
             case R.id.iv_shock://震动
-                if(ivMesageNotDisturb.isSelected()){
+                if (ivMesageNotDisturb.isSelected()) {
                     return;
                 }
                 if (ivShock.isSelected()) {
                     Hawk.put(PreferenceKey.SHOCK, false);
+                    PreferenceManager.getInstance().setSHOCK(false);
                     ivShock.setSelected(false);
-
                 } else {
                     Hawk.put(PreferenceKey.SHOCK, true);
+                    PreferenceManager.getInstance().setSHOCK(true);
                     ivShock.setSelected(true);
-
                 }
                 break;
             case R.id.rl_clear_cache://清除缓存

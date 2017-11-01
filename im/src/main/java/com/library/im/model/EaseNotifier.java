@@ -20,6 +20,7 @@ import com.hyphenate.chat.EMMessage;
 import com.library.im.controller.EaseUI;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
+import com.library.im.utils.PreferenceManager;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -189,6 +190,9 @@ public class EaseNotifier {
      * @param message
      */
     protected void sendNotification(EMMessage message, boolean isForeground, boolean numIncrease) {
+        if (PreferenceManager.getInstance().getMessageNoDisturb()) {
+            return;
+        }
         String username = message.getFrom();
         try {
             String notifyText = username + " ";
@@ -300,8 +304,6 @@ public class EaseNotifier {
                 return;
             }
         }
-
-
         if (System.currentTimeMillis() - lastNotifiyTime < 1000) {
             // received new messages within 2 seconds, skip play ringtone
             return;
@@ -316,43 +318,50 @@ public class EaseNotifier {
                 return;
             }
             EaseUI.EaseSettingsProvider settingsProvider = EaseUI.getInstance().getSettingsProvider();
-            if (settingsProvider.isMsgVibrateAllowed(message)) {
-                long[] pattern = new long[]{0, 180, 80, 120};
-                vibrator.vibrate(pattern, -1);
-            }
-
-            if (settingsProvider.isMsgSoundAllowed(message)) {
-                if (ringtone == null) {
-                    Uri notificationUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-                    ringtone = RingtoneManager.getRingtone(appContext, notificationUri);
-                    if (ringtone == null) {
-                        EMLog.d(TAG, "cant find ringtone at:" + notificationUri.getPath());
-                        return;
+            if (!PreferenceManager.getInstance().getMessageNoDisturb()) {
+                if (PreferenceManager.getInstance().getSHOCK()) {
+                    if (settingsProvider.isMsgVibrateAllowed(message)) {
+                        long[] pattern = new long[]{0, 180, 80, 120};
+                        vibrator.vibrate(pattern, -1);
                     }
                 }
+            }
+            if (!PreferenceManager.getInstance().getMessageNoDisturb()) {
+                if (PreferenceManager.getInstance().getSOUND()) {
+                    if (settingsProvider.isMsgSoundAllowed(message)) {
+                        if (ringtone == null) {
+                            Uri notificationUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-                if (!ringtone.isPlaying()) {
-                    String vendor = Build.MANUFACTURER;
-
-                    ringtone.play();
-                    // for samsung S3, we meet a bug that the phone will
-                    // continue ringtone without stop
-                    // so add below special handler to stop it after 3s if
-                    // needed
-                    if (vendor != null && vendor.toLowerCase().contains("samsung")) {
-                        Thread ctlThread = new Thread() {
-                            public void run() {
-                                try {
-                                    Thread.sleep(3000);
-                                    if (ringtone.isPlaying()) {
-                                        ringtone.stop();
-                                    }
-                                } catch (Exception e) {
-                                }
+                            ringtone = RingtoneManager.getRingtone(appContext, notificationUri);
+                            if (ringtone == null) {
+                                EMLog.d(TAG, "cant find ringtone at:" + notificationUri.getPath());
+                                return;
                             }
-                        };
-                        ctlThread.run();
+                        }
+
+                        if (!ringtone.isPlaying()) {
+                            String vendor = Build.MANUFACTURER;
+
+                            ringtone.play();
+                            // for samsung S3, we meet a bug that the phone will
+                            // continue ringtone without stop
+                            // so add below special handler to stop it after 3s if
+                            // needed
+                            if (vendor != null && vendor.toLowerCase().contains("samsung")) {
+                                Thread ctlThread = new Thread() {
+                                    public void run() {
+                                        try {
+                                            Thread.sleep(3000);
+                                            if (ringtone.isPlaying()) {
+                                                ringtone.stop();
+                                            }
+                                        } catch (Exception e) {
+                                        }
+                                    }
+                                };
+                                ctlThread.run();
+                            }
+                        }
                     }
                 }
             }
