@@ -14,7 +14,9 @@ import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,10 +39,12 @@ import com.guapi.model.VideoEntity;
 import com.guapi.tool.FileUtils;
 import com.guapi.util.ImageCache;
 import com.guapi.util.ImageResizer;
+import com.guapi.util.PermissonUtil.PermissionUtil;
 import com.guapi.widget.scan.RecyclingImageView;
 import com.hyphenate.util.DateUtils;
 import com.hyphenate.util.TextFormater;
 import com.library.im.utils.Utils;
+import com.listener.PermissionListener;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,6 +62,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
     private ImageResizer mImageResizer;
     List<VideoEntity> mList;
     private String savePath;
+    private PermissionListener permissionListener;
 
     /**
      * Empty constructor as per the Fragment documentation
@@ -165,6 +170,51 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 
     }
 
+    private void getPermission() {
+        permissionListener = new PermissionListener() {
+            @Override
+            public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+                PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, permissionListener);
+            }
+
+            @Override
+            public void onRequestPermissionSuccess() {
+                Intent mIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                mIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0.5);
+                mIntent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 20 * 1024 * 1024L);
+                mIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+                startActivityForResult(mIntent, RECORD_VIDEO);
+            }
+
+            @Override
+            public void onRequestPermissionError() {
+                showToast("请给予相机权限", true);
+            }
+        };
+        PermissionUtil
+                .with(this)
+                .permissions(
+                        PermissionUtil.PERMISSIONS_GROUP_CAMERA //定位授权
+                ).request(permissionListener);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, permissionListener);
+    }
+
+    /**
+     * @param msg    内容
+     * @param length true为长时间，false为短时间
+     * @return: void
+     */
+    protected void showToast(String msg, boolean length) {
+        if (TextUtils.isEmpty(msg)) {
+            return;
+        }
+        Toast.makeText(getActivity(), msg, length ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -188,12 +238,13 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 //            Intent intent = new Intent();
 //            intent.setClass(getActivity(), RecorderVideoActivity.class);
 //            startActivityForResult(intent, 100);
-            Intent mIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            mIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0.5);
+            getPermission();
+//            Intent mIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+//            mIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0.5);
+////            mIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+//            mIntent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 20 * 1024 * 1024L);
 //            mIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
-            mIntent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 20 * 1024 * 1024L);
-            mIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
-            startActivityForResult(mIntent, RECORD_VIDEO);
+//            startActivityForResult(mIntent, RECORD_VIDEO);
         } else {
             VideoEntity vEntty = mList.get(position - 1);
             // limit the size to 10M

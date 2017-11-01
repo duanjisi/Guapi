@@ -18,6 +18,13 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/iv_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:scaleType="centerCrop" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -102,6 +109,7 @@
             android:textColor="@android:color/white"
             android:textSize="13sp" />
     </RelativeLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"

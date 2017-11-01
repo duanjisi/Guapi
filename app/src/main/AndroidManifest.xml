@@ -102,6 +102,9 @@
             android:name=".main.ClipImageActivity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".main.CameraHideActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".main.ImageSelectActivity"
             android:screenOrientation="portrait"></activity>
         <!--个人中心-->
@@ -209,10 +212,6 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".main.CameraActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".main.CameraHideActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

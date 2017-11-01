@@ -13,7 +13,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.ThumbnailUtils;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,12 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.gifdecoder.GifDecoder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.ewuapp.framework.common.utils.IntentUtil;
 import com.ewuapp.framework.presenter.Impl.BasePresenterImpl;
@@ -63,6 +57,7 @@ import org.opencv.imgproc.Imgproc;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
@@ -98,6 +93,13 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
     @Bind(R.id.iv_user)
     CircleImageView ivUser;
 
+
+    private int[] resIds = {R.drawable.catch_guapi_succ0, R.drawable.catch_guapi_succ1};
+
+    private int[] resId2s = {R.drawable.catch_guapi_succ2, R.drawable.catch_guapi_succ3};
+
+    private int resDrawableId = 0;
+
     private ImageLoader imageLoader;
     private PermissionListener permissionListener;
     private GPResponse.GpListBean bean;
@@ -125,7 +127,7 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
     private long lastStaticStamp = 0;
     private Bitmap localBitmap, newBitmap;
     private Mat oneMat, twoMat;
-    private int cameraNum = 0;
+    //    private int cameraNum = 0;
     private double comPH;
     private AnimationDrawable animationDrawable;
     private Handler handler = new Handler() {
@@ -133,9 +135,9 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case 111:
-                    getGuapiDetails();
-                    break;
+//                case 111:
+//                    getGuapiDetails();
+//                    break;
                 case 0x01:
                     if (localBitmap != null) {
                         localBitmap = ThumbnailUtils.extractThumbnail(localBitmap, 450, 450);
@@ -167,13 +169,19 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
                             twoMat = getMat(twoMat);
                             if (oneMat != null && twoMat != null)
                                 comPH = comPareHist(oneMat, twoMat);
-                            if (comPH >= 0.3 || (cameraNum >= 4 && comPH > (0.3 - 0.05 * cameraNum))) {
-                                cameraNum = 0;
-//                                getServerData();
-//                                showToast("匹配成功", true);
+//                            if (comPH >= 0.3 || (cameraNum >= 4 && comPH > (0.3 - 0.05 * cameraNum))) {
+//                                cameraNum = 0;
+////                                showToast("匹配成功", true);
+//                                playSucessGif();
+//                            } else {
+//                                cameraNum++;
+//                                noMatchDo();
+//                            }
+                            Log.i("info", "==================comPH:" + comPH);
+                            if (comPH >= 0.4) {
+                                noMatchDo();
                                 playSucessGif();
                             } else {
-                                cameraNum++;
                                 noMatchDo();
                             }
                         }
@@ -190,7 +198,7 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
             Bundle bundle = new Bundle();
 //            bundle.putSerializable(Global.KEY_OBJ, bean);
             bundle.putString("gpId", bean.getGpId());
-            bundle.putString("from","CatchActivity");
+            bundle.putString("from", "CatchActivity");
             IntentUtil.startActivityWithBundle(this, GPCommentActivity.class, bundle, false);
             finish();
         }
@@ -313,6 +321,12 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
                         break;
                 }
                 return true;
+            }
+        });
+        iv_success.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getGuapiDetails();
             }
         });
 
@@ -543,10 +557,9 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
         @Override
         public void onPictureTaken(final byte[] bytes, Camera camera) {
             try {
-                if (Build.VERSION.SDK_INT >= 24) {
-                    mCamera.stopPreview();
-                }
-//                pb_load.setVisibility(View.VISIBLE);
+//                if (Build.VERSION.SDK_INT >= 24) {
+//                    mCamera.stopPreview();
+//                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -657,7 +670,6 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
                 lastStaticStamp = stamp;
                 STATUE = STATUS_STATIC;
             }
-
             mX = x;
             mY = y;
             mZ = z;
@@ -672,47 +684,34 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
     private void playSucessGif() {
         try {
             if (iv_success != null) {
+                Random rnd = new Random();
+                int rndint = rnd.nextInt(2);
+                if (TextUtils.equals(bean.getType(), Global.TYPE_PIC)) {
+                    resDrawableId = resIds[rndint];
+                } else if (TextUtils.equals(bean.getType(), Global.TYPE_VIDEO)) {
+                    resDrawableId = resId2s[rndint];
+                } else if (TextUtils.equals(bean.getType(), Global.TYPE_HB)) {
+                    resDrawableId = resId2s[0];
+                }
+                if (resDrawableId == 0) {
+                    return;
+                }
                 iv_success.setVisibility(View.VISIBLE);
+                Log.i("info", "=================playSucessGif()");
+//                Glide.with(this).load(resDrawableId)
+//                        .crossFade().into(iv_success);
                 Glide.with(this)
-                        .load(R.drawable.catch_guapi_succ0)
+                        .load(resDrawableId)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .listener(new RequestListener<Integer, GlideDrawable>() {
-
-                            @Override
-                            public boolean onException(Exception arg0, Integer arg1,
-                                                       Target<GlideDrawable> arg2, boolean arg3) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource,
-                                                           Integer model, Target<GlideDrawable> target,
-                                                           boolean isFromMemoryCache, boolean isFirstResource) {
-                                // 计算动画时长
-                                GifDrawable drawable = (GifDrawable) resource;
-                                GifDecoder decoder = drawable.getDecoder();
-                                int duration = 0;
-                                for (int i = 0; i < drawable.getFrameCount(); i++) {
-                                    duration += decoder.getDelay(i);
-                                }
-                                if (duration > 2000) {
-                                    duration = 2000;
-                                }
-                                //发送延时消息，通知动画结束
-                                handler.sendEmptyMessageDelayed(111,
-                                        duration);
-                                return false;
-                            }
-                        }) //仅仅加载一次gif动画
-                        .into(new GlideDrawableImageViewTarget(iv_success, 1));
+                        .into(iv_success);
             }
         } catch (Exception e) {
-            handler.sendEmptyMessageDelayed(111,
-                    1000);
+//            handler.sendEmptyMessageDelayed(111,
+//                    1000);
         } catch (OutOfMemoryError error) {
             System.gc();
-            handler.sendEmptyMessageDelayed(111,
-                    1000);
+//            handler.sendEmptyMessageDelayed(111,
+//                    1000);
         }
     }
 

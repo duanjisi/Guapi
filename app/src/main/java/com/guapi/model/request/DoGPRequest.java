@@ -32,4 +32,6 @@ public class DoGPRequest {
     public String type;
     @SerializedName("desc")
     public String desc;
+    @SerializedName("to_comment_id")
+    public String comment_id;
 }

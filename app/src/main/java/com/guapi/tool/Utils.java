@@ -129,8 +129,8 @@ public class Utils {
         return result;
     }
 
-    public static Bitmap changeRoation(Context context,Bitmap bmp, int orientations, int length) {
-        int edgeLength = length - Utils.dip2px(context, 5);
+    public static Bitmap changeRoation(Context context, Bitmap bmp, int orientations, int edgeLength) {
+//        int edgeLength = length - Utils.dip2px(context, 10);
         Matrix matrixs = new Matrix();
         if (orientations > 325 || orientations <= 45) {
             Log.v("time", "Surface.ROTATION_0;" + orientations);
@@ -150,6 +150,42 @@ public class Utils {
         return bmp;
     }
 
+    public static Bitmap changRoation(Context context, Bitmap bmp, int orientations) {
+//        int bW = 0;
+//        int bH = 0;
+//        int width = getScreenWidth(context);
+//        int height = getScreenHeight(context);
+        int w = bmp.getWidth();
+        int h = bmp.getHeight();
+//        if (w < width) {
+//            bW = w;
+//        } else {
+//            bW = width;
+//        }
+//        if (h < height) {
+//            bH = h;
+//        } else {
+//            bH = height;
+//        }
+
+        Matrix matrixs = new Matrix();
+        if (orientations > 325 || orientations <= 45) {
+            Log.v("time", "Surface.ROTATION_0;" + orientations);
+            matrixs.setRotate(90);
+        } else if (orientations > 45 && orientations <= 135) {
+            Log.v("time", " Surface.ROTATION_270" + orientations);
+            matrixs.setRotate(180);
+        } else if (orientations > 135 && orientations < 225) {
+            Log.v("time", "Surface.ROTATION_180;" + orientations);
+            matrixs.setRotate(270);
+        } else {
+            Log.v("time", "Surface.ROTATION_90" + orientations);
+            matrixs.setRotate(0);
+        }
+        bmp = Bitmap.createBitmap(bmp, 0, 0, w, h, matrixs, true);
+//        bmp = Bitmap.createBitmap(bmp, 0, 0, edgeLength, edgeLength, matrixs, true);
+        return bmp;
+    }
 //    /**
     //     * 按正方形裁切图片
     //     */
@@ -220,22 +256,23 @@ public class Utils {
     /**
      * 按正方形裁切图片
      */
-    public static Bitmap ImageCrop(Context context, Bitmap bitmap, boolean isRecycled, int length) {
-        int edgeLength = length - Utils.dip2px(context, 5);
+    public static Bitmap ImageCrop(Context context, Bitmap bitmap, boolean isRecycled, int edgeLength) {
+//        int edgeLength = length - Utils.dip2px(context, 10);
         if (bitmap == null) {
             return null;
         }
         int w = bitmap.getWidth(); // 得到图片的宽，高
         int h = bitmap.getHeight();
 
-        int longerEdge = (int) (edgeLength * Math.max(w, h) / Math.min(w, h));
-        int scaledWidth = w > h ? longerEdge : edgeLength;
-        int scaledHeight = w > h ? edgeLength : longerEdge;
+//        int longerEdge = (int) (edgeLength * Math.max(w, h) / Math.min(w, h));
+//        int scaledWidth = w > h ? longerEdge : edgeLength;
+//        int scaledHeight = w > h ? edgeLength : longerEdge;
 
         //从图中截取正中间的正方形部分。
         int xTopLeft = (w - edgeLength) / 2;
         int yTopLeft = (h - edgeLength) / 2;
-
+//        String str = "xTopLeft:" + xTopLeft + "yTopLeft:" + yTopLeft + "\n" + "edgeLength:" + edgeLength;
+//        Toast.makeText(context, str, Toast.LENGTH_LONG).show();
         Bitmap bmp = Bitmap.createBitmap(bitmap, xTopLeft, yTopLeft, edgeLength, edgeLength, null,
                 false);
         if (isRecycled && bitmap != null && !bitmap.equals(bmp)
@@ -256,6 +293,7 @@ public class Utils {
      * @param num2   短边的比例
      * @return
      */
+
     public static Bitmap ImageCrop(Bitmap bitmap, int num1, int num2,
                                    boolean isRecycled) {
         if (bitmap == null) {
@@ -301,6 +339,7 @@ public class Utils {
         // false);
     }
 
+
     /*
        *获取拍照之后的尺寸
        */
@@ -310,6 +349,7 @@ public class Utils {
         int index = -1;
 
         for (int i = 0; i < sizes.size(); i++) {
+            Log.i("info", "=============width:" + sizes.get(i).width + "\n" + "sizes.get(i).height" + sizes.get(i).height);
             if (Math.abs(screenWidth - sizes.get(i).width) == 0) {
                 index = i;
                 break;

@@ -91,7 +91,7 @@ import static com.guapi.tool.Global.TYPE_VIDEO;
 /**
  * Created by Johnny on 2017-09-07.
  */
-public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseViewPresenterImpl> implements
+public class CameraHideActivity2 extends BaseActivity<BasePresenterImpl, BaseViewPresenterImpl> implements
         OnSubmitClick,
         SensorEventListener {
 
@@ -115,8 +115,6 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
     Button btnSubmit;
     @Bind(R.id.rl_preciew)
     RelativeLayout rl_preciew;
-    @Bind(R.id.iv_bg)
-    ImageView iv_bg;
     @Bind(R.id.iv_focus)
     ImageView ivFocus;
 
@@ -200,8 +198,6 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
         showButton(false);
         sceenH = (int) (Utils.getScreenHeight(context) * 0.8);
         sceenW = (int) (Utils.getScreenWidth(context) * 0.8);
-//        sceenH = (int) (Utils.getScreenHeight(context));
-//        sceenW = (int) (Utils.getScreenWidth(context));
         AMapLocation aMapLocation = BaseApp.getInstance().getUserLocation();
         if (aMapLocation != null) {
             lat = aMapLocation.getLatitude();
@@ -274,7 +270,7 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
                 loadIngShow();
                 for (int i = 0; i < images.size(); i++) {
                     final String originFilePath = images.get(i);
-                    Luban.compress(CameraHideActivity.this, new File(originFilePath))
+                    Luban.compress(CameraHideActivity2.this, new File(originFilePath))
                             .putGear(Luban.THIRD_GEAR)
                             .launch(new CompressImage(originFilePath, images.size()));
                 }
@@ -322,7 +318,6 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
                 previewing = true;
                 canFocusIn = true;
                 isHideOk = true;
-                iv_bg.setVisibility(View.GONE);
 //                ivPoint.setVisibility(View.GONE);
                 if (mCamera == null) {
                     initCamera();
@@ -381,12 +376,16 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
     @Override
     protected void onResume() {
         super.onResume();
-        if (mOrientationListener != null) {//先判断下防止出现空指针异常
-            mOrientationListener.enable();
-        }
         if (!isChange) {
-            Log.i("info", "======================isChange()");
+            if (mOrientationListener != null) {//先判断下防止出现空指针异常
+                mOrientationListener.enable();
+            }
             animationDrawable.start();
+        } else {
+//            if (Build.VERSION.SDK_INT >= 24) {
+                mCamera.stopPreview();
+            Log.i("info", "======================stopPreview()");
+//            }
         }
         Log.i("info", "======================onResume()");
 //        getMainHandler().postDelayed(new Runnable() {
@@ -410,11 +409,11 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
     @Override
     protected void onStart() {
         super.onStart();
-//        if (!isChange) {
-        canFocus = true;
-        mSensorManager.registerListener(this, mSensor,
-                SensorManager.SENSOR_DELAY_NORMAL);
-//        }
+        if (!isChange) {
+            canFocus = true;
+            mSensorManager.registerListener(this, mSensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
         Log.i("info", "======================onStart()");
     }
 
@@ -504,7 +503,6 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
 //            }
 //            Camera.Size optimalSize = Utils.getOptimalPreviewSize(supportedPictureSizes, sceenW, sceenH);
             Camera.Size optimalSize = Utils.getPictureSize(this, supportedPictureSizes);
-//            Camera.Size optimalSize = MyCamPara.getInstance().getPictureSize(supportedPictureSizes, sceenW);
             parameters.setPictureSize(optimalSize.width, optimalSize.height);
         }
 
@@ -550,12 +548,10 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
                 if (Build.VERSION.SDK_INT >= 24) {
                     mCamera.stopPreview();
                 }
-//                showToast("onPictureTaken()被调用", true);
 //                BitmapFactory.Options opts = new BitmapFactory.Options();
 //                opts.inJustDecodeBounds = true;
 //                opts.inSampleSize = ImageTool.computeSampleSize(opts, -1, sceenW * sceenH);
 //                opts.inJustDecodeBounds = false;
-
                 int roation = orientations;
                 BitmapFactory.Options opts = new BitmapFactory.Options();
                 opts.inJustDecodeBounds = true;
@@ -569,16 +565,10 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
 //                bitmapImg = Utils.ImageCrop(byteToBitmap(opts, bytes), true, edgeLength);
                 Bitmap bitmap = Utils.ImageCrop(context, byteToBitmap(opts, bytes), true, edgeLength);
                 bitmapImg = Utils.changeRoation(context, bitmap, roation, edgeLength);
-
                 if (bitmapImg != null) {
 //                    ivPoint.setVisibility(View.VISIBLE);
 //                    Glide.with(context).load(bytes).into(ivPoint);
 //                    ivPoint.setImageBitmap(bitmapImg);
-                    Bitmap bm = Utils.changRoation(context, byteToBitmap(opts, bytes), roation);
-                    iv_bg.setVisibility(View.VISIBLE);
-                    iv_bg.setImageBitmap(bm);
-//                    Glide.with(context).load(bytes).into(iv_bg);
-//                    showToast("222222222222222222", true);
                     animationDrawable.stop();
 //                    createFileWithByte(bytes);
                     saveImage(context, bitmapImg);
@@ -591,7 +581,6 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-//                showToast("=========Exception:" + e.getMessage(), true);
             } catch (OutOfMemoryError error) {
                 showToast("相机异常,本页面即将销毁，请重新进入", false);
                 System.gc();
@@ -846,12 +835,12 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
         dataDialog.setOnPictureAction(new PicDataDialog.OnPictureAction() {
             @Override
             public void onRequestAddNewPicture() {
-                if (ContextCompat.checkSelfPermission(CameraHideActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(CameraHideActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                if (ContextCompat.checkSelfPermission(CameraHideActivity2.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(CameraHideActivity2.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         // 提示用户如果想要正常使用，要手动去设置中授权。
                         ToastUtils.showLong("请在 设置-应用管理 中开启此应用的储存授权。");
                     } else {
-                        ActivityCompat.requestPermissions(CameraHideActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_CONTACTS);
+                        ActivityCompat.requestPermissions(CameraHideActivity2.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_CONTACTS);
                     }
                 } else {
                     Timber.i("不需要授权 ");
@@ -860,7 +849,6 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
                     if (TextUtils.equals(type, TYPE_PIC)) {
                         initImagePicker();
                     } else {
-//                        IntentUtil.startActivityForResult(CameraHideActivity.this, VideoRecordActivity.class, ACTIVITY_REQUEST_VIDEO_PATH, false);
                         Intent intent = new Intent(context, ImageGridActivity.class);
                         startActivityForResult(intent, 102);
                     }
@@ -888,71 +876,6 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
 
     int compressPicSize = 0;
 
-//    private void initImagePicker() {
-//        compressPicSize = 0;
-//        picArray.remove(0);
-//        IHandlerCallBack iHandlerCallBack = new IHandlerCallBack() {
-//            @Override
-//            public void onStart() {
-//                Timber.i("onStart: 开启");
-//            }
-//
-//            @Override
-//            public void onSuccess(List<String> photoList) {
-//                Timber.i("onSuccess: 返回数据");
-//                // 直接赋值给传入的list
-//                picArray.clear();
-//                picArray.add("head");
-//                picArray.addAll(photoList);
-//                Timber.d("返回图片集合： %s", picArray);
-//                loadIngShow();
-//                for (int i = 0; i < photoList.size(); i++) {
-//                    final String originFilePath = photoList.get(i);
-//                    me.shaohui.advancedluban.Luban.compress(CameraHideActivity.this, new File(originFilePath))
-//                            .putGear(Luban.THIRD_GEAR)
-//                            .launch(new CompressImage(originFilePath, photoList.size()));
-//                }
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                Timber.i("onCancel: 取消");
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                Timber.i("onFinish: 结束");
-//            }
-//
-//            @Override
-//            public void onError() {
-//                Timber.e("onError: 出错");
-//            }
-//        };
-//        GalleryConfig galleryConfig = new GalleryConfig.Builder().imageLoader(new ImageLoader() {
-//            @Override
-//            public void displayImage(Activity activity, Context context, String path, GalleryImageView galleryImageView, int width, int height) {
-//                Glide.with(activity).load(path).into(galleryImageView);
-//            }
-//
-//            @Override
-//            public void clearMemoryCache() {
-//
-//            }
-//        })    // ImageLoader 加载框架（必填）
-//                .iHandlerCallBack(iHandlerCallBack)     // 监听接口（必填）
-//                .pathList(picArray)                         // 记录已选的图片
-//                // 是否多选   默认：false
-//                .multiSelect(true, 9)                   // 配置是否多选的同时 配置多选数量   默认：false ， 9
-//                .provider("com.guapi.fileprovider")   // provider(必填)
-//                .maxSize(9)                             // 配置多选时 的多选数量。    默认：9
-//                .crop(false)                             // 快捷开启裁剪功能，仅当单选 或直接开启相机时有效
-//                .crop(false, 1, 1, 500, 500)             // 配置裁剪功能的参数，   默认裁剪比例 1:1
-//                .isShowCamera(true)                     // 是否现实相机按钮  默认：false
-//                .filePath(getCacheDir().getAbsolutePath() + "/pictures")          // 图片存放路径
-//                .build();
-//        GalleryPick.getInstance().setGalleryConfig(galleryConfig).open(this);
-//    }
 
     private class CompressImage implements me.shaohui.advancedluban.OnCompressListener {
 
@@ -1031,7 +954,7 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
         Timber.d("需要上传的图片路径:%s", Arrays.asList(files));
 
         loadIngShow();
-        Http.createPic(CameraHideActivity.this, TYPE_PIC, message,
+        Http.createPic(CameraHideActivity2.this, TYPE_PIC, message,
                 lat, lng, address,
                 new CallBack<Result>() {
                     @Override
@@ -1091,7 +1014,7 @@ public class CameraHideActivity extends BaseActivity<BasePresenterImpl, BaseView
         File videoFile = new File(videoKey);
         File videoPicFile = new File(img_path);
         loadIngShow();
-        Http.createVideo(CameraHideActivity.this, TYPE_VIDEO, message,
+        Http.createVideo(CameraHideActivity2.this, TYPE_VIDEO, message,
                 lat, lng, address,
                 new CallBack<Result>() {
                     @Override

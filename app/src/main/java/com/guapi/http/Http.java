@@ -326,6 +326,20 @@ public class Http {
                 .subscribeWith(new BaseSubscriber<>(callBack));
     }
 
+    //操作瓜皮，包括抢红包，评论，点赞
+    public static Disposable doGP(Context context, String id, String comment_id, String type, String desc, CallBack<DoGPResponse> callBack) {
+        DoGPRequest doGPRequest = new DoGPRequest();
+        doGPRequest.id = id;
+        doGPRequest.type = type;
+        doGPRequest.comment_id = comment_id;
+        if (!TextUtils.isEmpty(desc)) {
+            doGPRequest.desc = desc;
+        }
+        return getAPI().doGp(gson.toJson(doGPRequest))
+                .compose(RxSchedulers.<DoGPResponse>mainThread(context))
+                .subscribeWith(new BaseSubscriber<>(callBack));
+    }
+
     //通过环信id，获取好友信息
     public static Disposable queryUserInforByHx(Context context, String hx_id, CallBack<QueryUserInfoByHxResponse> callBack) {
         QueryUserInfoBuHxRequest queryUserInfoBuHxRequest = new QueryUserInfoBuHxRequest();

@@ -4,6 +4,7 @@
  * Created by lisah0 on 2012-02-24
  */
 package com.guapi.widget.scan;
+
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
@@ -11,7 +12,9 @@ import android.hardware.Camera.PreviewCallback;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
 import com.guapi.tool.MycsLog;
+
 /**
  * A basic Camera preview class
  */
@@ -75,6 +78,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             }
         }
     }
+
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         /*

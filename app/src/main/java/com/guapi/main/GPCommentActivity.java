@@ -188,6 +188,7 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
     }
 
     boolean isHuifuTan = false;
+    private LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
 
     //打开软键盘
     public void openInputMethodManager() {
@@ -215,9 +216,14 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
         commentAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                etComment.requestFocus();
-                clickPosition = position;
-                openInputMethodManager();
+                GPResponse.GpListBean.CommentListBean bean = (GPResponse.GpListBean.CommentListBean) adapter.getItem(position);
+                if (!bean.getCommentUserId().equals(loginResponse.getUser().getUid())) {
+                    etComment.requestFocus();
+                    clickPosition = position;
+                    openInputMethodManager();
+                } else {
+                    showToast("不能回复自己!", true);
+                }
             }
         });
 
@@ -395,23 +401,23 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
             case R.id.iv_face:
                 break;
             case R.id.iv_send:
-                if (TextUtils.isEmpty(etComment.getText())) {
-                    return;
-                }
-                String message = "";
-                String msg = etComment.getText().toString().trim();
-                if (isHuifuTan) {
-                    LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
-//                    message = loginResponse.getUser().getNickname() + "回复:" +
-//                            commentAdapter.getData().get(clickPosition).getCommentUserName() +
-//                            etComment.getText().toString();
-                    message = "回复 【" +
-                            commentAdapter.getData().get(clickPosition).getCommentUserName() + "】:" + getString(msg);
-                } else {
-                    message = getString(msg);
-                }
-                Log.i("info", "==============message:" + message);
-                doGP(message);
+//                if (TextUtils.isEmpty(etComment.getText())) {
+//                    return;
+//                }
+//                String message = "";
+//                String msg = etComment.getText().toString().trim();
+//                if (isHuifuTan) {
+////                    LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
+////                    message = loginResponse.getUser().getNickname() + "回复:" +
+////                            commentAdapter.getData().get(clickPosition).getCommentUserName() +
+////                            etComment.getText().toString();
+//                    message = "回复 【" +
+//                            commentAdapter.getData().get(clickPosition).getCommentUserName() + "】:" + getString(msg);
+//                } else {
+//                    message = getString(msg);
+//                }
+//                Log.i("info", "==============message:" + message);
+                doGP();
                 break;
         }
     }
@@ -454,17 +460,35 @@ public class GPCommentActivity extends BaseActivity<BasePresenterImpl, BaseViewP
                 || ((codePoint >= 0xE000) && (codePoint <= 0xFFFD)) || ((codePoint >= 0x10000) && (codePoint <= 0x10FFFF)));
     }
 
-    public void doGP(String message) {
+    public void doGP() {
+        if (TextUtils.isEmpty(etComment.getText())) {
+            return;
+        }
+        String message = "";
+        String msg = etComment.getText().toString().trim();
+        String comment_id = "";
+        if (isHuifuTan) {
+            GPResponse.GpListBean.CommentListBean comment = commentAdapter.getData().get(clickPosition);
+            if (comment != null) {
+                message = "回复 【" + comment.getCommentUserName() + "】:" + getString(msg);
+                comment_id = comment.getCommentId();
+            }
+//            message = "回复 【" +
+//                    commentAdapter.getData().get(clickPosition).getCommentUserName() + "】:" + getString(msg);
+        } else {
+            message = getString(msg);
+        }
         loadIngShow();
-        Http.doGP(this, bean.getGpId(), Global.TYPE_COMMENT, message, new CallBack<DoGPResponse>() {
+        final String finalMessage = message;
+        Http.doGP(this, bean.getGpId(), comment_id, Global.TYPE_COMMENT, getString(msg), new CallBack<DoGPResponse>() {
             @Override
             public void handlerSuccess(DoGPResponse data) {
                 isHuifuTan = false;
                 loadIngDismiss();
                 etComment.setText("");
-                LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
+//                LoginResponse loginResponse = Hawk.get(PreferenceKey.LoginResponse);
                 GPResponse.GpListBean.CommentListBean bean = new GPResponse.GpListBean.CommentListBean();
-                bean.setCommentInfo(message);
+                bean.setCommentInfo(finalMessage);
                 bean.setCommentTime(TimeUtils.getNowString());
                 bean.setCommentUserId(loginResponse.getUser().getUid());
                 bean.setCommentUserName(loginResponse.getUser().getNickname());
