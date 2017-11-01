@@ -178,7 +178,7 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
 //                                noMatchDo();
 //                            }
                             Log.i("info", "==================comPH:" + comPH);
-                            if (comPH >= 0.4) {
+                            if (comPH >= 0.35) {
                                 noMatchDo();
                                 playSucessGif();
                             } else {
