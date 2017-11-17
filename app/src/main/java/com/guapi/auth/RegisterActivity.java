@@ -80,6 +80,14 @@ public class RegisterActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
             showMessage("手机号不能为空");
             return;
         }
+        if(phone.length()!=11){
+            showMessage("请输入正确的手机号");
+            return;
+        }
+        if(!CheckUtil.checkPhone(phone)){
+            showMessage("请输入正确的手机号");
+            return;
+        }
         loadIngShow();
         addDisposable(Http.getCode(context, phone, new CallBack<GetCodeResponse>() {
             @Override
@@ -102,8 +110,20 @@ public class RegisterActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
             showMessage("手机号不能为空");
             return;
         }
+        if(phone.length()!=11){
+            showMessage("请输入正确的手机号");
+            return;
+        }
+        if(!CheckUtil.checkPhone(phone)){
+            showMessage("请输入正确的手机号");
+            return;
+        }
         if (CheckUtil.isNull(code)) {
             showMessage("验证码不能为空");
+            return;
+        }
+        if(code.length()!=4){
+            showMessage("请输入正确的验证码");
             return;
         }
         if (CheckUtil.isNull(password1)) {
@@ -114,7 +134,7 @@ public class RegisterActivity extends BaseActivity<BasePresenterImpl, BaseViewPr
             showMessage("密码不能为空");
             return;
         }
-        if (!password1.equals(password1)) {
+        if (!password1.equals(password2)) {
             showMessage("两次输入的密码不相同");
             return;
         }
