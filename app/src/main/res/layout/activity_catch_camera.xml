@@ -65,11 +65,17 @@
 
         <ImageView
             android:id="@+id/iv_focus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
             android:layout_centerInParent="true"
             android:src="@drawable/center_point_bg" />
 
+        <com.guapi.widget.scan.CircleImageView
+            android:id="@+id/iv_point"
+            android:layout_width="178dp"
+            android:layout_height="178dp"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -199,12 +205,12 @@
             android:textColor="@android:color/white"
             android:textSize="13sp" />
 
-        <ImageView
-            android:id="@+id/iv_point"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            android:layout_centerInParent="true"
-            android:scaleType="centerCrop" />
+        <!--<ImageView-->
+        <!--android:id="@+id/iv_point"-->
+        <!--android:layout_width="240dp"-->
+        <!--android:layout_height="240dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:scaleType="centerCrop" />-->
     </RelativeLayout>
 
     <ImageView

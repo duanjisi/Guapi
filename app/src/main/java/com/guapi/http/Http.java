@@ -238,6 +238,18 @@ public class Http {
     }
 
     //用户藏瓜皮图片
+    public static Disposable matcherPic(Context context, File SourcePic, File MatcherPic, CallBack<Result> callBack) {
+        RequestBody sourceBody = RequestBody.create(MediaType.parse("multipart/form-data"), SourcePic);
+        RequestBody matcherBody = RequestBody.create(MediaType.parse("multipart/form-data"), MatcherPic);
+
+        MultipartBody.Part sourcePart = MultipartBody.Part.createFormData("sourcePic", SourcePic.getName(), sourceBody);
+        MultipartBody.Part matcherPart = MultipartBody.Part.createFormData("MatcherPic", MatcherPic.getName(), matcherBody);
+        return getAPI().matcherGp(sourcePart, matcherPart)
+                .compose(RxSchedulers.<Result>mainThread(context))
+                .subscribeWith(new BaseSubscriber<>(callBack));
+    }
+
+    //用户藏瓜皮图片
     public static Disposable createPic(Context context,
                                        String type,
                                        String message,

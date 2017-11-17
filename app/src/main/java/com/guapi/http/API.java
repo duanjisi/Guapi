@@ -83,6 +83,14 @@ public interface API {
 
     //用户藏瓜皮图片
     @Multipart
+    @POST("http://120.76.245.82/SimilarImageMatcher/preLoadPic.do")
+    Flowable<Result> matcherGp(
+            @Part() MultipartBody.Part sourcePic,
+            @Part() MultipartBody.Part MatcherPic
+    );
+
+    //用户藏瓜皮图片
+    @Multipart
     @POST("api/gp/createGp.do")
     Flowable<Result> createVideo(
             @Part() MultipartBody.Part key_file,

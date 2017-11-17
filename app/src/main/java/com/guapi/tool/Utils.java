@@ -18,6 +18,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -73,6 +74,16 @@ public class Utils {
     public static int dip2px(Context context, int dip) {
         float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dip * scale + 0.5f * (dip >= 0 ? 1 : -1));
+    }
+
+
+    public static byte[] bitmapToBytes(Bitmap bitmap) {
+        if (bitmap == null) {
+            return null;
+        }
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+        return os.toByteArray();
     }
 
     /**
@@ -147,6 +158,11 @@ public class Utils {
         }
 //        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrixs, true);
         bmp = Bitmap.createBitmap(bmp, 0, 0, edgeLength, edgeLength, matrixs, true);
+        return bmp;
+    }
+
+    public static Bitmap createBitmap(Bitmap bmp) {
+        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight());
         return bmp;
     }
 

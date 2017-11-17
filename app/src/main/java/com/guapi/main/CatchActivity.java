@@ -1,9 +1,11 @@
 package com.guapi.main;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -12,14 +14,16 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.ThumbnailUtils;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -35,6 +39,7 @@ import com.ewuapp.framework.view.BaseActivity;
 import com.ewuapp.framework.view.widget.ToolBarView;
 import com.guapi.BaseApp;
 import com.guapi.R;
+import com.guapi.model.ImageTool;
 import com.guapi.model.response.GPResponse;
 import com.guapi.tool.Global;
 import com.guapi.util.ImageLoaderUtils;
@@ -44,6 +49,8 @@ import com.guapi.widget.scan.CameraPreview;
 import com.guapi.widget.scan.CircleImageView;
 import com.guapi.widget.scan.RoundImageView;
 import com.listener.PermissionListener;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -54,15 +61,24 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.SoftReference;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
+import okhttp3.Response;
 
 import static com.guapi.tool.Global.TYPE_HB;
+
+//import yxr.com.library.SimilarityHelper;
 
 /**
  * Created by Johnny on 2017-09-09.
@@ -87,7 +103,7 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
     @Bind(R.id.tv_tip)
     TextView tvTip;
     @Bind(R.id.iv_point)
-    ImageView ivPoint;
+    CircleImageView ivPoint;
     @Bind(R.id.iv_success)
     ImageView iv_success;
     @Bind(R.id.iv_user)
@@ -110,7 +126,7 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
     private int STATUE = STATUS_NONE;
     private int mX, mY, mZ;
     public static final int DELEY_DURATION = 3500;
-    private int sceenH;
+    private int sceenH, sceenW;
     private String type = TYPE_HB;
     boolean canFocus = false;
     boolean canFocusIn = false;  //内部是否能够对焦控制机制
@@ -127,71 +143,178 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
     private long lastStaticStamp = 0;
     private Bitmap localBitmap, newBitmap;
     private Mat oneMat, twoMat;
-    //    private int cameraNum = 0;
+    private int cameraNum = 0;
     private double comPH;
     private AnimationDrawable animationDrawable;
+    private int edgeLength = 0;
+    private int orientations = 0;
+    private OrientationEventListener mOrientationListener;
+    private File file1, file2;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-//                case 111:
-//                    getGuapiDetails();
+//                case 0x01:
+//                    if (localBitmap != null) {
+//                        localBitmap = ThumbnailUtils.extractThumbnail(localBitmap, 450, 450);
+//                        isFirstImgBlack = getBitmapColor(localBitmap);
+//                        oneMat = new Mat();
+//                        Utils.bitmapToMat(localBitmap, oneMat);
+//                        oneMat = getMat(oneMat);
+//                    }
 //                    break;
-                case 0x01:
-                    if (localBitmap != null) {
-                        localBitmap = ThumbnailUtils.extractThumbnail(localBitmap, 450, 450);
-                        isFirstImgBlack = getBitmapColor(localBitmap);
-                        oneMat = new Mat();
-                        Utils.bitmapToMat(localBitmap, oneMat);
-                        oneMat = getMat(oneMat);
-                    }
-                    break;
                 case 0x02:
-                    lastStaticStamp = System.currentTimeMillis();
-                    if (newBitmap != null) {
-                        Bitmap bitmap = ThumbnailUtils.extractThumbnail(newBitmap, 450, 450);
-                        if (isFirstImgBlack) {
-                            if (getBitmapColor(bitmap)) {
-//                                showToast("匹配成功", true);
-                                playSucessGif();
-                            } else {
-                                noMatchDo();
-                            }
-                        } else {
-                            if (getBitmapColor(bitmap)) {
-                                noMatchDo();
-                                return;
-                            }
-                            newBitmap = null;
-                            twoMat = new Mat();
-                            Utils.bitmapToMat(bitmap, twoMat);
-                            twoMat = getMat(twoMat);
-                            if (oneMat != null && twoMat != null)
-                                comPH = comPareHist(oneMat, twoMat);
-//                            if (comPH >= 0.3 || (cameraNum >= 4 && comPH > (0.3 - 0.05 * cameraNum))) {
-//                                cameraNum = 0;
+                    matcherBitmap();
+//                    lastStaticStamp = System.currentTimeMillis();
+//                    if (newBitmap != null) {
+//                        Bitmap bitmap = ThumbnailUtils.extractThumbnail(newBitmap, 450, 450);
+//                        if (isFirstImgBlack) {
+//                            if (getBitmapColor(bitmap)) {
 ////                                showToast("匹配成功", true);
 //                                playSucessGif();
 //                            } else {
+//                                noMatchDo();
+//                            }
+//                        } else {
+//                            if (getBitmapColor(bitmap)) {
+//                                noMatchDo();
+//                                return;
+//                            }
+////                            matchBitmap();
+//                            twoMat = new Mat();
+//                            Utils.bitmapToMat(bitmap, twoMat);
+//                            twoMat = getMat(twoMat);
+//                            if (oneMat != null && twoMat != null)
+//                                comPH = comPareHist(oneMat, twoMat);
+//                            if (comPH >= 0.3 || (cameraNum >= 4 && comPH > (0.3 - 0.05 * cameraNum))) {
+//                                cameraNum = 0;
+////                                showToast("匹配成功", true);
+//                                noMatchDo();
+//                                playSucessGif();
+//                            } else {
+//                                if (cameraNum >= 4) {
+//                                    cameraNum = 0;
+//                                }
 //                                cameraNum++;
 //                                noMatchDo();
 //                            }
-                            Log.i("info", "==================comPH:" + comPH);
-                            if (comPH >= 0.35) {
-                                noMatchDo();
-                                playSucessGif();
-                            } else {
-                                noMatchDo();
-                            }
-                        }
-                    } else {
-                        noMatchDo();
-                    }
+//                            Log.i("info", "==================comPH:" + comPH);
+//                            showToast("==============相似度:" + comPH, true);
+//
+////                            || (cameraNum >= 3 && comPH > (0.35 - 0.05 * cameraNum))
+////                            if (comPH >= 0.35 || (cameraNum >= 4 && comPH >= (0.35 - 0.06 * cameraNum))) {
+////                                cameraNum = 0;
+////                                noMatchDo();
+////                                playSucessGif();
+////                            } else {
+////                                if (cameraNum >= 4) {
+////                                    cameraNum = 0;
+////                                }
+////                                cameraNum++;
+////                                noMatchDo();
+////                            }
+//                        }
+//                    } else {
+//                        noMatchDo();
+//                    }
                     break;
             }
         }
     };
+
+    private void matcherBitmap() {
+        if (file1 != null && file2 != null) {
+//            int retCode = new ImageMatcher().DoMatcher(com.guapi.tool.Utils.bitmapToBytes(localBitmap), com.guapi.tool.Utils.bitmapToBytes(newBitmap));
+//            if (retCode == -1) {
+//                showToast("Not Match", true);
+//            } else if (retCode == 0) {
+//                showToast("Match", true);
+//            } else if (retCode == 1) {
+//                showToast("Like Success", true);
+//            } else if (retCode == 2) {
+//                showToast("Maybe Like", true);
+//            }
+
+            OkGo.post("http://120.76.245.82/SimilarImageMatcher/preLoadPic.do")    //
+                    .params("sourcePic", file1)      // 可以添加文件上传
+                    .params("MatcherPic", file2)      // 可以添加文件上传
+                    .execute(new StringCallback() {
+
+                        @Override
+                        public void onSuccess(String s, okhttp3.Call call, Response response) {
+                            if (s.contains("-1")) {
+                                showToast("匹配失败...", true);
+                            } else if (s.contains("0") || s.contains("1")) {
+                                showToast("匹配成功...", true);
+                                playSucessGif();
+                            } else {
+                                showToast("匹配失败...", true);
+                            }
+                            newBitmap = null;
+                            noMatchDo();
+                        }
+
+                        @Override
+                        public void upProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
+                            //这里回调上传进度(该回调在主线程,可以直接更新ui)
+                        }
+                    });
+
+//            Http.matcherPic(context, file1, file2, new CallBack<Result>() {
+//                @Override
+//                public void handlerSuccess(Result data) {
+//                    newBitmap = null;
+//                    noMatchDo();
+//                    showToast(data.getRetVal(), true);
+//                }
+//
+//                @Override
+//                public void fail(int code, String message) {
+//                    newBitmap = null;
+//                    noMatchDo();
+//                    showToast(message, true);
+//                }
+//            });
+        }
+    }
+
+//    private SimilarityHelper similarityHelper;
+//    private void matchBitmap() {
+//        if (localBitmap != null) {
+//            Bitmap bitmap = Utils.createBitmap(localBitmap);
+//            if (localBitmap != null && newBitmap != null) {
+//                String similar = BitmapCompare.similarity(localBitmap, newBitmap);
+//                showToast("相似度：" + similar, true);
+//                newBitmap = null;
+//                noMatchDo();
+////                similarityHelper.similarity(bitmap, newBitmap, new SimilarityCallBack() {
+////                    @Override
+////                    public void onSimilarityStart() {
+////
+////                    }
+////
+////                    @Override
+////                    public void onSimilaritySuccess(int similarity, int different) {
+////                        float similar = ((float) similarity / (similarity + different) * 100);
+////                        showToast("相似度：" + similar + "%", true);
+////                        newBitmap = null;
+////                        noMatchDo();
+////                        if (similar >= 60) {
+////                            playSucessGif();
+////                        }
+////                    }
+////
+////                    @Override
+////                    public void onSimilarityError(String reason) {
+////                        showToast(reason, true);
+////                        noMatchDo();
+////                    }
+////                });
+//            }
+//        }
+//    }
 
     private void getGuapiDetails() {
         if (bean != null) {
@@ -202,6 +325,32 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
             IntentUtil.startActivityWithBundle(this, GPCommentActivity.class, bundle, false);
             finish();
         }
+    }
+
+
+    public double converHist(Bitmap bitmap1, Bitmap bitmap2) {
+        Mat OneMat = new Mat();
+        Mat TowMat = new Mat();
+        Utils.bitmapToMat(bitmap1, OneMat);
+        Utils.bitmapToMat(bitmap2, TowMat);
+        return compareImage(OneMat, TowMat);
+    }
+
+    private double compareImage(Mat natOne, Mat natTow) {
+        Mat srcMat = new Mat();
+        Mat desMat = new Mat();
+
+        Imgproc.cvtColor(natOne, srcMat, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(natTow, desMat, Imgproc.COLOR_BGR2GRAY);
+
+        Imgproc.equalizeHist(srcMat, desMat);
+
+        srcMat.convertTo(srcMat, CvType.CV_32F);
+        srcMat.convertTo(desMat, CvType.CV_32F);
+
+        double target = Imgproc.compareHist(srcMat, desMat,
+                Imgproc.CV_COMP_CORREL);
+        return target;
     }
 
     private void noMatchDo() {
@@ -264,6 +413,7 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
                 }
             }
         }
+        Log.i("info", "========================isBlack:" + isBlack);
         return isBlack;
     }
 
@@ -288,19 +438,19 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         imageLoader = ImageLoaderUtils.createImageLoader(context);
-        sceenH = com.guapi.tool.Utils.getScreenHeight(this);
+//        sceenH = com.guapi.tool.Utils.getScreenHeight(this);
         ivFocus.setImageResource(R.drawable.center_point_bg);
         animationDrawable = (AnimationDrawable) ivFocus.getDrawable();
-
-//        RelativeLayout.LayoutParams threadParam = (RelativeLayout.LayoutParams) iv_thread_bg.getLayoutParams();
-//        threadParam.height = sceenH / 4;
-//        threadParam.width = sceenH / 4;
-//        iv_thread_bg.setLayoutParams(threadParam);
-//        RelativeLayout.LayoutParams threadbgParam = (RelativeLayout.LayoutParams) iv_thread.getLayoutParams();
-//        threadbgParam.height = sceenH / 4;
-//        threadbgParam.width = sceenH / 4;
-//        iv_thread.setLayoutParams(threadbgParam);
-
+        sceenH = (int) (com.guapi.tool.Utils.getScreenHeight(context) * 0.8);
+        sceenW = (int) (com.guapi.tool.Utils.getScreenWidth(context) * 0.8);
+        mOrientationListener = new OrientationEventListener(this) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                orientations = orientation;
+                Log.v("time", "现在是横屏" + orientation);
+            }
+        };
+        edgeLength = com.guapi.tool.Utils.px2dip(context, ivPoint.getLayoutParams().width);
         autoFocusHandler = new Handler();
         mSensorManager = (SensorManager) BaseApp.getInstance().getSystemService(Activity.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);// TYPE_GRAVITY
@@ -330,6 +480,15 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
             }
         });
 
+        if (Build.VERSION.SDK_INT == 19 || Build.VERSION.SDK_INT == 20) {
+            savePath = getFilesDir().getPath();
+        } else {
+            savePath = Environment.getExternalStorageDirectory() + "/guapi/";
+        }
+
+        file1 = new File(savePath, "source.jpg");
+        file2 = new File(savePath, "matcher.jpg");
+
         Intent intent = getIntent();
         if (intent != null) {
             bean = (GPResponse.GpListBean) intent.getSerializableExtra(Global.KEY_OBJ);
@@ -348,6 +507,7 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
                                     .centerCrop()
                                     .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                                     .get();
+                            saveImage(context, localBitmap, file1);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         } catch (ExecutionException e) {
@@ -359,6 +519,67 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
             }
         }
         getPermission();
+    }
+
+    private String savePath;
+
+    public void saveImage(Context context, Bitmap bmp, String fileName) {
+        writeToSDFile();
+//        String fileName = System.currentTimeMillis() + ".jpg";
+        File imgFile = new File(savePath, fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(imgFile);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveImage(Context context, Bitmap bmp, File imgFile) {
+        writeToSDFile();
+        if (imgFile.exists()) {
+            imgFile.delete();
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(imgFile);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //sdcard的写操作
+    public void writeToSDFile() {
+        try {
+            makeRootDir(savePath);//先创建文件夹
+        } catch (Exception e) {
+// TODO: handle exception
+        }
+    }
+
+    public void makeRootDir(String filePath) {
+        File file = null;
+        String newPath = null;
+        String[] path = filePath.split("/");
+        for (int i = 0; i < path.length; i++) {
+            if (newPath == null) {
+                newPath = path[i];
+            } else {
+                newPath = newPath + "/" + path[i];
+            }
+            file = new File(newPath);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+        }
     }
 
     @Override
@@ -435,6 +656,10 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
             Log.d("info", "OpenCV library found inside package. Using it!");
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
+
+        if (mOrientationListener != null) {//先判断下防止出现空指针异常
+            mOrientationListener.enable();
+        }
         animationDrawable.start();
 //        getMainHandler().postDelayed(new Runnable() {
 //            @Override
@@ -442,6 +667,14 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
 //                YoYo.with(Techniques.RotateOut).duration(1000).repeat(10).playOn(ivFocus);
 //            }
 //        }, 2000);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mOrientationListener != null) {
+            mOrientationListener.disable();
+        }
     }
 
     //openCV4Android 需要加载用到
@@ -557,36 +790,67 @@ public class CatchActivity extends BaseActivity<BasePresenterImpl, BaseViewPrese
         @Override
         public void onPictureTaken(final byte[] bytes, Camera camera) {
             try {
-//                if (Build.VERSION.SDK_INT >= 24) {
-//                    mCamera.stopPreview();
-//                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            newBitmap = Glide.with(context)
-                                    .load(bytes)
-                                    .asBitmap()
-                                    .centerCrop()
-                                    .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                                    .get();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        } catch (OutOfMemoryError error) {
-                            newBitmap = null;
-                            System.gc();
-                        }
-                        handler.sendEmptyMessage(0x02);
-                    }
-                }).start();
+                if (Build.VERSION.SDK_INT >= 24) {
+                    mCamera.stopPreview();
+                }
+                int roation = orientations;
+                BitmapFactory.Options opts = new BitmapFactory.Options();
+                opts.inJustDecodeBounds = true;
+                BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
+                opts.inSampleSize = ImageTool.computeSampleSize(opts, -1, sceenW * sceenH);
+                opts.inJustDecodeBounds = false;
+                Bitmap bitmap = com.guapi.tool.Utils.ImageCrop(context, byteToBitmap(opts, bytes), true, edgeLength);
+                newBitmap = com.guapi.tool.Utils.changeRoation(context, bitmap, roation, edgeLength);
+                saveImage(context, newBitmap, file2);
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            newBitmap = Glide.with(context)
+//                                    .load(bytes)
+//                                    .asBitmap()
+//                                    .centerCrop()
+//                                    .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+//                                    .get();
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        } catch (ExecutionException e) {
+//                            e.printStackTrace();
+//                        } catch (OutOfMemoryError error) {
+//                            newBitmap = null;
+//                            System.gc();
+//                        }
+//                        handler.sendEmptyMessage(0x02);
+//                    }
+//                }).start();
+//                handler.sendEmptyMessage(0x02);
+                handler.sendEmptyMessageDelayed(0x02, 500);
             } catch (Exception e) {
                 Log.i("descriptorMatcher:", "error:" + e.getMessage());
                 e.printStackTrace();
             }
         }
     };
+
+    private Bitmap byteToBitmap(BitmapFactory.Options options, byte[] imgByte) {
+        InputStream input = null;
+        Bitmap bitmap = null;
+        input = new ByteArrayInputStream(imgByte);
+        SoftReference softRef = new SoftReference(BitmapFactory.decodeStream(
+                input, null, options));
+        bitmap = (Bitmap) softRef.get();
+        if (imgByte != null) {
+            imgByte = null;
+        }
+        try {
+            if (input != null) {
+                input.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
 
     Camera.AutoFocusCallback autoFocusCB = new Camera.AutoFocusCallback() {
         public void onAutoFocus(boolean success, Camera camera) {
